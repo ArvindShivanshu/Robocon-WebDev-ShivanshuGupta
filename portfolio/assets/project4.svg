@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="100%" height="100%">
+  <defs>
+    <linearGradient id="p4Bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b" />
+      <stop offset="100%" stop-color="#31104b" />
+    </linearGradient>
+    <linearGradient id="purplePink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7" />
+      <stop offset="100%" stop-color="#ec4899" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="350" rx="16" fill="url(#p4Bg)" />
+
+  <!-- Window Header -->
+  <rect width="600" height="40" rx="16" fill="#1e1b4b" />
+  <rect y="25" width="600" height="15" fill="#1e1b4b" />
+  <circle cx="30" cy="20" r="6" fill="#ef4444" />
+  <circle cx="50" cy="20" r="6" fill="#eab308" />
+  <circle cx="70" cy="20" r="6" fill="#22c55e" />
+  <text x="300" y="25" fill="#d8b4fe" font-family="sans-serif" font-size="12" text-anchor="middle" font-weight="600">iot-smart-node-mesh.io</text>
+
+  <!-- Network Topology Map -->
+  <g stroke="#6b21a8" stroke-width="1.5" stroke-dasharray="3 3">
+    <line x1="140" y1="130" x2="300" y2="110" />
+    <line x1="300" y1="110" x2="460" y2="140" />
+    <line x1="140" y1="130" x2="220" y2="240" />
+    <line x1="300" y1="110" x2="220" y2="240" />
+    <line x1="300" y1="110" x2="380" y2="250" />
+    <line x1="460" y1="140" x2="380" y2="250" />
+  </g>
+
+  <!-- Nodes -->
+  <!-- Center Master Node -->
+  <circle cx="300" cy="110" r="32" fill="#581c87" stroke="#c084fc" stroke-width="3" />
+  <circle cx="300" cy="110" r="14" fill="#a855f7" />
+  <text x="300" y="160" fill="#f3e8ff" font-family="sans-serif" font-size="11" font-weight="bold" text-anchor="middle">GATEWAY HUB</text>
+
+  <!-- Node 1 -->
+  <circle cx="140" cy="130" r="22" fill="#1f2937" stroke="#38bdf8" stroke-width="2" />
+  <text x="140" y="135" fill="#38bdf8" font-family="monospace" font-size="11" text-anchor="middle">ESP32</text>
+  <text x="140" y="170" fill="#94a3b8" font-family="sans-serif" font-size="10" text-anchor="middle">Lab Node A</text>
+
+  <!-- Node 2 -->
+  <circle cx="460" cy="140" r="22" fill="#1f2937" stroke="#ec4899" stroke-width="2" />
+  <text x="460" y="145" fill="#ec4899" font-family="monospace" font-size="11" text-anchor="middle">LoRa</text>
+  <text x="460" y="180" fill="#94a3b8" font-family="sans-serif" font-size="10" text-anchor="middle">Weather Mast</text>
+
+  <!-- Node 3 -->
+  <circle cx="220" cy="240" r="20" fill="#1f2937" stroke="#10b981" stroke-width="2" />
+  <text x="220" y="244" fill="#10b981" font-family="monospace" font-size="10" text-anchor="middle">PWR</text>
+  <text x="220" y="278" fill="#94a3b8" font-family="sans-serif" font-size="10" text-anchor="middle">Solar Grid</text>
+
+  <!-- Node 4 -->
+  <circle cx="380" cy="250" r="20" fill="#1f2937" stroke="#fbbf24" stroke-width="2" />
+  <text x="380" y="254" fill="#fbbf24" font-family="monospace" font-size="10" text-anchor="middle">BOT</text>
+  <text x="380" y="288" fill="#94a3b8" font-family="sans-serif" font-size="10" text-anchor="middle">Robot Base</text>
+
+  <!-- Bottom Data Bar -->
+  <rect x="30" y="305" width="540" height="30" rx="6" fill="#1e1b4b" stroke="#4c1d95" stroke-width="1" />
+  <text x="45" y="324" fill="#a78bfa" font-family="monospace" font-size="11">Active Nodes: 12/12  |  Packets/sec: 450  |  Loss: 0.00%  |  MQTT Broker: Healthy</text>
+</svg>

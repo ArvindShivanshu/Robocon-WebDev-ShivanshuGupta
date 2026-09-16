@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="100%" height="100%">
+  <defs>
+    <linearGradient id="p1Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="cyanPurple" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+    <linearGradient id="neonGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#34d399" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="350" rx="16" fill="url(#p1Grad)" />
+  
+  <!-- Window Header Bar -->
+  <rect width="600" height="40" rx="16" fill="#1e293b" />
+  <rect y="25" width="600" height="15" fill="#1e293b" />
+  <circle cx="30" cy="20" r="6" fill="#ef4444" />
+  <circle cx="50" cy="20" r="6" fill="#eab308" />
+  <circle cx="70" cy="20" r="6" fill="#22c55e" />
+  <text x="300" y="25" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" text-anchor="middle" font-weight="600">robocon-telemetry-dashboard.live</text>
+
+  <!-- Left Sidebar / Stats -->
+  <rect x="25" y="60" width="150" height="265" rx="10" fill="#111827" stroke="#334155" stroke-width="1" />
+  <text x="40" y="90" fill="#38bdf8" font-family="monospace" font-size="12" font-weight="bold">SYSTEM STATUS</text>
+  <rect x="40" y="105" width="120" height="8" rx="4" fill="#064e3b" />
+  <rect x="40" y="105" width="105" height="8" rx="4" fill="url(#neonGreen)" />
+  <text x="40" y="130" fill="#94a3b8" font-family="monospace" font-size="11">ROBOT: ONLINE</text>
+
+  <rect x="40" y="150" width="120" height="50" rx="6" fill="#1f2937" />
+  <text x="50" y="170" fill="#a5b4fc" font-family="monospace" font-size="10">MOTOR SPEED</text>
+  <text x="50" y="190" fill="#ffffff" font-family="monospace" font-size="16" font-weight="bold">2,450 RPM</text>
+
+  <rect x="40" y="215" width="120" height="50" rx="6" fill="#1f2937" />
+  <text x="50" y="235" fill="#f472b6" font-family="monospace" font-size="10">BATTERY TEMP</text>
+  <text x="50" y="255" fill="#ffffff" font-family="monospace" font-size="16" font-weight="bold">34.2 °C</text>
+
+  <!-- Central Chart / Radar -->
+  <rect x="195" y="60" width="380" height="150" rx="10" fill="#111827" stroke="#334155" stroke-width="1" />
+  <text x="215" y="90" fill="#f8fafc" font-family="-apple-system, sans-serif" font-size="13" font-weight="bold">Telemetry &amp; Sensor Streams</text>
+  
+  <!-- Wave / Oscilloscope Chart -->
+  <path d="M215 150 Q260 90 305 140 T395 130 T485 160 T555 120" fill="none" stroke="url(#cyanPurple)" stroke-width="3" stroke-linecap="round" />
+  <path d="M215 165 Q270 180 325 155 T435 170 T540 145" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4 4" />
+
+  <!-- Bottom Grid Cards -->
+  <rect x="195" y="225" width="180" height="100" rx="10" fill="#111827" stroke="#334155" stroke-width="1" />
+  <text x="215" y="255" fill="#94a3b8" font-family="sans-serif" font-size="11">LiDAR Coordinates</text>
+  <text x="215" y="280" fill="#38bdf8" font-family="monospace" font-size="14" font-weight="bold">X: 142.8 | Y: 89.2</text>
+  <text x="215" y="305" fill="#10b981" font-family="monospace" font-size="11">Obstacle Clear (98.4%)</text>
+
+  <rect x="390" y="225" width="185" height="100" rx="10" fill="#111827" stroke="#334155" stroke-width="1" />
+  <text x="410" y="255" fill="#94a3b8" font-family="sans-serif" font-size="11">Active Mode</text>
+  <text x="410" y="280" fill="#ec4899" font-family="monospace" font-size="14" font-weight="bold">AUTONOMOUS RUN</text>
+  <text x="410" y="305" fill="#cbd5e1" font-family="monospace" font-size="11">PID Loop Active: 200Hz</text>
+</svg>

@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141824" />
+      <stop offset="100%" stop-color="#0b0f19" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="50%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#ec4899" />
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Circle -->
+  <rect width="400" height="400" rx="40" fill="url(#bgGrad)" />
+
+  <!-- Outer Neon Rings -->
+  <circle cx="200" cy="200" r="160" fill="none" stroke="url(#accentGrad)" stroke-width="3" stroke-dasharray="8 6" opacity="0.7" />
+  <circle cx="200" cy="200" r="145" fill="none" stroke="url(#glowGrad)" stroke-width="2" opacity="0.5" />
+
+  <!-- Tech Geometric Orbits -->
+  <g opacity="0.3">
+    <ellipse cx="200" cy="200" rx="170" ry="60" fill="none" stroke="#818cf8" stroke-width="1.5" transform="rotate(-25 200 200)" />
+    <ellipse cx="200" cy="200" rx="170" ry="60" fill="none" stroke="#ec4899" stroke-width="1.5" transform="rotate(35 200 200)" />
+  </g>
+
+  <!-- Developer Silhouette / Avatar Base -->
+  <!-- Body/Shoulders -->
+  <path d="M120 340 C120 270, 150 250, 200 250 C250 250, 280 270, 280 340 Z" fill="#1e2436" stroke="url(#accentGrad)" stroke-width="2.5" />
+  
+  <!-- Hoodie Collar / V-neck -->
+  <polygon points="180,250 220,250 200,285" fill="#111625" />
+
+  <!-- Head / Face -->
+  <ellipse cx="200" cy="180" rx="55" ry="68" fill="#2d3748" stroke="url(#glowGrad)" stroke-width="2" />
+  
+  <!-- Stylish Modern Haircut -->
+  <path d="M145 170 C140 120, 180 100, 220 105 C250 110, 260 135, 255 160 C245 130, 220 120, 185 125 C160 130, 150 150, 145 170 Z" fill="url(#accentGrad)" />
+
+  <!-- Glasses -->
+  <rect x="160" y="165" width="32" height="20" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+  <rect x="208" y="165" width="32" height="20" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+  <line x1="192" y1="175" x2="208" y2="175" stroke="#38bdf8" stroke-width="2" />
+  
+  <!-- Glasses Tech Reflection -->
+  <line x1="164" y1="179" x2="174" y2="169" stroke="#67e8f9" stroke-width="2" opacity="0.8" />
+  <line x1="212" y1="179" x2="222" y2="169" stroke="#67e8f9" stroke-width="2" opacity="0.8" />
+
+  <!-- Confident Smile -->
+  <path d="M188 215 Q200 226 212 215" fill="none" stroke="#f1f5f9" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Floating Code Badges -->
+  <g transform="translate(60, 90)">
+    <rect width="65" height="30" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#glow)" />
+    <text x="32" y="20" font-family="monospace" font-size="13" font-weight="bold" fill="#38bdf8" text-anchor="middle">&lt;/&gt; DEV</text>
+  </g>
+
+  <g transform="translate(280, 260)">
+    <rect width="70" height="30" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="1.5" filter="url(#glow)" />
+    <text x="35" y="20" font-family="monospace" font-size="12" font-weight="bold" fill="#c084fc" text-anchor="middle">ROBOCON</text>
+  </g>
+
+  <!-- Glowing Dots -->
+  <circle cx="90" cy="270" r="4" fill="#38bdf8" />
+  <circle cx="310" cy="120" r="4" fill="#ec4899" />
+  <circle cx="140" cy="70" r="3" fill="#818cf8" />
+</svg>

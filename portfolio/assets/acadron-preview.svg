@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="100%" height="100%">
+  <defs>
+    <linearGradient id="acadronBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070b19" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="blueGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    <linearGradient id="cyanPurpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="100%" stop-color="#4facfe" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="600" height="350" rx="16" fill="url(#acadronBg)" />
+
+  <!-- Top Browser Header Bar -->
+  <rect width="600" height="42" rx="16" fill="#0c1322" />
+  <rect y="25" width="600" height="17" fill="#0c1322" />
+  <circle cx="28" cy="21" r="5.5" fill="#ef4444" />
+  <circle cx="46" cy="21" r="5.5" fill="#eab308" />
+  <circle cx="64" cy="21" r="5.5" fill="#22c55e" />
+  <rect x="180" y="10" width="240" height="22" rx="6" fill="#151e32" />
+  <text x="300" y="25" fill="#7dd3fc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" text-anchor="middle">acadron.in | Scheduling Engine</text>
+
+  <!-- Brand Title Banner -->
+  <g transform="translate(30, 58)">
+    <rect width="540" height="68" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Acadron Icon Mark -->
+    <circle cx="36" cy="34" r="18" fill="url(#cyanPurpleGrad)" />
+    <path d="M28 39 L36 25 L44 39 Z" fill="#070b19" />
+    <line x1="31" y1="35" x2="41" y2="35" stroke="#070b19" stroke-width="2" />
+
+    <text x="66" y="30" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="18" font-weight="800" letter-spacing="1">ACADRON</text>
+    <text x="66" y="48" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="500">Autonomous Academic Scheduling Engine</text>
+
+    <!-- Status Chip -->
+    <rect x="420" y="22" width="105" height="24" rx="12" fill="#042f2e" stroke="#14b8a6" stroke-width="1" />
+    <circle cx="432" cy="34" r="4" fill="#2dd4bf" />
+    <text x="444" y="38" fill="#5eead4" font-family="monospace" font-size="10" font-weight="bold">ENGINE ACTIVE</text>
+  </g>
+
+  <!-- Left: Constraints & AI Telemetry -->
+  <g transform="translate(30, 138)">
+    <rect width="255" height="185" rx="10" fill="#0d1424" stroke="#1e293b" stroke-width="1" />
+    <text x="18" y="28" fill="#94a3b8" font-family="-apple-system, sans-serif" font-size="11" font-weight="700" text-transform="uppercase">Constraint Engine</text>
+
+    <g transform="translate(18, 44)">
+      <rect width="219" height="34" rx="6" fill="#131d33" />
+      <text x="12" y="21" fill="#e2e8f0" font-family="monospace" font-size="10">Teacher Absences</text>
+      <text x="175" y="21" fill="#34d399" font-family="monospace" font-size="10" font-weight="bold">Auto-Resolved</text>
+    </g>
+
+    <g transform="translate(18, 86)">
+      <rect width="219" height="34" rx="6" fill="#131d33" />
+      <text x="12" y="21" fill="#e2e8f0" font-family="monospace" font-size="10">Room Constraints</text>
+      <text x="182" y="21" fill="#38bdf8" font-family="monospace" font-size="10" font-weight="bold">Zero Clashes</text>
+    </g>
+
+    <g transform="translate(18, 128)">
+      <rect width="219" height="42" rx="6" fill="#131d33" />
+      <text x="12" y="18" fill="#f43f5e" font-family="monospace" font-size="10" font-weight="bold">7:40 AM Crisis Sim</text>
+      <text x="12" y="32" fill="#94a3b8" font-family="-apple-system, sans-serif" font-size="9">20-min zero latency response</text>
+    </g>
+  </g>
+
+  <!-- Right: Adaptive Timetable Matrix -->
+  <g transform="translate(300, 138)">
+    <rect width="270" height="185" rx="10" fill="#0d1424" stroke="#1e293b" stroke-width="1" />
+    <text x="18" y="28" fill="#94a3b8" font-family="-apple-system, sans-serif" font-size="11" font-weight="700" text-transform="uppercase">Adaptive Schedule Grid</text>
+
+    <!-- Mini Timetable Grid Blocks -->
+    <g transform="translate(18, 44)">
+      <!-- Period 1 -->
+      <rect x="0" y="0" width="70" height="38" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+      <text x="35" y="18" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">CS-302</text>
+      <text x="35" y="30" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Hall 4B</text>
+
+      <!-- Period 2 -->
+      <rect x="80" y="0" width="70" height="38" rx="6" fill="#1e293b" stroke="#818cf8" stroke-width="1" />
+      <text x="115" y="18" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">AI-401</text>
+      <text x="115" y="30" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Lab 2</text>
+
+      <!-- Period 3 -->
+      <rect x="160" y="0" width="70" height="38" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1" />
+      <text x="195" y="18" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">DS-201</text>
+      <text x="195" y="30" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Auditorium</text>
+
+      <!-- Row 2 -->
+      <rect x="0" y="48" width="110" height="38" rx="6" fill="#1e293b" stroke="#ec4899" stroke-width="1" />
+      <text x="55" y="66" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">DYNAMIC SWAP</text>
+      <text x="55" y="78" fill="#f472b6" font-family="sans-serif" font-size="8" text-anchor="middle">Absence Covered</text>
+
+      <rect x="120" y="48" width="110" height="38" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+      <text x="175" y="66" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">SYLLABUS GAP</text>
+      <text x="175" y="78" fill="#38bdf8" font-family="sans-serif" font-size="8" text-anchor="middle">Re-allocated</text>
+
+      <!-- Bottom Metric bar -->
+      <rect x="0" y="98" width="230" height="28" rx="6" fill="#042f2e" />
+      <text x="115" y="116" fill="#5eead4" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">OPTIMIZATION SCORE: 99.4%</text>
+    </g>
+  </g>
+</svg>
