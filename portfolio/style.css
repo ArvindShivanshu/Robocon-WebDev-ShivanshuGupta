@@ -63,7 +63,7 @@ nav {
 
 .nav-links {
   display: flex;
-  list-style: none;
+  /* list-style: none; */
   gap: 25px;
 }
 
