@@ -3,17 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=/workshopreg2">
-    <title>SolidWorks ✕ Altium Co-Design Workshop</title>
-    <script>
-        window.location.replace('/workshopreg2');
-    </script>
+    <title>Shivanshu Gupta | Robocon Web Development Workspace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --surface-card: #ffffff;
+            --border-subtle: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent-blue: #2563eb;
+            --accent-orange: #ea580c;
+            --accent-cyan: #0284c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 48px 20px;
+            background-image: 
+                radial-gradient(at 100% 0%, rgba(37, 99, 235, 0.05) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(234, 88, 12, 0.04) 0px, transparent 50%);
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1060px;
+        }
+
+        .header {
+            margin-bottom: 44px;
+            text-align: left;
+        }
+
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: 9999px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+            line-height: 1.15;
+            margin-bottom: 12px;
+        }
+
+        p.subtitle {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 680px;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 22px;
+            margin-bottom: 48px;
+        }
+
+        .card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 18px;
+            padding: 28px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 16px -4px rgba(15, 23, 42, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #cbd5e1;
+            box-shadow: 0 16px 32px -8px rgba(15, 23, 42, 0.08);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .badge-path {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            margin-bottom: 24px;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-top: auto;
+        }
+
+        .card:hover .card-footer {
+            gap: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 24px;
+            width: 100%;
+        }
+
+        .footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            color: var(--text-primary);
+        }
+    </style>
 </head>
-<body style="margin: 0; padding: 40px; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; color: #0f172a;">
-    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);">
-        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;">Launching SolidWorks ✕ Altium Workshop...</h2>
-        <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 16px;">If not redirected automatically within 2 seconds, click below:</p>
-        <a href="/workshopreg2" style="display: inline-block; padding: 10px 22px; background: #2563eb; color: #ffffff; text-decoration: none; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">Open Workshop Portal &rarr;</a>
+<body>
+    <div class="main-container">
+        <header class="header">
+            <div class="tag-pill">SRM ROBOCON // WEB DEVELOPMENT</div>
+            <h1>Workspace Directory</h1>
+            <p class="subtitle">
+                Centralized hub for all mechatronics web projects, interactive engineering CAD studios, portfolio builds, and lab repositories.
+            </p>
+        </header>
+
+        <main class="grid">
+            <!-- Workshop CAD & Co-Design Card -->
+            <a href="/workshop-cad" class="card">
+                <div>
+                    <div class="card-top">
+                        <div class="card-icon" style="background: #eff6ff; color: #2563eb;">⚡</div>
+                        <span class="badge-path">/workshop-cad</span>
+                    </div>
+                    <h3>SolidWorks & Altium Workshop</h3>
+                    <p>
+                        Full-stack mechatronics fellowship portal featuring in-browser 3D SolidWorks parametric modeler, Altium ECAD router, and live clearance inspector.
+                    </p>
+                </div>
+                <div class="card-footer" style="color: #2563eb;">
+                    <span>Launch Studio & Registration</span> &rarr;
+                </div>
+            </a>
+
+            <!-- Portfolio Website Card -->
+            <a href="/portfolio" class="card">
+                <div>
+                    <div class="card-top">
+                        <div class="card-icon" style="background: #f0fdf4; color: #16a34a;">🚀</div>
+                        <span class="badge-path">/portfolio</span>
+                    </div>
+                    <h3>Developer Portfolio</h3>
+                    <p>
+                        Personal developer portfolio showcasing hardware-software engineering projects, robotics systems, and technical skillset.
+                    </p>
+                </div>
+                <div class="card-footer" style="color: #16a34a;">
+                    <span>Open Portfolio</span> &rarr;
+                </div>
+            </a>
+
+            <!-- Class 3 Lab Card -->
+            <a href="/class3" class="card">
+                <div>
+                    <div class="card-top">
+                        <div class="card-icon" style="background: #faf5ff; color: #9333ea;">🎨</div>
+                        <span class="badge-path">/class3</span>
+                    </div>
+                    <h3>Class 3 Frontend Project</h3>
+                    <p>
+                        Frontend responsive design layouts, modern typography systems, and web development laboratory exercises.
+                    </p>
+                </div>
+                <div class="card-footer" style="color: #9333ea;">
+                    <span>View Project</span> &rarr;
+                </div>
+            </a>
+
+            <!-- Class PPS Card -->
+            <a href="/class-pps" class="card">
+                <div>
+                    <div class="card-top">
+                        <div class="card-icon" style="background: #fff7ed; color: #ea580c;">⚙️</div>
+                        <span class="badge-path">/class-pps</span>
+                    </div>
+                    <h3>Programming & Problem Solving</h3>
+                    <p>
+                        Structured C algorithms, mechatronic logic flow, and computational problem-solving coursework files.
+                    </p>
+                </div>
+                <div class="card-footer" style="color: #ea580c;">
+                    <span>Browse Files</span> &rarr;
+                </div>
+            </a>
+        </main>
+
+        <footer class="footer">
+            <p>
+                Shivanshu Gupta &bull; <a href="https://github.com/ArvindShivanshu/Robocon-WebDev-ShivanshuGupta" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+            </p>
+        </footer>
     </div>
 </body>
 </html>

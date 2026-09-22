@@ -30,12 +30,6 @@ export default function App() {
     standoffHeight: 6.0
   });
 
-  // Sync route /workshopreg2 in URL bar
-  useEffect(() => {
-    if (window.location.pathname === '/' || window.location.pathname === '') {
-      window.history.replaceState(null, '', '/workshopreg2');
-    }
-  }, []);
 
   // Fetch live workshop info from Express Backend (PERN)
   useEffect(() => {
@@ -187,7 +181,7 @@ export default function App() {
         ) : activeStudioMode === 'codesign' ? (
           <CoDesignBridge />
         ) : (
-          /* WORKSHOP HUB & REGISTRATION PORTAL (/workshopreg2) */
+          /* WORKSHOP HUB & REGISTRATION PORTAL */
           <main style={{ position: 'relative', zIndex: 2 }}>
             <HeroSection
               workshop={workshopData?.workshop}
@@ -202,7 +196,7 @@ export default function App() {
 
             <SpeakersSection speakers={workshopData?.faculty} />
 
-            {/* The Central /workshopreg2 Registration Component */}
+            {/* The Central Registration Component */}
             <RegistrationForm
               selectedTrack={selectedTrack}
               onRegisterSuccess={handleRegisterSuccess}

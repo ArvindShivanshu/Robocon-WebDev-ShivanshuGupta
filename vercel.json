@@ -1,12 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "vite",
-  "buildCommand": "cd workshop-cad/client && npm install && npm run build",
-  "outputDirectory": "workshop-cad/client/dist",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  "buildCommand": "cd workshop-cad/client && npm install && npm run build && cp -r dist/* ../",
+  "outputDirectory": "."
 }
