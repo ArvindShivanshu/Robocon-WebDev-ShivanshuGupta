@@ -1,0 +1,8 @@
+{
+  "name": "robocon-webdev-shivanshugupta",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix workshop-cad/client run build"
+  }
+}
