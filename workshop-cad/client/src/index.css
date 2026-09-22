@@ -147,10 +147,13 @@ p, span, div, a, label, li, ul, ol, input, button, select, textarea, optgroup {
   font-family: var(--font-display);
   font-size: clamp(2.3rem, 4.4vw, 4rem);
   font-weight: 750;
-  line-height: 1.08;
+  line-height: 1.18;
   letter-spacing: -0.035em;
   color: #0f172a;
   text-wrap: balance;
+  padding-bottom: 0.18em;
+  -webkit-mask-clip: no-clip;
+  mask-clip: no-clip;
 }
 
 .text-subtle {
@@ -391,7 +394,8 @@ p, span, div, a, label, li, ul, ol, input, button, select, textarea, optgroup {
   .heading-hero {
     font-size: clamp(1.85rem, 7.5vw, 2.75rem) !important;
     letter-spacing: -0.03em !important;
-    line-height: 1.1 !important;
+    line-height: 1.18 !important;
+    padding-bottom: 0.18em !important;
   }
 
   .pro-panel {

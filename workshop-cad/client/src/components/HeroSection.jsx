@@ -128,9 +128,12 @@ export default function HeroSection({ workshop, onSelectTrack }) {
             className="heading-hero"
             style={{
               margin: 0,
+              paddingBottom: '0.18em',
               color: '#0f172a',
               WebkitMaskImage: headlineMask.active ? headlineMask.base : 'none',
               maskImage: headlineMask.active ? headlineMask.base : 'none',
+              WebkitMaskClip: 'no-clip',
+              maskClip: 'no-clip',
               transition: 'WebkitMaskImage 0.08s ease, maskImage 0.08s ease'
             }}
           >
@@ -151,13 +154,16 @@ export default function HeroSection({ workshop, onSelectTrack }) {
               left: 0,
               width: '100%',
               margin: 0,
+              paddingBottom: '0.18em',
               color: '#ffffff',
               pointerEvents: 'none',
               zIndex: 3,
               opacity: headlineMask.active ? 1 : 0,
               transition: 'opacity 0.15s ease',
               WebkitMaskImage: headlineMask.active ? headlineMask.reveal : 'none',
-              maskImage: headlineMask.active ? headlineMask.reveal : 'none'
+              maskImage: headlineMask.active ? headlineMask.reveal : 'none',
+              WebkitMaskClip: 'no-clip',
+              maskClip: 'no-clip'
             }}
           >
             <span>Where Precision 3D Mechanics</span>
