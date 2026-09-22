@@ -266,11 +266,11 @@ export default function Navbar({ activeMode, setActiveMode, seatsLeft, onGoToReg
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = '#1d4ed8';
-            e.currentTarget.style.transform = 'translateY(-1px)';
+            e.currentTarget.style.boxShadow = '0 0 22px rgba(37, 99, 235, 0.55), 0 4px 14px rgba(37, 99, 235, 0.35)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = '#2563eb';
-            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 14px rgba(37, 99, 235, 0.28)';
           }}
         >
           <Ticket size={13} />

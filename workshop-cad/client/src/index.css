@@ -232,12 +232,11 @@ p, span, div, a, label, li, ul, ol, input, button, select, textarea, optgroup {
 .btn-primary-lead:hover {
   background: linear-gradient(180deg, #1e293b 0%, #334155 100%);
   border-color: #0284c7;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 24px -2px rgba(2, 132, 199, 0.42), 0 6px 20px rgba(15, 23, 42, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .btn-primary-lead:active {
-  transform: translateY(0);
+  transform: scale(0.985);
 }
 
 .btn-secondary-pro {
@@ -256,16 +255,19 @@ p, span, div, a, label, li, ul, ol, input, button, select, textarea, optgroup {
   border-radius: 9px;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   text-decoration: none;
 }
 
 .btn-secondary-pro:hover {
   background: #f8fafc;
-  border-color: #94a3b8;
+  border-color: #0284c7;
   color: #0284c7;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 0 18px -2px rgba(2, 132, 199, 0.22), 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.btn-secondary-pro:active {
+  transform: scale(0.985);
 }
 
 /* Form Elements */

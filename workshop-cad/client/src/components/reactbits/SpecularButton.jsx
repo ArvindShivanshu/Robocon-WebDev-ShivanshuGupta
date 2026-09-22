@@ -30,16 +30,18 @@ export default function SpecularButton({
           ? 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)'
           : 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
         color: '#ffffff',
-        border: isHovered ? '1px solid #0f172a' : '1px solid rgba(15, 23, 42, 0.9)',
+        border: isHovered ? '1px solid rgba(56, 189, 248, 0.55)' : '1px solid rgba(15, 23, 42, 0.9)',
         boxShadow: isHovered
-          ? '0 6px 20px rgba(15, 23, 42, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+          ? '0 0 24px -2px rgba(2, 132, 199, 0.42), 0 6px 20px rgba(15, 23, 42, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.25)'
           : '0 2px 8px rgba(15, 23, 42, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
       }
     : {
-        background: isHovered ? '#f8fafc' : '#ffffff',
-        color: '#0f172a',
-        border: isHovered ? '1px solid rgba(15, 23, 42, 0.25)' : '1px solid var(--border-medium)',
-        boxShadow: isHovered ? '0 4px 14px rgba(0, 0, 0, 0.07)' : '0 1px 3px rgba(0, 0, 0, 0.04)'
+        background: isHovered ? '#f1f5f9' : '#ffffff',
+        color: isHovered ? '#0284c7' : '#0f172a',
+        border: isHovered ? '1px solid #0284c7' : '1px solid var(--border-medium)',
+        boxShadow: isHovered
+          ? '0 0 18px -2px rgba(2, 132, 199, 0.2), 0 2px 8px rgba(0, 0, 0, 0.05)'
+          : '0 1px 3px rgba(0, 0, 0, 0.04)'
       };
 
   return (
@@ -66,8 +68,8 @@ export default function SpecularButton({
         letterSpacing: '-0.01em',
         cursor: disabled ? 'not-allowed' : 'pointer',
         overflow: 'hidden',
-        transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-        transform: isHovered && !disabled ? 'translateY(-1px)' : 'translateY(0)',
+        transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+        transform: 'none',
         ...baseStyle,
         ...style
       }}
