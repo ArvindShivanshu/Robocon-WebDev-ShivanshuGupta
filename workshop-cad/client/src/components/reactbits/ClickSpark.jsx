@@ -21,11 +21,8 @@ export default function ClickSpark({
     let animationId;
 
     const resize = () => {
-      const parent = canvas.parentElement;
-      if (parent) {
-        canvas.width = parent.clientWidth;
-        canvas.height = parent.clientHeight;
-      }
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
     resize();
@@ -79,9 +76,9 @@ export default function ClickSpark({
   const handleClick = useCallback((e) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    // With fixed viewport-sized canvas, clientX and clientY match canvas pixel coordinates 1:1
+    const x = e.clientX;
+    const y = e.clientY;
     const now = performance.now();
 
     const colors = Array.isArray(sparkColor) ? sparkColor : [sparkColor, '#ff5722', '#e2b768', '#ffffff'];
@@ -120,13 +117,13 @@ export default function ClickSpark({
       <canvas
         ref={canvasRef}
         style={{
-          position: 'absolute',
+          position: 'fixed',
           top: 0,
           left: 0,
-          width: '100%',
-          height: '100%',
+          width: '100vw',
+          height: '100vh',
           pointerEvents: 'none',
-          zIndex: 9999,
+          zIndex: 99999,
           border: 'none',
           outline: 'none'
         }}

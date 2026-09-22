@@ -24,7 +24,10 @@ import {
   Sparkles,
   CheckCircle2,
   AlertTriangle,
-  Info
+  Info,
+  Link,
+  PlusCircle,
+  Compass
 } from 'lucide-react';
 
 // Solder Mask Palette presets matching authentic PCB fabrication houses (Isola, Rogers, FR4)
@@ -41,12 +44,12 @@ const INITIAL_COMPONENTS = [
     name: 'STM32F407VGT6',
     desc: 'ARM Cortex-M4 168MHz MCU',
     package: 'LQFP-64',
-    rx: -60,
+    rx: -70,
     ry: 0,
     w: 68,
     h: 68,
     rot: 0,
-    height3D: 1.6,
+    height3D: 2.2,
     pins: 64,
     type: 'qfp',
     silkscreen: 'STM32F4 // 168MHz',
@@ -57,12 +60,12 @@ const INITIAL_COMPONENTS = [
     name: 'Xilinx Artix-7 56G',
     desc: 'High-Density DSP FPGA',
     package: 'BGA-256',
-    rx: 76,
+    rx: 80,
     ry: 0,
-    w: 80,
-    h: 80,
+    w: 78,
+    h: 78,
     rot: 0,
-    height3D: 2.2,
+    height3D: 2.4,
     pins: 256,
     type: 'bga',
     silkscreen: 'XILINX // ARTIX-7',
@@ -73,12 +76,12 @@ const INITIAL_COMPONENTS = [
     name: 'Amphenol USB-C 3.2',
     desc: '24-Pin Receptacle with Shield',
     package: 'USB-C-24P',
-    rx: -175,
+    rx: -180,
     ry: 8,
     w: 42,
     h: 36,
     rot: 0,
-    height3D: 3.4,
+    height3D: 3.6,
     pins: 24,
     type: 'conn',
     silkscreen: 'USB-C // 10Gbps',
@@ -89,8 +92,8 @@ const INITIAL_COMPONENTS = [
     name: 'TI TPS7A4700',
     desc: 'Ultra-Low Noise 3.3V LDO',
     package: 'SOT-223-3',
-    rx: -125,
-    ry: -55,
+    rx: -130,
+    ry: -60,
     w: 34,
     h: 28,
     rot: 0,
@@ -105,12 +108,12 @@ const INITIAL_COMPONENTS = [
     name: '25.000 MHz TCXO',
     desc: 'Ultra-Low Jitter Oscillator',
     package: 'SMD-3225',
-    rx: -55,
-    ry: 64,
+    rx: -60,
+    ry: 70,
     w: 24,
     h: 18,
     rot: 0,
-    height3D: 1.0,
+    height3D: 1.2,
     pins: 4,
     type: 'xtal',
     silkscreen: '25.000 MHz',
@@ -121,12 +124,12 @@ const INITIAL_COMPONENTS = [
     name: '100nF 0402 Cap',
     desc: 'High-Freq Decoupling MLCC',
     package: '0402',
-    rx: -12,
-    ry: -44,
+    rx: -14,
+    ry: -48,
     w: 16,
     h: 10,
     rot: 0,
-    height3D: 0.6,
+    height3D: 0.8,
     pins: 2,
     type: 'smd_cap',
     silkscreen: 'C1',
@@ -138,11 +141,11 @@ const INITIAL_COMPONENTS = [
     desc: 'Bulk Rail Storage Cap',
     package: '0805',
     rx: 16,
-    ry: -44,
+    ry: -48,
     w: 20,
     h: 12,
     rot: 0,
-    height3D: 0.9,
+    height3D: 1.0,
     pins: 2,
     type: 'smd_cap',
     silkscreen: 'C2',
@@ -153,12 +156,12 @@ const INITIAL_COMPONENTS = [
     name: '50Ω 0603 Resistor',
     desc: 'Impedance Match Terminator',
     package: '0603',
-    rx: 24,
-    ry: 32,
+    rx: 20,
+    ry: 36,
     w: 18,
     h: 10,
     rot: 0,
-    height3D: 0.6,
+    height3D: 0.8,
     pins: 2,
     type: 'smd_res',
     silkscreen: 'R1',
@@ -169,193 +172,110 @@ const INITIAL_COMPONENTS = [
     name: '0805 Status LED',
     desc: 'Emerald 525nm Heartbeat',
     package: '0805',
-    rx: -110,
-    ry: 50,
+    rx: -115,
+    ry: 52,
     w: 18,
     h: 11,
     rot: 0,
-    height3D: 0.8,
+    height3D: 0.9,
     pins: 2,
     type: 'smd_led',
     silkscreen: 'D1',
     netAssignments: ['PWR_3V3', 'GND']
-  },
-  {
-    id: 'TP1',
-    name: 'TP_CLK25M Test Point',
-    desc: 'Oscilloscope Probe Pad',
-    package: 'TESTPOINT',
-    rx: -18,
-    ry: 64,
-    w: 12,
-    h: 12,
-    rot: 0,
-    height3D: 0.2,
-    pins: 1,
-    type: 'testpoint',
-    silkscreen: 'TP1',
-    netAssignments: ['CLK_25M']
-  },
-  {
-    id: 'TP2',
-    name: 'TP_3V3 Test Point',
-    desc: 'Regulator Monitor Pad',
-    package: 'TESTPOINT',
-    rx: -155,
-    ry: -55,
-    w: 12,
-    h: 12,
-    rot: 0,
-    height3D: 0.2,
-    pins: 1,
-    type: 'testpoint',
-    silkscreen: 'TP2',
-    netAssignments: ['PWR_3V3']
-  },
-  {
-    id: 'H1',
-    name: 'M3 Plated Standoff',
-    desc: 'Chassis Earth Ground',
-    package: 'M3_HOLE',
-    rx: -186,
-    ry: -98,
-    w: 22,
-    h: 22,
-    rot: 0,
-    height3D: 0,
-    pins: 1,
-    type: 'hole',
-    silkscreen: 'H1',
-    netAssignments: ['GND']
-  },
-  {
-    id: 'H2',
-    name: 'M3 Plated Standoff',
-    desc: 'Chassis Earth Ground',
-    package: 'M3_HOLE',
-    rx: 186,
-    ry: -98,
-    w: 22,
-    h: 22,
-    rot: 0,
-    height3D: 0,
-    pins: 1,
-    type: 'hole',
-    silkscreen: 'H2',
-    netAssignments: ['GND']
-  },
-  {
-    id: 'H3',
-    name: 'M3 Plated Standoff',
-    desc: 'Chassis Earth Ground',
-    package: 'M3_HOLE',
-    rx: -186,
-    ry: 98,
-    w: 22,
-    h: 22,
-    rot: 0,
-    height3D: 0,
-    pins: 1,
-    type: 'hole',
-    silkscreen: 'H3',
-    netAssignments: ['GND']
-  },
-  {
-    id: 'H4',
-    name: 'M3 Plated Standoff',
-    desc: 'Chassis Earth Ground',
-    package: 'M3_HOLE',
-    rx: 186,
-    ry: 98,
-    w: 22,
-    h: 22,
-    rot: 0,
-    height3D: 0,
-    pins: 1,
-    type: 'hole',
-    silkscreen: 'H4',
-    netAssignments: ['GND']
   }
 ];
 
 const INITIAL_TRACES = [
   {
-    id: 'TR_VBUS',
-    net: 'VBUS_5V',
-    from: 'J1',
-    to: 'U3',
-    layer: 'L1_TOP',
-    color: '#ef4444',
-    width: 2.8,
-    signalType: 'power',
-    voltage: '5.0V',
-    frequency: 'DC',
-    impedance: '0.12 Ω'
-  },
-  {
-    id: 'TR_3V3',
-    net: 'PWR_3V3',
-    from: 'U3',
-    to: 'C1',
-    layer: 'L3_PWR',
-    color: '#f59e0b',
-    width: 2.4,
-    signalType: 'power',
-    voltage: '3.3V',
-    frequency: '100kHz Ripple',
-    impedance: '0.08 Ω'
-  },
-  {
-    id: 'TR_CLK',
-    net: 'CLK_25M',
-    from: 'Y1',
-    to: 'U1',
-    layer: 'L1_TOP',
-    color: '#10b981',
-    width: 1.8,
-    signalType: 'clock',
-    voltage: '3.3Vpp',
-    frequency: '25.000 MHz',
-    impedance: '50.1 Ω'
-  },
-  {
-    id: 'TR_BUS',
+    id: 'TR1',
     net: 'HS_BUS',
     from: 'U1',
     to: 'U2',
     layer: 'L1_TOP',
-    color: '#06b6d4',
-    width: 1.6,
+    color: '#ef4444',
+    width: 2.5,
     signalType: 'diff',
-    voltage: '1.2V LVDS',
-    frequency: '480.0 Mbps',
-    impedance: '100.2 Ω Diff'
+    voltage: '1.2Vpp',
+    frequency: '480 MHz',
+    impedance: '50.1 Ω'
   },
   {
-    id: 'TR_GND',
-    net: 'GND',
-    from: 'U2',
-    to: 'H2',
-    layer: 'L2_GND',
-    color: '#3b82f6',
-    width: 3.0,
-    signalType: 'gnd',
-    voltage: '0.0V',
-    frequency: 'Return Plane',
-    impedance: '0.01 Ω'
+    id: 'TR2',
+    net: 'CLK_25M',
+    from: 'Y1',
+    to: 'U1',
+    layer: 'L1_TOP',
+    color: '#ef4444',
+    width: 2.0,
+    signalType: 'clock',
+    voltage: '3.3Vpp',
+    frequency: '25.000 MHz',
+    impedance: '50.0 Ω'
   },
   {
-    id: 'TR_LED',
+    id: 'TR3',
+    net: 'USB_DP',
+    from: 'J1',
+    to: 'U1',
+    layer: 'L1_TOP',
+    color: '#ef4444',
+    width: 2.2,
+    signalType: 'diff',
+    voltage: '3.3V',
+    frequency: '12 Mbps',
+    impedance: '45.0 Ω'
+  },
+  {
+    id: 'TR4',
     net: 'PWR_3V3',
     from: 'U3',
-    to: 'D1',
-    layer: 'L1_TOP',
-    color: '#10b981',
-    width: 1.6,
+    to: 'U1',
+    layer: 'L3_PWR',
+    color: '#f59e0b',
+    width: 3.5,
     signalType: 'power',
-    voltage: '3.3V',
-    frequency: 'Heartbeat 1Hz',
-    impedance: '150 Ω'
+    voltage: '3.30V DC',
+    frequency: 'DC',
+    impedance: '0.02 Ω'
+  },
+  {
+    id: 'TR5',
+    net: 'PWR_3V3',
+    from: 'U1',
+    to: 'U2',
+    layer: 'L3_PWR',
+    color: '#f59e0b',
+    width: 3.5,
+    signalType: 'power',
+    voltage: '3.30V DC',
+    frequency: 'DC',
+    impedance: '0.02 Ω'
+  },
+  {
+    id: 'TR6',
+    net: 'HS_BUS',
+    from: 'U2',
+    to: 'R1',
+    layer: 'L1_TOP',
+    color: '#ef4444',
+    width: 2.0,
+    signalType: 'diff',
+    voltage: '1.2Vpp',
+    frequency: '480 MHz',
+    impedance: '50.0 Ω'
+  },
+  {
+    id: 'TR7',
+    net: 'VBUS_5V',
+    from: 'J1',
+    to: 'U3',
+    layer: 'L3_PWR',
+    color: '#f59e0b',
+    width: 3.8,
+    signalType: 'power',
+    voltage: '5.02V DC',
+    frequency: 'DC',
+    impedance: '0.01 Ω'
   }
 ];
 
@@ -372,6 +292,10 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
   const [signalsActive, setSignalsActive] = useState(true);
   const [isolateLayer, setIsolateLayer] = useState(false);
 
+  // 3D Viewport Orbit & Camera State
+  const [rotation3D, setRotation3D] = useState({ x: 32, y: -38 });
+  const [autoRotate3D, setAutoRotate3D] = useState(false);
+
   // Zoom & Pan
   const [zoom, setZoom] = useState(1.0);
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
@@ -382,11 +306,11 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
   const [selectedComp, setSelectedComp] = useState(null);
   const [selectedTrace, setSelectedTrace] = useState(null);
   const [selectedNet, setSelectedNet] = useState('CLK_25M');
+  const [targetConnectId, setTargetConnectId] = useState('');
 
   // DRC & Status
   const [statusText, setStatusText] = useState('Altium 24 Engine Ready • 0 DRC Violations • High-Speed ECAD Core Online');
   const [drcPassed, setDrcPassed] = useState(true);
-  const [violations, setViolations] = useState([]);
 
   // Components & Traces
   const [components, setComponents] = useState(INITIAL_COMPONENTS);
@@ -396,6 +320,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
   const [isDragging, setIsDragging] = useState(false);
   const [draggedId, setDraggedId] = useState(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });
 
   // Routing State
   const [routingSourceId, setRoutingSourceId] = useState(null);
@@ -428,53 +353,116 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
     return colls;
   };
 
-  useEffect(() => {
-    const colls = detectCollisions(components);
-    setViolations(colls);
-    if (colls.length > 0) {
-      setDrcPassed(false);
-      setStatusText(`⚠️ DRC VIOLATION: Component collision between ${colls[0].c1} and ${colls[0].c2} (< 0.15mm clearance)`);
-    } else {
-      setDrcPassed(true);
-    }
-  }, [components]);
-
-  // Coordinate Conversion: Viewport Client (px) -> PCB Board Space
+  // Convert Screen Canvas Mouse Coordinates to Board Internal Coordinates (2D)
   const getBoardCoords = (clientX, clientY) => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
     const rect = canvas.getBoundingClientRect();
+    const mouseX = clientX - rect.left;
+    const mouseY = clientY - rect.top;
+
     const cx = canvas.width / 2 + panOffset.x;
     const cy = canvas.height / 2 + panOffset.y;
     const baseScale = Math.min(1.0, Math.max(0.65, (canvas.width - 32) / 460)) * zoom;
 
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
-
     return {
-      x: (x - cx) / baseScale,
-      y: (y - cy) / baseScale
+      x: (mouseX - cx) / baseScale,
+      y: (mouseY - cy) / baseScale
     };
   };
 
-  // Rotate selected component 90 degrees
-  const handleRotateSelected = () => {
-    if (!selectedComp) return;
-    setComponents((prev) =>
-      prev.map((c) => {
-        if (c.id === selectedComp.id) {
-          const newRot = ((c.rot || 0) + 90) % 360;
-          const newComp = { ...c, rot: newRot, w: c.h, h: c.w };
-          setSelectedComp(newComp);
-          return newComp;
-        }
-        return c;
-      })
-    );
-    setStatusText(`Rotated ${selectedComp.id} 90° clockwise`);
+  // 3D Standard CAD Presets
+  const set3DPreset = (view) => {
+    if (view === 'iso') setRotation3D({ x: 32, y: -38 });
+    else if (view === 'top') setRotation3D({ x: 90, y: 0 });
+    else if (view === 'front') setRotation3D({ x: 0, y: 0 });
+    else if (view === 'right') setRotation3D({ x: 0, y: -90 });
+    setStatusText(`3D Camera: Standard ${view.toUpperCase()} View Alignment`);
   };
 
-  // Main 60FPS RAF Canvas Loop (2D Layout + 3D View + Live Signal Pulses)
+  // 60FPS Digital Oscilloscope Simulation CRT Waveform
+  useEffect(() => {
+    const scopeCanvas = scopeCanvasRef.current;
+    if (!scopeCanvas) return;
+    const sCtx = scopeCanvas.getContext('2d');
+    let scopeAnimId;
+    let scopeTime = 0;
+
+    const renderScope = () => {
+      scopeTime += 0.05;
+      const w = (scopeCanvas.width = scopeCanvas.clientWidth);
+      const h = (scopeCanvas.height = scopeCanvas.clientHeight);
+
+      sCtx.fillStyle = '#060a0e';
+      sCtx.fillRect(0, 0, w, h);
+
+      // CRT Grid Division Lines
+      sCtx.strokeStyle = 'rgba(0, 229, 255, 0.08)';
+      sCtx.lineWidth = 1;
+      const divX = w / 8;
+      const divY = h / 4;
+      for (let x = 0; x <= w; x += divX) {
+        sCtx.beginPath();
+        sCtx.moveTo(x, 0);
+        sCtx.lineTo(x, h);
+        sCtx.stroke();
+      }
+      for (let y = 0; y <= h; y += divY) {
+        sCtx.beginPath();
+        sCtx.moveTo(0, y);
+        sCtx.lineTo(w, y);
+        sCtx.stroke();
+      }
+
+      // Draw Signal Trace Waveform
+      sCtx.strokeStyle = '#00e5ff';
+      sCtx.shadowColor = '#00e5ff';
+      sCtx.shadowBlur = 8;
+      sCtx.lineWidth = 1.8;
+      sCtx.beginPath();
+
+      const centerY = h / 2;
+      const amp = h * 0.32;
+
+      for (let x = 0; x < w; x++) {
+        let y = centerY;
+        const normX = x / w;
+
+        if (selectedNet === 'CLK_25M') {
+          // Sharp High-Speed 25MHz Square Clock Wave with rise/fall edges
+          const phase = (normX * 8 + scopeTime * 2.5) % 1;
+          const square = phase < 0.5 ? 1 : -1;
+          // Soften edges slightly for authentic analog RC rise time
+          const edgeSoft = Math.sin(phase * Math.PI * 2) * 0.15;
+          y = centerY + (square * 0.85 + edgeSoft) * amp;
+        } else if (selectedNet === 'HS_BUS') {
+          // 480Mbps Differential Eye-Diagram PRBS Pattern
+          const bit1 = Math.sin(normX * 24 + scopeTime * 4);
+          const bit2 = Math.cos(normX * 48 + scopeTime * 8);
+          y = centerY + (bit1 * 0.5 + bit2 * 0.4) * amp;
+        } else if (selectedNet === 'VBUS_5V' || selectedNet === 'PWR_3V3') {
+          // DC Power Rail with minor high-frequency switching ripple (<15mV)
+          const ripple = Math.sin(normX * 36 + scopeTime * 6) * 0.08;
+          y = centerY - amp * 0.75 + ripple * amp;
+        } else {
+          // Sine Wave Probe Signal
+          y = centerY + Math.sin(normX * 12 + scopeTime * 3) * amp;
+        }
+
+        if (x === 0) sCtx.moveTo(x, y);
+        else sCtx.lineTo(x, y);
+      }
+      sCtx.stroke();
+      sCtx.shadowBlur = 0;
+
+      scopeAnimId = requestAnimationFrame(renderScope);
+    };
+
+    scopeAnimId = requestAnimationFrame(renderScope);
+    return () => cancelAnimationFrame(scopeAnimId);
+  }, [selectedNet]);
+
+  // Main 60FPS Canvas Loop (2D Precision CAD + True 3D Perspective Isometric Board View)
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
@@ -484,71 +472,352 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
     let startTime = performance.now();
 
     const render = (time) => {
-      const elapsed = time - startTime;
+      const elapsed = (time - startTime) * 0.001;
+
+      // Turntable Auto-Rotate in 3D
+      if (viewMode === '3D' && autoRotate3D && !isDragging) {
+        setRotation3D((prev) => ({ ...prev, y: prev.y + 0.5 }));
+      }
+
       const width = (canvas.width = container.clientWidth);
       const height = (canvas.height = container.clientHeight);
 
       ctx.clearRect(0, 0, width, height);
 
-      const cx = width / 2 + panOffset.x;
-      const cy = height / 2 + panOffset.y;
-      const baseScale = Math.min(1.0, Math.max(0.65, (width - 32) / 460)) * zoom;
+      const cx = width / 2 + (viewMode === '2D' ? panOffset.x : 0);
+      const cy = height / 2 + (viewMode === '2D' ? panOffset.y : 0);
+      const mask = SOLDER_MASKS[solderMask] || SOLDER_MASKS.emerald;
 
+      // ==========================================
+      // TRUE 3D PERSPECTIVE RENDERING ENGINE
+      // ==========================================
+      if (viewMode === '3D') {
+        const radX = (rotation3D.x * Math.PI) / 180;
+        const radY = (rotation3D.y * Math.PI) / 180;
+
+        // 3D Projection Matrix
+        const project3D = (x, y, z) => {
+          // Rotate Y (yaw)
+          const x1 = x * Math.cos(radY) + z * Math.sin(radY);
+          const z1 = -x * Math.sin(radY) + z * Math.cos(radY);
+
+          // Rotate X (pitch)
+          const y2 = y * Math.cos(radX) - z1 * Math.sin(radX);
+          const z2 = y * Math.sin(radX) + z1 * Math.cos(radX);
+
+          const fov = 480 * zoom;
+          const scale = fov / (fov + z2 + 380);
+
+          return {
+            x: cx + x1 * scale,
+            y: cy + y2 * scale,
+            depth: z2,
+            scale
+          };
+        };
+
+        // 1. Ground Datum CAD Grid
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+        ctx.lineWidth = 1;
+        const gSize = 260;
+        const gStep = 32;
+        const groundY = 48;
+
+        for (let gx = -gSize; gx <= gSize; gx += gStep) {
+          const p1 = project3D(gx, groundY, -gSize);
+          const p2 = project3D(gx, groundY, gSize);
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+        for (let gz = -gSize; gz <= gSize; gz += gStep) {
+          const p1 = project3D(-gSize, groundY, gz);
+          const p2 = project3D(gSize, groundY, gz);
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+
+        // 2. 3D Solid FR4 PCB Slab (Multi-layer Board with real thickness)
+        const pcbHalfW = 210;
+        const pcbHalfD = 120;
+        const pcbThick = 14; // ~1.6mm thickness scaled
+        const topY = -pcbThick / 2;
+        const botY = pcbThick / 2;
+
+        const verts = [
+          project3D(-pcbHalfW, topY, -pcbHalfD), // 0: Top Front Left
+          project3D(pcbHalfW, topY, -pcbHalfD),  // 1: Top Front Right
+          project3D(pcbHalfW, topY, pcbHalfD),   // 2: Top Back Right
+          project3D(-pcbHalfW, topY, pcbHalfD),  // 3: Top Back Left
+          project3D(-pcbHalfW, botY, -pcbHalfD), // 4: Bot Front Left
+          project3D(pcbHalfW, botY, -pcbHalfD),  // 5: Bot Front Right
+          project3D(pcbHalfW, botY, pcbHalfD),   // 6: Bot Back Right
+          project3D(-pcbHalfW, botY, pcbHalfD)   // 7: Bot Back Left
+        ];
+
+        // Bottom Solder Mask Face
+        ctx.fillStyle = mask.core;
+        ctx.beginPath();
+        ctx.moveTo(verts[4].x, verts[4].y);
+        ctx.lineTo(verts[5].x, verts[5].y);
+        ctx.lineTo(verts[6].x, verts[6].y);
+        ctx.lineTo(verts[7].x, verts[7].y);
+        ctx.closePath();
+        ctx.fill();
+
+        // 4 Multi-Layer FR4 Edge Faces (showing brown laminate core & gold copper foil stripes)
+        const drawEdge = (i1, i2, i3, i4) => {
+          ctx.fillStyle = '#1c150c'; // FR4 core edge
+          ctx.beginPath();
+          ctx.moveTo(verts[i1].x, verts[i1].y);
+          ctx.lineTo(verts[i2].x, verts[i2].y);
+          ctx.lineTo(verts[i3].x, verts[i3].y);
+          ctx.lineTo(verts[i4].x, verts[i4].y);
+          ctx.closePath();
+          ctx.fill();
+
+          // Internal Copper Plane Foil Stripes
+          ctx.strokeStyle = '#b45309';
+          ctx.lineWidth = 1;
+          const mid1x = (verts[i1].x + verts[i4].x) / 2;
+          const mid1y = (verts[i1].y + verts[i4].y) / 2;
+          const mid2x = (verts[i2].x + verts[i3].x) / 2;
+          const mid2y = (verts[i2].y + verts[i3].y) / 2;
+          ctx.beginPath();
+          ctx.moveTo(mid1x, mid1y);
+          ctx.lineTo(mid2x, mid2y);
+          ctx.stroke();
+
+          ctx.strokeStyle = mask.border;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+        };
+
+        // Render visible edge faces
+        drawEdge(0, 1, 5, 4); // Front
+        drawEdge(1, 2, 6, 5); // Right
+        drawEdge(2, 3, 7, 6); // Back
+        drawEdge(3, 0, 4, 7); // Left
+
+        // Top Solder Mask Face
+        ctx.fillStyle = mask.bg;
+        ctx.beginPath();
+        ctx.moveTo(verts[0].x, verts[0].y);
+        ctx.lineTo(verts[1].x, verts[1].y);
+        ctx.lineTo(verts[2].x, verts[2].y);
+        ctx.lineTo(verts[3].x, verts[3].y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = mask.border;
+        ctx.lineWidth = 2.0;
+        ctx.stroke();
+
+        // 3D Standoff Mounting Holes (Plated through-holes with gold annular rings)
+        const holes = [
+          project3D(-pcbHalfW + 18, topY, -pcbHalfD + 18),
+          project3D(pcbHalfW - 18, topY, -pcbHalfD + 18),
+          project3D(-pcbHalfW + 18, topY, pcbHalfD - 18),
+          project3D(pcbHalfW - 18, topY, pcbHalfD - 18)
+        ];
+        holes.forEach((h) => {
+          ctx.fillStyle = '#f59e0b'; // Gold plated annular pad
+          ctx.beginPath();
+          ctx.arc(h.x, h.y, 6.5 * zoom, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#060a0e'; // Drill hole
+          ctx.beginPath();
+          ctx.arc(h.x, h.y, 3.8 * zoom, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // 3. Render 3D Copper Traces on Top Solder Mask Plane
+        traces.forEach((tr) => {
+          const cFrom = components.find((c) => c.id === tr.from);
+          const cTo = components.find((c) => c.id === tr.to);
+          if (!cFrom || !cTo) return;
+
+          const p1 = project3D(cFrom.rx + cFrom.w / 2, topY - 1, cFrom.ry + cFrom.h / 2);
+          const p2 = project3D(cTo.rx + cTo.w / 2, topY - 1, cTo.ry + cTo.h / 2);
+
+          const isSelected = selectedTrace?.id === tr.id || selectedNet === tr.net;
+
+          ctx.strokeStyle = isSelected ? '#00e5ff' : tr.color;
+          ctx.lineWidth = (isSelected ? 3.0 : 1.8) * zoom;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+
+          // 45-degree mitred dogleg in 3D
+          const midX = (cFrom.rx + cTo.rx) / 2;
+          const pMid = project3D(midX, topY - 1, cFrom.ry + cFrom.h / 2);
+          ctx.lineTo(pMid.x, pMid.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+
+          // 3D Animated Signal Photons
+          if (signalsActive) {
+            const photonPhase = (elapsed * 2.2 + tr.id.charCodeAt(tr.id.length - 1) * 0.3) % 1;
+            const photonX = p1.x + (p2.x - p1.x) * photonPhase;
+            const photonY = p1.y + (p2.y - p1.y) * photonPhase;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.shadowColor = '#00e5ff';
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.arc(photonX, photonY, 3.2 * zoom, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        });
+
+        // 4. Render 3D Extruded Components
+        // Sort components by 3D depth for painter's algorithm
+        const sortedComps = [...components].map((comp) => {
+          const center = project3D(comp.rx + comp.w / 2, topY, comp.ry + comp.h / 2);
+          return { comp, center, depth: center.depth };
+        });
+        sortedComps.sort((a, b) => b.depth - a.depth);
+
+        sortedComps.forEach(({ comp }) => {
+          const h3D = (comp.height3D || 1.5) * 8; // Extrusion height
+          const compTopY = topY - h3D;
+          const compBotY = topY;
+          const isSelected = selectedComp?.id === comp.id;
+
+          const cx3D = comp.rx + comp.w / 2;
+          const cz3D = comp.ry + comp.h / 2;
+          const hw = comp.w / 2;
+          const hd = comp.h / 2;
+
+          // 8 Vertices of the Extruded Component Box
+          const cv = [
+            project3D(cx3D - hw, compTopY, cz3D - hd),
+            project3D(cx3D + hw, compTopY, cz3D - hd),
+            project3D(cx3D + hw, compTopY, cz3D + hd),
+            project3D(cx3D - hw, compTopY, cz3D + hd),
+            project3D(cx3D - hw, compBotY, cz3D - hd),
+            project3D(cx3D + hw, compBotY, cz3D - hd),
+            project3D(cx3D + hw, compBotY, cz3D + hd),
+            project3D(cx3D - hw, compBotY, cz3D + hd)
+          ];
+
+          // Side Walls Shading
+          ctx.fillStyle = comp.type === 'conn' ? '#94a3b8' : comp.type === 'bga' ? '#334155' : '#1e2433';
+          // Front Side
+          ctx.beginPath();
+          ctx.moveTo(cv[0].x, cv[0].y);
+          ctx.lineTo(cv[1].x, cv[1].y);
+          ctx.lineTo(cv[5].x, cv[5].y);
+          ctx.lineTo(cv[4].x, cv[4].y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = '#0f172a';
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+
+          // Right Side
+          ctx.beginPath();
+          ctx.moveTo(cv[1].x, cv[1].y);
+          ctx.lineTo(cv[2].x, cv[2].y);
+          ctx.lineTo(cv[6].x, cv[6].y);
+          ctx.lineTo(cv[5].x, cv[5].y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          // Top Face
+          if (comp.type === 'smd_led') {
+            ctx.fillStyle = '#10b981'; // Luminous Emerald
+            ctx.shadowColor = '#10b981';
+            ctx.shadowBlur = 10;
+          } else if (comp.type === 'conn') {
+            ctx.fillStyle = '#cbd5e1'; // Stainless Steel
+          } else if (comp.type === 'xtal') {
+            ctx.fillStyle = '#e2e8f0'; // Shiny Silver Can
+          } else {
+            ctx.fillStyle = isSelected ? '#2d3748' : '#1a202c'; // Molded Epoxy Package
+          }
+
+          ctx.beginPath();
+          ctx.moveTo(cv[0].x, cv[0].y);
+          ctx.lineTo(cv[1].x, cv[1].y);
+          ctx.lineTo(cv[2].x, cv[2].y);
+          ctx.lineTo(cv[3].x, cv[3].y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          ctx.strokeStyle = isSelected ? '#00e5ff' : '#475569';
+          ctx.lineWidth = isSelected ? 2.0 : 1.0;
+          ctx.stroke();
+
+          // Gold Gull-Wing Pins on QFP (STM32)
+          if (comp.type === 'qfp') {
+            ctx.fillStyle = '#fbbf24';
+            for (let p = -hw + 8; p < hw - 8; p += 6) {
+              const pTop = project3D(cx3D + p, compBotY - 2, cz3D + hd);
+              const pBot = project3D(cx3D + p, compBotY + 2, cz3D + hd + 4);
+              ctx.fillRect(pTop.x - 1, pTop.y, 2.5 * zoom, 4 * zoom);
+            }
+          }
+
+          // Top Face Silkscreen / Part ID
+          const labelPt = project3D(cx3D, compTopY, cz3D);
+          ctx.fillStyle = comp.type === 'conn' ? '#0f172a' : '#f8fafc';
+          ctx.font = `700 ${Math.max(8, 10 * zoom)}px "JetBrains Mono", monospace`;
+          ctx.textAlign = 'center';
+          ctx.fillText(comp.id, labelPt.x, labelPt.y + 4);
+        });
+
+        // 3D Viewport HUD Metadata
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '700 11px "JetBrains Mono", monospace';
+        ctx.fillText(
+          `3D ORBIT: ${rotation3D.x.toFixed(0)}° / ${rotation3D.y.toFixed(0)}° | ZOOM: ${(zoom * 100).toFixed(0)}% | COMPONENTS: ${components.length}`,
+          18,
+          24
+        );
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '600 10px "JetBrains Mono", monospace';
+        ctx.fillText(
+          `FR4 SUBSTRATE: 115×75×1.6mm | TOP LAYER: ${activeLayer} | SOLDER MASK: ${mask.name}`,
+          18,
+          38
+        );
+
+        animFrameRef.current = requestAnimationFrame(render);
+        return;
+      }
+
+      // ==========================================
+      // 2D PRECISION CAD INTERACTIVE EDITOR
+      // ==========================================
+      const baseScale = Math.min(1.0, Math.max(0.65, (width - 32) / 460)) * zoom;
       ctx.save();
       ctx.translate(cx, cy);
-
-      if (viewMode === '3D') {
-        // Perspective Isometric transformation for realistic 3D Board inspection
-        ctx.scale(baseScale * 0.95, baseScale * 0.58);
-        ctx.rotate(-Math.PI / 8);
-      } else {
-        ctx.scale(baseScale, baseScale);
-      }
+      ctx.scale(baseScale, baseScale);
 
       const pcbW = 440;
       const pcbH = 250;
       const pcbX = -pcbW / 2;
       const pcbY = -pcbH / 2;
-      const mask = SOLDER_MASKS[solderMask];
 
-      // 1. Board Drop Shadow & 3D Substrate Thickness
-      if (viewMode === '3D') {
-        // Multi-layer FR4 edge depth
-        ctx.fillStyle = '#05070a';
-        ctx.beginPath();
-        ctx.roundRect(pcbX + 8, pcbY + 16, pcbW, pcbH, 10);
-        ctx.fill();
+      // 1. Board Drop Shadow
+      ctx.fillStyle = '#05070a';
+      ctx.beginPath();
+      ctx.roundRect(pcbX + 8, pcbY + 12, pcbW, pcbH, 10);
+      ctx.fill();
 
-        // FR4 Core Brown/Gold edge bevel
-        ctx.fillStyle = '#1c150c';
-        ctx.beginPath();
-        ctx.roundRect(pcbX, pcbY + 8, pcbW, pcbH, 8);
-        ctx.fill();
-      }
-
-      // 2. PCB Solder Mask (FR4 Substrate Surface)
+      // 2. PCB Solder Mask
       ctx.fillStyle = mask.bg;
       ctx.beginPath();
       ctx.roundRect(pcbX, pcbY, pcbW, pcbH, 8);
       ctx.fill();
 
-      // Subtle fiberglass weave texture
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.025)';
-      ctx.lineWidth = 1;
-      for (let i = pcbX; i <= pcbX + pcbW; i += 8) {
-        ctx.beginPath();
-        ctx.moveTo(i, pcbY);
-        ctx.lineTo(i, pcbY + pcbH);
-        ctx.stroke();
-      }
-      for (let j = pcbY; j <= pcbY + pcbH; j += 8) {
-        ctx.beginPath();
-        ctx.moveTo(pcbX, j);
-        ctx.lineTo(pcbX + pcbW, j);
-        ctx.stroke();
-      }
-
-      // Board Edge Chamfer / Milling Outline
+      // Board Edge Chamfer
       ctx.strokeStyle = mask.border;
       ctx.lineWidth = 2.2;
       ctx.stroke();
@@ -561,7 +830,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
       ctx.strokeRect(pcbX + 4, pcbY + 4, pcbW - 8, pcbH - 8);
       ctx.restore();
 
-      // CAD Precision Snap Grid Dots
+      // CAD Snap Grid Dots
       ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
       for (let x = pcbX + 16; x < pcbX + pcbW; x += 16) {
         for (let y = pcbY + 16; y < pcbY + pcbH; y += 16) {
@@ -569,32 +838,25 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
         }
       }
 
-      // Optical Fiducials in Board Corners (ENIG Gold with Soldermask Opening)
+      // Optical Fiducials in Board Corners
       const fiducials = [
         { x: pcbX + 18, y: pcbY + 36 },
         { x: pcbX + pcbW - 18, y: pcbY + 36 },
         { x: pcbX + 18, y: pcbY + pcbH - 24 }
       ];
       fiducials.forEach((fid) => {
-        // Solder mask opening
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-        ctx.beginPath();
-        ctx.arc(fid.x, fid.y, 4.5, 0, Math.PI * 2);
-        ctx.fill();
-        // Gold pad
         ctx.fillStyle = '#f59e0b';
         ctx.beginPath();
-        ctx.arc(fid.x, fid.y, 2.2, 0, Math.PI * 2);
+        ctx.arc(fid.x, fid.y, 2.8, 0, Math.PI * 2);
         ctx.fill();
-        // Crosshair ring
         ctx.strokeStyle = '#f8fafc';
         ctx.lineWidth = 0.8;
         ctx.beginPath();
-        ctx.arc(fid.x, fid.y, 6.5, 0, Math.PI * 2);
+        ctx.arc(fid.x, fid.y, 6.0, 0, Math.PI * 2);
         ctx.stroke();
       });
 
-      // 3. Render Multi-Layer 45° Mitred Copper Traces
+      // 3. Render 2D Copper Traces
       traces.forEach((tr) => {
         const cFrom = components.find((c) => c.id === tr.from);
         const cTo = components.find((c) => c.id === tr.to);
@@ -604,9 +866,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
         const isLayerActive = tr.layer === activeLayer;
 
         let alpha = 1.0;
-        if (isolateLayer && !isLayerActive) {
-          alpha = 0.15;
-        }
+        if (isolateLayer && !isLayerActive) alpha = 0.15;
 
         ctx.save();
         ctx.globalAlpha = alpha;
@@ -616,436 +876,97 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
         const x2 = cTo.rx + cTo.w / 2;
         const y2 = cTo.ry + cTo.h / 2;
 
-        // Calculate authentic 45-degree mitred dogleg routing
-        const dx = x2 - x1;
-        const dy = y2 - y1;
-        const absDx = Math.abs(dx);
-        const absDy = Math.abs(dy);
+        const midX = (x1 + x2) / 2;
 
-        let p1x = x1;
-        let p1y = y1;
-        let p2x, p2y, p3x, p3y;
-
-        if (absDx > absDy) {
-          const cornerDist = absDy;
-          const cornerDirX = Math.sign(dx);
-          p2x = x1 + (dx - cornerDist * cornerDirX);
-          p2y = y1;
-          p3x = x2;
-          p3y = y2;
-        } else {
-          const cornerDist = absDx;
-          const cornerDirY = Math.sign(dy);
-          p2x = x1;
-          p2y = y1 + (dy - cornerDist * cornerDirY);
-          p3x = x2;
-          p3y = y2;
-        }
-
-        // Trace Outer Glow on Selected / Active
-        if (isTraceSelected || isLayerActive) {
-          ctx.strokeStyle = tr.color;
-          ctx.lineWidth = tr.width + 4.0;
-          ctx.shadowColor = tr.color;
-          ctx.shadowBlur = isTraceSelected ? 14 : 7;
-          ctx.beginPath();
-          ctx.moveTo(p1x, p1y);
-          ctx.lineTo(p2x, p2y);
-          ctx.lineTo(p3x, p3y);
-          ctx.stroke();
-        }
-
-        // Copper Track Body
-        ctx.strokeStyle = isTraceSelected ? '#ffffff' : tr.color;
-        ctx.lineWidth = tr.width;
+        ctx.strokeStyle = isTraceSelected ? '#00e5ff' : tr.color;
+        ctx.lineWidth = (isTraceSelected ? 3.6 : tr.width) * (activeLayer === tr.layer ? 1.0 : 0.85);
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
+
         ctx.beginPath();
-        ctx.moveTo(p1x, p1y);
-        ctx.lineTo(p2x, p2y);
-        ctx.lineTo(p3x, p3y);
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(midX, y1);
+        ctx.lineTo(x2, y2);
         ctx.stroke();
 
-        // 4. Real-Time Moving Signal Photon Pulses
-        if (signalsActive && alpha > 0.4) {
-          const totalLength = Math.hypot(p2x - p1x, p2y - p1y) + Math.hypot(p3x - p2x, p3y - p2y);
-          const speed = tr.signalType === 'clock' ? 0.28 : tr.signalType === 'diff' ? 0.38 : 0.16;
-          const pulseOffset = (elapsed * speed) % totalLength;
+        // Animated Signal Photon Wavefront
+        if (signalsActive) {
+          const photonPhase = (elapsed * 2.5 + tr.id.charCodeAt(tr.id.length - 1) * 0.3) % 1;
+          let px = x1 + (x2 - x1) * photonPhase;
+          let py = y1 + (y2 - y1) * photonPhase;
 
-          // Compute exact position along 45° segments
-          let pulseX, pulseY;
-          const seg1Len = Math.hypot(p2x - p1x, p2y - p1y);
-          if (pulseOffset <= seg1Len && seg1Len > 0) {
-            const frac = pulseOffset / seg1Len;
-            pulseX = p1x + (p2x - p1x) * frac;
-            pulseY = p1y + (p2y - p1y) * frac;
-          } else {
-            const seg2Len = Math.hypot(p3x - p2x, p3y - p2y);
-            const frac = seg2Len > 0 ? (pulseOffset - seg1Len) / seg2Len : 0;
-            pulseX = p2x + (p3x - p2x) * frac;
-            pulseY = p2y + (p3y - p2y) * frac;
-          }
-
-          // Render Electric Photon Dot
           ctx.fillStyle = '#ffffff';
-          ctx.shadowColor = tr.color;
-          ctx.shadowBlur = 10;
+          ctx.shadowColor = '#00e5ff';
+          ctx.shadowBlur = 8;
           ctx.beginPath();
-          ctx.arc(pulseX, pulseY, 2.8, 0, Math.PI * 2);
+          ctx.arc(px, py, 3.2, 0, Math.PI * 2);
           ctx.fill();
-
-          // Second staggered pulse for high-speed differential bus
-          if (tr.signalType === 'diff') {
-            const offset2 = (pulseOffset + totalLength * 0.5) % totalLength;
-            let p2X, p2Y;
-            if (offset2 <= seg1Len && seg1Len > 0) {
-              const f = offset2 / seg1Len;
-              p2X = p1x + (p2x - p1x) * f;
-              p2Y = p1y + (p2y - p1y) * f;
-            } else {
-              const seg2Len = Math.hypot(p3x - p2x, p3y - p2y);
-              const f = seg2Len > 0 ? (offset2 - seg1Len) / seg2Len : 0;
-              p2X = p2x + (p3x - p2x) * f;
-              p2Y = p2y + (p3y - p2y) * f;
-            }
-            ctx.fillStyle = '#a5f3fc';
-            ctx.beginPath();
-            ctx.arc(p2X, p2Y, 2.2, 0, Math.PI * 2);
-            ctx.fill();
-          }
+          ctx.shadowBlur = 0;
         }
-
-        // Plated Via Annular Rings at Terminations
-        const drawVia = (vx, vy) => {
-          // Copper pad outer ring
-          ctx.fillStyle = '#d97706';
-          ctx.beginPath();
-          ctx.arc(vx, vy, 4.2, 0, Math.PI * 2);
-          ctx.fill();
-          // ENIG Gold center plating
-          ctx.fillStyle = '#fbbf24';
-          ctx.beginPath();
-          ctx.arc(vx, vy, 2.8, 0, Math.PI * 2);
-          ctx.fill();
-          // Dark drilled hole
-          ctx.fillStyle = '#05070a';
-          ctx.beginPath();
-          ctx.arc(vx, vy, 1.4, 0, Math.PI * 2);
-          ctx.fill();
-        };
-
-        drawVia(x1, y1);
-        drawVia(x2, y2);
 
         ctx.restore();
       });
 
-      // 5. Interactive Routing Airwire Guide
+      // 4. Interactive In-Progress Routing Flightline Wire
       if (activeTool === 'route' && routingSourceId) {
-        const src = components.find((c) => c.id === routingSourceId);
-        if (src) {
-          const sx = src.rx + src.w / 2;
-          const sy = src.ry + src.h / 2;
+        const rComp = components.find((c) => c.id === routingSourceId);
+        if (rComp) {
+          const sx = rComp.rx + rComp.w / 2;
+          const sy = rComp.ry + rComp.h / 2;
 
           ctx.save();
-          // Dynamic 45-degree preview line
-          const rdx = mouseBoardPos.x - sx;
-          const rdy = mouseBoardPos.y - sy;
-          let midX, midY;
-          if (Math.abs(rdx) > Math.abs(rdy)) {
-            midX = sx + (rdx - Math.abs(rdy) * Math.sign(rdx));
-            midY = sy;
-          } else {
-            midX = sx;
-            midY = sy + (rdy - Math.abs(rdx) * Math.sign(rdy));
-          }
-
-          ctx.strokeStyle = '#f59e0b';
-          ctx.lineWidth = 2.2;
-          ctx.setLineDash([5, 4]);
+          ctx.strokeStyle = '#00e5ff';
+          ctx.lineWidth = 2.0;
+          ctx.setLineDash([5, 5]);
           ctx.beginPath();
           ctx.moveTo(sx, sy);
-          ctx.lineTo(midX, midY);
           ctx.lineTo(mouseBoardPos.x, mouseBoardPos.y);
           ctx.stroke();
-
-          // Pulsing Source Ring
-          ctx.setLineDash([]);
-          ctx.strokeStyle = '#00e5ff';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.arc(sx, sy, Math.max(src.w, src.h) / 2 + 8, 0, Math.PI * 2);
-          ctx.stroke();
           ctx.restore();
+
+          // Destination crosshair target
+          ctx.strokeStyle = '#00e5ff';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(mouseBoardPos.x, mouseBoardPos.y, 8, 0, Math.PI * 2);
+          ctx.stroke();
         }
       }
 
-      // 6. Render Authentic Component Packages & Footprints
+      // 5. Render 2D Components
       components.forEach((comp) => {
         const isSelected = selectedComp?.id === comp.id;
-        const isRoutingSource = routingSourceId === comp.id;
-        const isColliding = violations.some((v) => v.c1 === comp.id || v.c2 === comp.id);
-        const px = comp.rx;
-        const py = comp.ry;
-        const pw = comp.w;
-        const ph = comp.h;
 
-        ctx.save();
-
-        // 3D Isometric Drop Shadow on Substrate
-        if (viewMode === '3D') {
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-          ctx.beginPath();
-          ctx.roundRect(px + 4, py + 6, pw, ph, 4);
-          ctx.fill();
-        }
-
-        // Live DRC Collision Warning Halo
-        if (isColliding) {
-          ctx.strokeStyle = '#ef4444';
-          ctx.lineWidth = 2.8;
-          ctx.strokeRect(px - 4, py - 4, pw + 8, ph + 8);
-
-          // Diagonal Warning Stripes
-          ctx.save();
-          ctx.beginPath();
-          ctx.rect(px, py, pw, ph);
-          ctx.clip();
-          ctx.strokeStyle = 'rgba(239, 68, 68, 0.7)';
-          ctx.lineWidth = 2.5;
-          for (let s = -ph; s < pw + ph; s += 8) {
-            ctx.beginPath();
-            ctx.moveTo(px + s, py);
-            ctx.lineTo(px + s + ph, py + ph);
-            ctx.stroke();
-          }
-          ctx.restore();
-
-          // DRC clearance tag
-          ctx.fillStyle = '#ef4444';
-          ctx.font = 'bold 9px "JetBrains Mono", monospace';
-          ctx.fillText('CLEARANCE VIOLATION!', px - 2, py - 6);
-        }
-
-        // Selection Halo
+        // Selection Highlight
         if (isSelected) {
           ctx.strokeStyle = '#00e5ff';
-          ctx.lineWidth = 2.0;
-          ctx.setLineDash([4, 3]);
-          ctx.strokeRect(px - 3, py - 3, pw + 6, ph + 6);
+          ctx.lineWidth = 2;
+          ctx.setLineDash([4, 4]);
+          ctx.strokeRect(comp.rx - 5, comp.ry - 5, comp.w + 10, comp.h + 10);
           ctx.setLineDash([]);
         }
 
-        // Specific Package Footprint Rendering
-        if (comp.type === 'qfp') {
-          // STM32F4 QFP-64 Package
-          // Perimeter Gold Lead Pads
-          ctx.fillStyle = '#fbbf24';
-          for (let i = 8; i < pw - 8; i += 7) {
-            ctx.fillRect(px + i, py - 4, 3.5, 4);
-            ctx.fillRect(px + i, py + ph, 3.5, 4);
-          }
-          for (let j = 8; j < ph - 8; j += 7) {
-            ctx.fillRect(px - 4, py + j, 4, 3.5);
-            ctx.fillRect(px + pw, py + j, 4, 3.5);
-          }
+        // Component Body
+        ctx.fillStyle = comp.type === 'conn' ? '#475569' : comp.type === 'bga' ? '#1e293b' : '#111827';
+        ctx.beginPath();
+        ctx.roundRect(comp.rx, comp.ry, comp.w, comp.h, 3);
+        ctx.fill();
+        ctx.strokeStyle = isSelected ? '#00e5ff' : '#64748b';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
 
-          // Molded Epoxy Package Body with Beveled Chamfers
-          ctx.fillStyle = isSelected ? '#1e2433' : '#141720';
-          ctx.beginPath();
-          ctx.roundRect(px, py, pw, ph, 4);
-          ctx.fill();
-          ctx.strokeStyle = '#2d3748';
-          ctx.lineWidth = 1;
-          ctx.stroke();
+        // Pin 1 Index Dot
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath();
+        ctx.arc(comp.rx + 5, comp.ry + 5, 2, 0, Math.PI * 2);
+        ctx.fill();
 
-          // Exposed Thermal Center Ground Pad
-          ctx.fillStyle = '#d97706';
-          ctx.fillRect(px + pw / 2 - 12, py + ph / 2 - 12, 24, 24);
-
-          // Pin 1 Index Notch
-          ctx.fillStyle = '#00e5ff';
-          ctx.beginPath();
-          ctx.arc(px + 8, py + 8, 2.5, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Laser Engraved IC Silkscreen
-          ctx.fillStyle = '#94a3b8';
-          ctx.font = '700 8px "JetBrains Mono", monospace';
-          ctx.textAlign = 'center';
-          ctx.fillText(comp.id, px + pw / 2, py + ph / 2 - 3);
-          ctx.font = '500 7px "JetBrains Mono", monospace';
-          ctx.fillText('STM32F407', px + pw / 2, py + ph / 2 + 7);
-          ctx.textAlign = 'left';
-        } else if (comp.type === 'bga') {
-          // FPGA BGA-256 Package with Metallic Heat-Spreader
-          // Substrate PCB Border
-          ctx.fillStyle = '#1e293b';
-          ctx.fillRect(px, py, pw, ph);
-
-          // Metallic Anodized Aluminum Lid
-          const lidMargin = 6;
-          ctx.fillStyle = isSelected ? '#334155' : '#1e2430';
-          ctx.fillRect(px + lidMargin, py + lidMargin, pw - lidMargin * 2, ph - lidMargin * 2);
-          ctx.strokeStyle = '#64748b';
-          ctx.lineWidth = 1;
-          ctx.strokeRect(px + lidMargin, py + lidMargin, pw - lidMargin * 2, ph - lidMargin * 2);
-
-          // BGA Corner Orientation Chamfer
-          ctx.fillStyle = '#f59e0b';
-          ctx.beginPath();
-          ctx.moveTo(px + lidMargin, py + lidMargin + 8);
-          ctx.lineTo(px + lidMargin + 8, py + lidMargin);
-          ctx.lineTo(px + lidMargin, py + lidMargin);
-          ctx.closePath();
-          ctx.fill();
-
-          // Laser Text
-          ctx.fillStyle = '#cbd5e1';
-          ctx.font = '700 9px "JetBrains Mono", monospace';
-          ctx.textAlign = 'center';
-          ctx.fillText(comp.id, px + pw / 2, py + ph / 2 - 4);
-          ctx.font = '500 7px "JetBrains Mono", monospace';
-          ctx.fillStyle = '#94a3b8';
-          ctx.fillText('XILINX 56G', px + pw / 2, py + ph / 2 + 7);
-          ctx.textAlign = 'left';
-        } else if (comp.type === 'conn') {
-          // USB-C Receptacle Package
-          // Metal Shell
-          ctx.fillStyle = isSelected ? '#384252' : '#272f3d';
-          ctx.beginPath();
-          ctx.roundRect(px, py, pw, ph, 4);
-          ctx.fill();
-          ctx.strokeStyle = '#94a3b8';
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
-
-          // Ground Hold-Down Retention Tabs
-          ctx.fillStyle = '#fbbf24';
-          ctx.fillRect(px + 4, py - 3, 6, 3);
-          ctx.fillRect(px + pw - 10, py - 3, 6, 3);
-          ctx.fillRect(px + 4, py + ph, 6, 3);
-          ctx.fillRect(px + pw - 10, py + ph, 6, 3);
-
-          // Front Bezel Tongue & Opening
-          ctx.fillStyle = '#0f172a';
-          ctx.beginPath();
-          ctx.roundRect(px + 4, py + 8, 8, ph - 16, 2);
-          ctx.fill();
-
-          ctx.fillStyle = '#cbd5e1';
-          ctx.font = '700 8px "JetBrains Mono", monospace';
-          ctx.fillText('USB-C', px + 15, py + ph / 2 + 3);
-        } else if (comp.type === 'sot') {
-          // SOT-223 Voltage Regulator
-          // Tab Heat Sink Lead (Top)
-          ctx.fillStyle = '#fbbf24';
-          ctx.fillRect(px + pw / 2 - 8, py - 4, 16, 4);
-
-          // 3 Output Leads (Bottom)
-          ctx.fillRect(px + 4, py + ph, 5, 4);
-          ctx.fillRect(px + pw / 2 - 2.5, py + ph, 5, 4);
-          ctx.fillRect(px + pw - 9, py + ph, 5, 4);
-
-          // Molded Body
-          ctx.fillStyle = '#1e2430';
-          ctx.beginPath();
-          ctx.roundRect(px, py, pw, ph, 2);
-          ctx.fill();
-          ctx.strokeStyle = '#475569';
-          ctx.lineWidth = 1;
-          ctx.stroke();
-
-          ctx.fillStyle = '#cbd5e1';
-          ctx.font = '700 8px "JetBrains Mono", monospace';
-          ctx.fillText(comp.id, px + 5, py + ph / 2 + 3);
-        } else if (comp.type === 'xtal') {
-          // Crystal Oscillator Hermetic Can
-          ctx.fillStyle = '#b45309';
-          ctx.beginPath();
-          ctx.roundRect(px, py, pw, ph, 2);
-          ctx.fill();
-          ctx.fillStyle = '#fef3c7';
-          ctx.fillRect(px + 2, py + 2, pw - 4, ph - 4);
-          ctx.fillStyle = '#78350f';
-          ctx.font = '700 7px "JetBrains Mono", monospace';
-          ctx.fillText('25.0M', px + 3, py + ph / 2 + 2);
-        } else if (comp.type === 'testpoint') {
-          // Gold Circular Test Point
-          ctx.fillStyle = '#f59e0b';
-          ctx.beginPath();
-          ctx.arc(px + pw / 2, py + ph / 2, pw / 2, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#fbbf24';
-          ctx.lineWidth = 1.4;
-          ctx.stroke();
-
-          ctx.fillStyle = '#ffffff';
-          ctx.font = '700 7px "JetBrains Mono", monospace';
-          ctx.fillText(comp.id, px - 2, py - 2);
-        } else if (comp.type === 'hole') {
-          // M3 Mounting Standoff with Annular Thermal Relief Vias
-          ctx.fillStyle = '#05070a';
-          ctx.beginPath();
-          ctx.arc(px + pw / 2, py + ph / 2, 7, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Plated Ring
-          ctx.strokeStyle = '#f59e0b';
-          ctx.lineWidth = 3.5;
-          ctx.stroke();
-
-          // 8 Thermal Ground Vias around hole
-          ctx.fillStyle = '#fbbf24';
-          for (let a = 0; a < Math.PI * 2; a += Math.PI / 4) {
-            const hx = px + pw / 2 + Math.cos(a) * 11;
-            const hy = py + ph / 2 + Math.sin(a) * 11;
-            ctx.beginPath();
-            ctx.arc(hx, hy, 1.4, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        } else {
-          // SMD Passive (Resistor, Capacitor, LED)
-          // Ceramic or Epoxy Body
-          const isCap = comp.type === 'smd_cap';
-          const isLed = comp.type === 'smd_led';
-          ctx.fillStyle = isCap ? '#854d0e' : isLed ? '#065f46' : '#1e2430';
-          ctx.fillRect(px, py, pw, ph);
-
-          // Metallic Solder Terminals on Ends
-          ctx.fillStyle = '#e2e8f0';
-          ctx.fillRect(px, py, 3.5, ph);
-          ctx.fillRect(px + pw - 3.5, py, 3.5, ph);
-
-          // Silkscreen RefDes
-          ctx.fillStyle = '#cbd5e1';
-          ctx.font = '700 7.5px "JetBrains Mono", monospace';
-          ctx.fillText(comp.id, px + 1, py - 3);
-        }
-
-        ctx.restore();
+        // Silkscreen Text
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = '700 9px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(comp.id, comp.rx + comp.w / 2, comp.ry + comp.h / 2 + 3);
       });
-
-      // 7. Silkscreen Board Title & Revision Stamp
-      ctx.textAlign = 'center';
-      ctx.fillStyle = mask.silk;
-      ctx.font = '700 11px "JetBrains Mono", monospace';
-      ctx.fillText('ALTIUM DESIGNER 24 // HIGH-SPEED ECAD MATRIX', 0, pcbY + 22);
-
-      ctx.fillStyle = violations.length > 0 ? '#ef4444' : '#10b981';
-      ctx.font = '600 10px "JetBrains Mono", monospace';
-      ctx.fillText(
-        `LAYER: ${activeLayer} | NETS: ${traces.length} | IMPEDANCE: 50Ω | DRC: ${
-          violations.length > 0 ? `${violations.length} VIOLATION(S)` : '0 ERRORS (VERIFIED)'
-        }`,
-        0,
-        pcbY + 36
-      );
-
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-      ctx.font = '9px "JetBrains Mono", monospace';
-      ctx.fillText('SRM ROBOCON // HW-MECH CO-DESIGN LAB // REV 2.4', 0, pcbY + pcbH - 12);
-      ctx.textAlign = 'left';
 
       ctx.restore();
 
@@ -1054,121 +975,18 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
 
     animFrameRef.current = requestAnimationFrame(render);
     return () => cancelAnimationFrame(animFrameRef.current);
-  }, [
-    components,
-    traces,
-    selectedComp,
-    selectedTrace,
-    selectedNet,
-    activeLayer,
-    activeTool,
-    routingSourceId,
-    mouseBoardPos,
-    isolateLayer,
-    violations,
-    solderMask,
-    viewMode,
-    zoom,
-    panOffset,
-    signalsActive
-  ]);
+  }, [components, traces, activeLayer, activeTool, solderMask, viewMode, zoom, panOffset, selectedComp, selectedTrace, selectedNet, routingSourceId, mouseBoardPos, isolateLayer, signalsActive, rotation3D, autoRotate3D, isDragging]);
 
-  // Real-Time Animated Oscilloscope Waveform RAF Loop
-  useEffect(() => {
-    const scopeCanvas = scopeCanvasRef.current;
-    if (!scopeCanvas) return;
-    const ctx = scopeCanvas.getContext('2d');
-    let scopeAnimId = 0;
-    let t = 0;
-
-    const renderScope = () => {
-      const w = (scopeCanvas.width = scopeCanvas.clientWidth || 250);
-      const h = (scopeCanvas.height = scopeCanvas.clientHeight || 120);
-
-      // CRT phosphor dark background
-      ctx.fillStyle = '#060a0e';
-      ctx.fillRect(0, 0, w, h);
-
-      // Oscilloscope Graticule (Subdivision Grid)
-      ctx.strokeStyle = 'rgba(0, 229, 255, 0.12)';
-      ctx.lineWidth = 1;
-      const xDivs = 8;
-      const yDivs = 6;
-      for (let i = 0; i <= xDivs; i++) {
-        const gx = (w / xDivs) * i;
-        ctx.beginPath();
-        ctx.moveTo(gx, 0);
-        ctx.lineTo(gx, h);
-        ctx.stroke();
-      }
-      for (let j = 0; j <= yDivs; j++) {
-        const gy = (h / yDivs) * j;
-        ctx.beginPath();
-        ctx.moveTo(0, gy);
-        ctx.lineTo(w, gy);
-        ctx.stroke();
-      }
-
-      // Center Dotted Crosshairs
-      ctx.strokeStyle = 'rgba(0, 229, 255, 0.28)';
-      ctx.setLineDash([2, 3]);
-      ctx.beginPath();
-      ctx.moveTo(w / 2, 0);
-      ctx.lineTo(w / 2, h);
-      ctx.moveTo(0, h / 2);
-      ctx.lineTo(w, h / 2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Generate Live Signal Waveform based on selected trace or net
-      ctx.strokeStyle = '#00e5ff';
-      ctx.lineWidth = 2.0;
-      ctx.shadowColor = '#00e5ff';
-      ctx.shadowBlur = 8;
-      ctx.beginPath();
-
-      const activeTr = traces.find((tr) => tr.net === selectedNet || tr.id === selectedTrace?.id);
-      const sigType = activeTr ? activeTr.signalType : 'clock';
-
-      for (let x = 0; x < w; x++) {
-        let y = h / 2;
-        if (sigType === 'clock') {
-          // 25MHz Square Wave with high-speed slew-rate exponential curvature
-          const phase = (x * 0.08 + t * 0.18) % (Math.PI * 2);
-          const rawSq = Math.sin(phase) > 0 ? 1 : -1;
-          const rounded = Math.tanh(rawSq * 4);
-          y = h / 2 - rounded * (h * 0.35);
-        } else if (sigType === 'diff') {
-          // High-Speed 480Mbps Serial PRBS Eye-Pattern Simulation
-          const p1 = Math.sin(x * 0.12 + t * 0.25);
-          const p2 = Math.cos(x * 0.06 - t * 0.15);
-          y = h / 2 - (p1 * 0.7 + p2 * 0.3) * (h * 0.32);
-        } else if (sigType === 'power') {
-          // 3.3V DC Rail with Switch-Mode 100kHz ripple noise
-          const ripple = Math.sin(x * 0.25 + t * 0.3) * 3 + Math.sin(x * 0.7 - t * 0.4) * 1.5;
-          y = h / 2 - h * 0.25 + ripple;
-        } else {
-          // GND Clean Low Line
-          y = h * 0.85 + (Math.random() - 0.5) * 1.2;
-        }
-
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-
-      t += 0.8;
-      scopeAnimId = requestAnimationFrame(renderScope);
-    };
-
-    scopeAnimId = requestAnimationFrame(renderScope);
-    return () => cancelAnimationFrame(scopeAnimId);
-  }, [selectedNet, selectedTrace, traces]);
-
-  // Pointer Handlers: Move, Select, Routing & Drag
+  // Pointer Down (Mouse & Touch)
   const handlePointerDown = (clientX, clientY, e) => {
-    // Middle-click or Alt-click initiates pan
-    if (e?.button === 1 || activeTool === 'pan') {
+    setLastMousePos({ x: clientX, y: clientY });
+
+    if (viewMode === '3D') {
+      setIsDragging(true);
+      return;
+    }
+
+    if (activeTool === 'pan' || e?.button === 1 || e?.altKey) {
       setIsPanning(true);
       setPanStart({ x: clientX - panOffset.x, y: clientY - panOffset.y });
       return;
@@ -1177,24 +995,21 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
     const coords = getBoardCoords(clientX, clientY);
     if (!coords) return;
 
-    // Check if clicked a component
-    const clickedComp = components.find(
-      (c) => coords.x >= c.rx && coords.x <= c.rx + c.w && coords.y >= c.ry && coords.y <= c.ry + c.h
-    );
+    // Check Component Hit
+    const clickedComp = [...components].reverse().find((c) => {
+      return coords.x >= c.rx && coords.x <= c.rx + c.w && coords.y >= c.ry && coords.y <= c.ry + c.h;
+    });
 
     if (activeTool === 'select') {
       if (clickedComp) {
         setSelectedComp(clickedComp);
         setSelectedTrace(null);
-        if (clickedComp.netAssignments && clickedComp.netAssignments[0]) {
-          setSelectedNet(clickedComp.netAssignments[0]);
-        }
         setIsDragging(true);
         setDraggedId(clickedComp.id);
         setDragOffset({ x: coords.x - clickedComp.rx, y: coords.y - clickedComp.ry });
-        setStatusText(`Selected Footprint ${clickedComp.id} (${clickedComp.name}) • Drag to reposition • Press 'R' to rotate`);
+        setStatusText(`Selected Footprint [${clickedComp.id}] (${clickedComp.name}) • Drag to reposition with 4px grid snap`);
       } else {
-        // Check if clicked a trace
+        // Check Trace Hit
         const clickedTrace = traces.find((tr) => {
           const cFrom = components.find((c) => c.id === tr.from);
           const cTo = components.find((c) => c.id === tr.to);
@@ -1203,7 +1018,6 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
           const y1 = cFrom.ry + cFrom.h / 2;
           const x2 = cTo.rx + cTo.w / 2;
           const y2 = cTo.ry + cTo.h / 2;
-
           const d1 = Math.hypot(coords.x - x1, coords.y - y1);
           const d2 = Math.hypot(coords.x - x2, coords.y - y2);
           const dTotal = Math.hypot(x2 - x1, y2 - y1);
@@ -1214,7 +1028,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
           setSelectedTrace(clickedTrace);
           setSelectedNet(clickedTrace.net);
           setSelectedComp(null);
-          setStatusText(`Selected Copper Net [${clickedTrace.net}] (${clickedTrace.from} ➔ ${clickedTrace.to}) on Layer ${clickedTrace.layer}`);
+          setStatusText(`Selected Copper Net [${clickedTrace.net}] (${clickedTrace.from} ➔ ${clickedTrace.to})`);
         } else {
           setSelectedComp(null);
           setSelectedTrace(null);
@@ -1230,33 +1044,8 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
           setRoutingSourceId(null);
           setStatusText('Routing cancelled.');
         } else {
-          const layerColor =
-            activeLayer === 'L1_TOP'
-              ? '#ef4444'
-              : activeLayer === 'L2_GND'
-              ? '#06b6d4'
-              : activeLayer === 'L3_PWR'
-              ? '#f59e0b'
-              : '#3b82f6';
-
-          const newTrace = {
-            id: `TR_${Date.now()}`,
-            net: `NET_${routingSourceId}_${clickedComp.id}`,
-            from: routingSourceId,
-            to: clickedComp.id,
-            layer: activeLayer,
-            color: layerColor,
-            width: 2.0,
-            signalType: 'diff',
-            voltage: '3.3V',
-            frequency: '100MHz',
-            impedance: '50.0 Ω'
-          };
-
-          setTraces((prev) => [...prev, newTrace]);
-          setSelectedTrace(newTrace);
-          setSelectedNet(newTrace.net);
-          setStatusText(`✓ Routed 45° Net [${routingSourceId} ➔ ${clickedComp.id}] on ${activeLayer} (Impedance: 50.0Ω)`);
+          // Connect routingSourceId to clickedComp.id
+          connectComponents(routingSourceId, clickedComp.id);
           setRoutingSourceId(null);
         }
       } else {
@@ -1267,6 +1056,19 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
   };
 
   const handlePointerMove = (clientX, clientY) => {
+    if (viewMode === '3D') {
+      if (isDragging) {
+        const dx = clientX - lastMousePos.x;
+        const dy = clientY - lastMousePos.y;
+        setRotation3D((prev) => ({
+          x: Math.max(-85, Math.min(85, prev.x + dy * 0.45)),
+          y: prev.y + dx * 0.45
+        }));
+        setLastMousePos({ x: clientX, y: clientY });
+      }
+      return;
+    }
+
     if (isPanning) {
       setPanOffset({
         x: clientX - panStart.x,
@@ -1286,11 +1088,11 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
       const rawRx = coords.x - dragOffset.x;
       const rawRy = coords.y - dragOffset.y;
 
-      // 4px CAD grid snap (~0.2mm)
+      // 4px CAD grid snap
       const snapRx = Math.round(rawRx / 4) * 4;
       const snapRy = Math.round(rawRy / 4) * 4;
 
-      // Clamp inside 440x250 board boundary
+      // Clamp inside board boundaries
       const clampedRx = Math.max(-210, Math.min(210 - comp.w, snapRx));
       const clampedRy = Math.max(-115, Math.min(115 - comp.h, snapRy));
 
@@ -1317,83 +1119,165 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
     setZoom((prev) => Math.max(0.6, Math.min(2.4, prev + zoomDelta)));
   };
 
+  // Add Component from Catalog (Fully Responsive in both 2D and 3D)
   const handleAddComponent = (type) => {
-    const nextId = `${type === 'cap' ? 'C' : type === 'led' ? 'D' : type === 'res' ? 'R' : 'Y'}${components.length + 1}`;
-    let newComp;
+    const count = components.length + 1;
+    let nextId = '';
+    let newComp = null;
+
+    // Spread new components around open locations
+    const offsetX = ((count * 45) % 320) - 160;
+    const offsetY = ((count * 35) % 160) - 80;
 
     if (type === 'cap') {
+      nextId = `C${count}`;
       newComp = {
         id: nextId,
         name: '0402 100nF Cap',
         desc: 'SMD MLCC Bypass',
         package: '0402',
-        rx: -20,
-        ry: 20,
+        rx: offsetX,
+        ry: offsetY,
         w: 16,
         h: 10,
         rot: 0,
-        height3D: 0.6,
+        height3D: 0.8,
         pins: 2,
         type: 'smd_cap',
         silkscreen: nextId,
         netAssignments: ['PWR_3V3']
       };
     } else if (type === 'led') {
+      nextId = `D${count}`;
       newComp = {
         id: nextId,
         name: '0805 Status LED',
         desc: 'Emerald Indicating Diode',
         package: '0805',
-        rx: 30,
-        ry: 30,
+        rx: offsetX,
+        ry: offsetY,
         w: 18,
         h: 11,
         rot: 0,
-        height3D: 0.8,
+        height3D: 0.9,
         pins: 2,
         type: 'smd_led',
         silkscreen: nextId,
         netAssignments: ['PWR_3V3']
       };
     } else if (type === 'res') {
+      nextId = `R${count}`;
       newComp = {
         id: nextId,
         name: '0603 50Ω Resistor',
         desc: 'Thick Film Terminator',
         package: '0603',
-        rx: -50,
-        ry: -35,
+        rx: offsetX,
+        ry: offsetY,
         w: 18,
         h: 10,
         rot: 0,
-        height3D: 0.6,
+        height3D: 0.8,
         pins: 2,
         type: 'smd_res',
         silkscreen: nextId,
         netAssignments: ['HS_BUS']
       };
-    } else {
+    } else if (type === 'xtal') {
+      nextId = `Y${count}`;
       newComp = {
         id: nextId,
         name: '25MHz TCXO Crystal',
         desc: 'Precision Oscillator',
         package: 'SMD-3225',
-        rx: 0,
-        ry: 45,
+        rx: offsetX,
+        ry: offsetY,
         w: 24,
         h: 18,
         rot: 0,
-        height3D: 1.0,
+        height3D: 1.2,
         pins: 4,
         type: 'xtal',
         silkscreen: nextId,
         netAssignments: ['CLK_25M']
       };
+    } else if (type === 'mcu') {
+      nextId = `U${count}`;
+      newComp = {
+        id: nextId,
+        name: 'STM32F407 MCU',
+        desc: '168MHz ARM Cortex-M4',
+        package: 'LQFP-64',
+        rx: offsetX,
+        ry: offsetY,
+        w: 68,
+        h: 68,
+        rot: 0,
+        height3D: 2.2,
+        pins: 64,
+        type: 'qfp',
+        silkscreen: 'STM32F4',
+        netAssignments: ['HS_BUS', 'PWR_3V3', 'GND']
+      };
+    } else if (type === 'conn') {
+      nextId = `J${count}`;
+      newComp = {
+        id: nextId,
+        name: 'USB-C Receptacle',
+        desc: '24-Pin 10Gbps Connector',
+        package: 'USB-C-24P',
+        rx: offsetX,
+        ry: offsetY,
+        w: 42,
+        h: 36,
+        rot: 0,
+        height3D: 3.6,
+        pins: 24,
+        type: 'conn',
+        silkscreen: 'USB-C',
+        netAssignments: ['USB_DP', 'VBUS_5V', 'GND']
+      };
     }
 
-    setComponents((prev) => [...prev, newComp]);
-    setSelectedComp(newComp);
-    setStatusText(`✓ Placed ${newComp.id} (${newComp.name}) on Board Substrate`);
+    if (newComp) {
+      setComponents((prev) => [...prev, newComp]);
+      setSelectedComp(newComp);
+      setStatusText(`✓ Added ${newComp.id} (${newComp.name}) to PCB • Ready to wire & position`);
+    }
+  };
+
+  // Connect Two Components Responsively
+  const connectComponents = (fromId, toId) => {
+    if (!fromId || !toId || fromId === toId) return;
+
+    // Check if trace already exists
+    const exists = traces.some(
+      (t) => (t.from === fromId && t.to === toId) || (t.from === toId && t.to === fromId)
+    );
+    if (exists) {
+      setStatusText(`Net already exists between ${fromId} and ${toId}.`);
+      return;
+    }
+
+    const netName = `NET_${fromId}_${toId}`;
+    const newTrace = {
+      id: `TR_${Date.now()}`,
+      net: netName,
+      from: fromId,
+      to: toId,
+      layer: activeLayer,
+      color: activeLayer === 'L1_TOP' ? '#ef4444' : activeLayer === 'L2_GND' ? '#06b6d4' : '#f59e0b',
+      width: 2.2,
+      signalType: 'diff',
+      voltage: '3.3V',
+      frequency: '100 MHz',
+      impedance: '50.0 Ω'
+    };
+
+    setTraces((prev) => [...prev, newTrace]);
+    setSelectedTrace(newTrace);
+    setSelectedNet(netName);
+    setStatusText(`✓ Connected Net [${fromId} ➔ ${toId}] on ${activeLayer} • Signals Active!`);
   };
 
   const handleDeleteSelected = () => {
@@ -1418,7 +1302,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
     setRoutingSourceId(null);
     setZoom(1.0);
     setPanOffset({ x: 0, y: 0 });
-    setStatusText('PCB Layout reset to default mechatronics development configuration.');
+    setStatusText('PCB Layout reset to default mechatronics configuration.');
   };
 
   const handleRunDRC = () => {
@@ -1462,7 +1346,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
             </span>
           </div>
           <p style={{ color: '#475569', fontSize: '0.84rem', marginTop: '2px' }}>
-            Interactive ECAD engine: Drag IC footprints with real-time rubberbanding, route 45° mitred differential nets, inspect live oscillograms, and verify IPC-2221 clearances.
+            Interactive ECAD engine: Switch between 2D high-speed layout & true 3D perspective PCB inspection with 360° orbit, component placement, interactive wire routing, and live oscilloscope signal waveforms.
           </p>
         </div>
 
@@ -1473,7 +1357,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
             style={{ padding: '8px 14px', fontSize: '0.82rem' }}
           >
             <ShieldCheck size={14} color={drcPassed ? '#10b981' : '#ef4444'} />
-            <span>{drcPassed ? 'Run DRC Rule Check' : 'Inspect Violations'}</span>
+            <span>{drcPassed ? 'Run DRC Check' : 'Inspect Violations'}</span>
           </button>
 
           <button
@@ -1481,174 +1365,114 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
             className="btn-primary-lead"
             style={{ padding: '8px 18px', fontSize: '0.84rem' }}
           >
-            <Layers size={14} />
-            <span>Push PCB to SolidWorks</span>
+            <Zap size={14} />
+            <span>Push to SolidWorks MCAD</span>
           </button>
         </div>
       </div>
 
-      {/* Main Studio 3-Column Layout */}
+      {/* Main Studio 3-Column Grid */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '260px 1fr 310px',
+          gridTemplateColumns: '270px 1fr 310px',
           gap: '16px',
           alignItems: 'stretch'
         }}
         className="studio-grid-mobile"
       >
-        {/* Left Column: Layer Stackup & Solder Mask Customization */}
-        <div className="pro-panel" style={{ padding: '18px', display: 'flex', flexDirection: 'column' }}>
+        {/* Left Column: Layer Stack Manager & Color Finish */}
+        <div className="pro-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span className="font-mono" style={{ fontSize: '0.72rem', color: '#0284c7', textTransform: 'uppercase', fontWeight: 600 }}>
-              LAYER STACKUP MANAGER
-            </span>
-            <button
-              onClick={() => setIsolateLayer(!isolateLayer)}
-              style={{
-                fontSize: '0.66rem',
-                padding: '2px 7px',
-                borderRadius: '4px',
-                background: isolateLayer ? '#e0f2fe' : '#f1f5f9',
-                border: isolateLayer ? '1px solid #0284c7' : '1px solid var(--border-subtle)',
-                color: isolateLayer ? '#0284c7' : '#64748b',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px'
-              }}
-              title="Altium Single Layer Mode (Shift+S)"
-            >
-              {isolateLayer ? <Eye size={11} /> : <EyeOff size={11} />}
-              <span>{isolateLayer ? 'Solo Layer' : 'All Layers'}</span>
-            </button>
-          </div>
-
-          {/* Layer Buttons */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
-            {[
-              { id: 'L1_TOP', name: 'L1 Top Signals [RF/56G]', color: '#ef4444' },
-              { id: 'L2_GND', name: 'L2 Ground Plane', color: '#0284c7' },
-              { id: 'L3_PWR', name: 'L3 Power Rails [3.3V]', color: '#f59e0b' },
-              { id: 'L4_BOT', name: 'L4 Bottom Signals', color: '#2563eb' }
-            ].map((layer) => (
-              <button
-                key={layer.id}
-                onClick={() => setActiveLayer(layer.id)}
-                style={{
-                  padding: '9px 12px',
-                  borderRadius: '6px',
-                  border: activeLayer === layer.id ? `1.5px solid ${layer.color}` : '1px solid var(--border-subtle)',
-                  background: activeLayer === layer.id ? '#ffffff' : '#f8fafc',
-                  color: activeLayer === layer.id ? '#0f172a' : '#64748b',
-                  boxShadow: activeLayer === layer.id ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                  fontSize: '0.8rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: layer.color }} />
-                <span>{layer.name}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Solder Mask Color Switcher */}
-          <div style={{ marginBottom: '16px' }}>
-            <span className="font-mono" style={{ fontSize: '0.7rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
-              SOLDER MASK SUBSTRATE
-            </span>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px' }}>
-              {Object.entries(SOLDER_MASKS).map(([k, v]) => (
-                <button
-                  key={k}
-                  onClick={() => setSolderMask(k)}
-                  style={{
-                    height: '26px',
-                    borderRadius: '5px',
-                    background: v.bg,
-                    border: solderMask === k ? '2px solid #00e5ff' : '1px solid rgba(0,0,0,0.2)',
-                    cursor: 'pointer',
-                    boxShadow: solderMask === k ? '0 0 8px rgba(0, 229, 255, 0.4)' : 'none'
-                  }}
-                  title={v.name}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Placed Footprint List */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
             <span className="font-mono" style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>
-              PLACED FOOTPRINTS ({components.length})
+              PCB LAYER STACK
+            </span>
+            <span className="font-mono" style={{ fontSize: '0.66rem', color: '#0284c7', fontWeight: 700 }}>
+              4-LAYER HIGH-SPEED
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', fontSize: '0.78rem', maxHeight: '180px', overflowY: 'auto' }}>
-            {components.map((comp) => {
-              const isColliding = violations.some((v) => v.c1 === comp.id || v.c2 === comp.id);
+          {/* Layer Selector */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.8rem' }}>
+            {[
+              { id: 'L1_TOP', name: 'L1 Top Layer (Signals)', color: '#ef4444', desc: '0.035mm Cu • Microstrip' },
+              { id: 'L2_GND', name: 'L2 Ground Plane (Ref)', color: '#06b6d4', desc: '0.035mm Cu • Solid Ref' },
+              { id: 'L3_PWR', name: 'L3 Power Plane (3.3V/5V)', color: '#f59e0b', desc: '0.070mm Cu • Low Drop' },
+              { id: 'L4_BOT', name: 'L4 Bottom Layer (Signals)', color: '#3b82f6', desc: '0.035mm Cu • Shielded' }
+            ].map((layer) => {
+              const isSelected = activeLayer === layer.id;
               return (
                 <div
-                  key={comp.id}
-                  onClick={() => {
-                    setSelectedComp(comp);
-                    setSelectedTrace(null);
-                    if (comp.netAssignments && comp.netAssignments[0]) {
-                      setSelectedNet(comp.netAssignments[0]);
-                    }
-                  }}
+                  key={layer.id}
+                  onClick={() => setActiveLayer(layer.id)}
                   style={{
-                    padding: '6px 10px',
-                    borderRadius: '5px',
-                    background: selectedComp?.id === comp.id ? '#e0f2fe' : '#f8fafc',
-                    border: isColliding
-                      ? '1px solid #ef4444'
-                      : selectedComp?.id === comp.id
-                      ? '1px solid #0284c7'
-                      : '1px solid var(--border-subtle)',
+                    padding: '8px 10px',
+                    borderRadius: '6px',
+                    border: isSelected ? `1.5px solid ${layer.color}` : '1px solid var(--border-subtle)',
+                    background: isSelected ? '#f8fafc' : '#ffffff',
                     cursor: 'pointer',
                     display: 'flex',
+                    alignItems: 'center',
                     justifyContent: 'space-between',
-                    alignItems: 'center'
+                    transition: 'all 0.15s ease'
                   }}
                 >
-                  <strong style={{ color: isColliding ? '#ef4444' : '#0f172a' }}>{comp.id}</strong>
-                  <span style={{ color: '#64748b', fontSize: '0.74rem' }}>{comp.package}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: layer.color }} />
+                    <span style={{ fontWeight: isSelected ? 700 : 500, color: isSelected ? '#0f172a' : '#475569', fontSize: '0.75rem' }}>
+                      {layer.name}
+                    </span>
+                  </div>
+                  <span className="font-mono" style={{ fontSize: '0.64rem', color: '#64748b' }}>
+                    {isSelected ? 'ACTIVE' : ''}
+                  </span>
                 </div>
               );
             })}
           </div>
 
-          <div style={{ marginTop: 'auto', paddingTop: '14px', borderTop: '1px solid var(--border-subtle)' }}>
-            <button
-              onClick={handleResetBoard}
-              style={{
-                width: '100%',
-                padding: '7px',
-                borderRadius: '6px',
-                background: '#ffffff',
-                border: '1px solid var(--border-subtle)',
-                color: '#475569',
-                fontSize: '0.74rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px'
-              }}
-            >
-              <RefreshCw size={12} />
-              <span>Reset PCB Layout</span>
-            </button>
+          {/* Solder Mask Finish */}
+          <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
+            <label className="form-label" style={{ fontSize: '0.74rem' }}>Solder Mask Color</label>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px', marginTop: '6px' }}>
+              {Object.entries(SOLDER_MASKS).map(([k, v]) => (
+                <button
+                  key={k}
+                  onClick={() => setSolderMask(k)}
+                  style={{
+                    padding: '6px 8px',
+                    borderRadius: '6px',
+                    border: solderMask === k ? '2px solid #0284c7' : '1px solid var(--border-subtle)',
+                    background: v.bg,
+                    color: '#ffffff',
+                    fontSize: '0.7rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: v.border }} />
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{v.name.split(' ')[1]}</span>
+                </button>
+              ))}
+            </div>
+
+            <div style={{ marginTop: '14px', display: 'flex', gap: '6px' }}>
+              <button
+                onClick={handleResetBoard}
+                className="btn-secondary-pro"
+                style={{ width: '100%', padding: '6px', fontSize: '0.74rem', justifyContent: 'center' }}
+              >
+                <RefreshCw size={12} />
+                <span>Reset Board Layout</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Center Column: Live Interactive ECAD Canvas Viewport */}
+        {/* Center Column: Interactive 2D/3D PCB Canvas Viewport */}
         <div
           className="pro-panel"
           style={{
@@ -1658,7 +1482,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
             overflow: 'hidden'
           }}
         >
-          {/* Top Interactive CAD Toolbar */}
+          {/* Top Viewport Toolbar */}
           <div
             style={{
               padding: '8px 12px',
@@ -1671,117 +1495,138 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
               gap: '8px'
             }}
           >
-            {/* Primary Tool Modes */}
-            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-              <button
-                onClick={() => {
-                  setActiveTool('select');
-                  setRoutingSourceId(null);
-                  setStatusText('Inspect & Move mode active • Drag footprints to reposition • Press R to rotate');
-                }}
-                style={{
-                  padding: '5px 11px',
-                  borderRadius: '5px',
-                  border: activeTool === 'select' ? '1px solid #0284c7' : '1px solid var(--border-subtle)',
-                  background: activeTool === 'select' ? '#e0f2fe' : '#ffffff',
-                  color: activeTool === 'select' ? '#0284c7' : '#64748b',
-                  fontSize: '0.74rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '5px'
-                }}
-              >
-                <Move size={12} />
-                <span>Move & Inspect</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setActiveTool('route');
-                  setSelectedComp(null);
-                  setSelectedTrace(null);
-                  setStatusText('⚡ 45° Mitred Routing Active: Click any IC pin or test point to start route');
-                }}
-                style={{
-                  padding: '5px 11px',
-                  borderRadius: '5px',
-                  border: activeTool === 'route' ? '1px solid #10b981' : '1px solid var(--border-subtle)',
-                  background: activeTool === 'route' ? '#ecfdf5' : '#ffffff',
-                  color: activeTool === 'route' ? '#059669' : '#64748b',
-                  fontSize: '0.74rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '5px'
-                }}
-              >
-                <Zap size={12} />
-                <span>Route 45° Net</span>
-              </button>
-
-              {/* Rotate Tool */}
-              <button
-                onClick={handleRotateSelected}
-                disabled={!selectedComp}
-                style={{
-                  padding: '5px 9px',
-                  borderRadius: '5px',
-                  background: selectedComp ? '#ffffff' : '#f1f5f9',
-                  border: '1px solid var(--border-subtle)',
-                  color: selectedComp ? '#0f172a' : '#94a3b8',
-                  fontSize: '0.74rem',
-                  cursor: selectedComp ? 'pointer' : 'not-allowed',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}
-                title="Rotate Selected Footprint 90° (R)"
-              >
-                <RotateCw size={12} />
-                <span>Rotate</span>
-              </button>
-            </div>
-
-            {/* View Mode & Signal Animation Toggles */}
+            {/* View Mode & 2D Tools */}
             <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
               {/* 2D / 3D Toggle */}
               <div style={{ display: 'flex', background: '#e2e8f0', padding: '2px', borderRadius: '6px', gap: '2px' }}>
                 <button
                   onClick={() => setViewMode('2D')}
                   style={{
-                    padding: '3px 8px',
+                    padding: '4px 10px',
                     borderRadius: '4px',
                     border: 'none',
                     background: viewMode === '2D' ? '#ffffff' : 'transparent',
                     color: viewMode === '2D' ? '#0f172a' : '#64748b',
-                    fontSize: '0.7rem',
+                    fontSize: '0.74rem',
                     fontWeight: 700,
                     cursor: 'pointer'
                   }}
                 >
-                  2D CAD
+                  2D CAD Layout
                 </button>
                 <button
                   onClick={() => setViewMode('3D')}
                   style={{
-                    padding: '3px 8px',
+                    padding: '4px 10px',
                     borderRadius: '4px',
                     border: 'none',
-                    background: viewMode === '3D' ? '#ffffff' : 'transparent',
-                    color: viewMode === '3D' ? '#0f172a' : '#64748b',
-                    fontSize: '0.7rem',
+                    background: viewMode === '3D' ? '#0284c7' : 'transparent',
+                    color: viewMode === '3D' ? '#ffffff' : '#64748b',
+                    fontSize: '0.74rem',
                     fontWeight: 700,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
                   }}
                 >
-                  3D View
+                  <Box size={12} />
+                  <span>3D Realistic Board</span>
                 </button>
               </div>
 
-              {/* Signals Flow Toggle */}
+              {/* 2D Tools (Select vs Route) */}
+              {viewMode === '2D' && (
+                <div style={{ display: 'flex', gap: '4px', marginLeft: '6px' }}>
+                  <button
+                    onClick={() => setActiveTool('select')}
+                    style={{
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      border: activeTool === 'select' ? '1px solid #0284c7' : '1px solid var(--border-subtle)',
+                      background: activeTool === 'select' ? '#e0f2fe' : '#ffffff',
+                      color: activeTool === 'select' ? '#0284c7' : '#64748b',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Select / Move
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTool('route');
+                      setRoutingSourceId(null);
+                      setStatusText('⚡ Interactive Route Net Active: Click source component pin');
+                    }}
+                    style={{
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      border: activeTool === 'route' ? '1px solid #ea580c' : '1px solid var(--border-subtle)',
+                      background: activeTool === 'route' ? '#fff2ed' : '#ffffff',
+                      color: activeTool === 'route' ? '#ea580c' : '#64748b',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    <Zap size={11} />
+                    <span>Route Net</span>
+                  </button>
+                </div>
+              )}
+
+              {/* 3D Camera Controls */}
+              {viewMode === '3D' && (
+                <div style={{ display: 'flex', gap: '4px', alignItems: 'center', marginLeft: '6px' }}>
+                  <button
+                    onClick={() => setAutoRotate3D(!autoRotate3D)}
+                    style={{
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      background: autoRotate3D ? '#ecfdf5' : '#ffffff',
+                      border: autoRotate3D ? '1px solid #10b981' : '1px solid var(--border-subtle)',
+                      color: autoRotate3D ? '#059669' : '#64748b',
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                    title="Toggle 360° Turntable Auto-Orbit"
+                  >
+                    {autoRotate3D ? <Pause size={10} /> : <Play size={10} />}
+                    <span>Auto-Orbit</span>
+                  </button>
+
+                  <button
+                    onClick={() => set3DPreset('iso')}
+                    style={{ padding: '3px 6px', background: '#fff', border: '1px solid var(--border-subtle)', borderRadius: '4px', fontSize: '0.68rem', cursor: 'pointer' }}
+                  >
+                    ISO
+                  </button>
+                  <button
+                    onClick={() => set3DPreset('top')}
+                    style={{ padding: '3px 6px', background: '#fff', border: '1px solid var(--border-subtle)', borderRadius: '4px', fontSize: '0.68rem', cursor: 'pointer' }}
+                  >
+                    TOP
+                  </button>
+                  <button
+                    onClick={() => set3DPreset('front')}
+                    style={{ padding: '3px 6px', background: '#fff', border: '1px solid var(--border-subtle)', borderRadius: '4px', fontSize: '0.68rem', cursor: 'pointer' }}
+                  >
+                    EDGE
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Right Controls: Signals & Zoom */}
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
               <button
                 onClick={() => setSignalsActive(!signalsActive)}
                 style={{
@@ -1797,13 +1642,11 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                   alignItems: 'center',
                   gap: '4px'
                 }}
-                title="Toggle Real-Time Animated Signal Transmission"
               >
                 {signalsActive ? <Play size={10} fill="#059669" /> : <Pause size={10} />}
                 <span>{signalsActive ? 'Signals Live' : 'Signals Off'}</span>
               </button>
 
-              {/* Zoom Controls */}
               <div style={{ display: 'flex', gap: '2px', alignItems: 'center' }}>
                 <button
                   onClick={() => setZoom((z) => Math.max(0.6, z - 0.15))}
@@ -1823,7 +1666,6 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                     setPanOffset({ x: 0, y: 0 });
                   }}
                   style={{ padding: '4px 6px', background: '#fff', border: '1px solid var(--border-subtle)', borderRadius: '4px', cursor: 'pointer' }}
-                  title="Fit Board to View"
                 >
                   <Maximize2 size={12} color="#475569" />
                 </button>
@@ -1831,32 +1673,44 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
             </div>
           </div>
 
-          {/* Quick Component Placement Bar */}
-          <div style={{ padding: '6px 12px', background: '#ffffff', borderBottom: '1px solid var(--border-subtle)', display: 'flex', gap: '6px', alignItems: 'center', fontSize: '0.7rem' }}>
-            <span className="font-mono" style={{ color: '#64748b', fontWeight: 600 }}>+ ADD FOOTPRINT:</span>
+          {/* Quick Component Palette Bar (Add Components in 1-Click) */}
+          <div style={{ padding: '6px 12px', background: '#ffffff', borderBottom: '1px solid var(--border-subtle)', display: 'flex', gap: '6px', alignItems: 'center', fontSize: '0.7rem', flexWrap: 'wrap' }}>
+            <span className="font-mono" style={{ color: '#0284c7', fontWeight: 700 }}>+ ADD FOOTPRINT:</span>
             <button
               onClick={() => handleAddComponent('cap')}
               style={{ padding: '3px 8px', borderRadius: '4px', background: '#f8fafc', border: '1px solid var(--border-subtle)', cursor: 'pointer', color: '#0f172a' }}
             >
-              0402 Cap
+              + 0402 Cap
             </button>
             <button
               onClick={() => handleAddComponent('res')}
               style={{ padding: '3px 8px', borderRadius: '4px', background: '#f8fafc', border: '1px solid var(--border-subtle)', cursor: 'pointer', color: '#0f172a' }}
             >
-              0603 Res
+              + 0603 Res
             </button>
             <button
               onClick={() => handleAddComponent('led')}
               style={{ padding: '3px 8px', borderRadius: '4px', background: '#f8fafc', border: '1px solid var(--border-subtle)', cursor: 'pointer', color: '#059669' }}
             >
-              0805 LED
+              + 0805 LED
             </button>
             <button
               onClick={() => handleAddComponent('xtal')}
               style={{ padding: '3px 8px', borderRadius: '4px', background: '#f8fafc', border: '1px solid var(--border-subtle)', cursor: 'pointer', color: '#b45309' }}
             >
-              25MHz TCXO
+              + 25MHz TCXO
+            </button>
+            <button
+              onClick={() => handleAddComponent('mcu')}
+              style={{ padding: '3px 8px', borderRadius: '4px', background: '#f8fafc', border: '1px solid var(--border-subtle)', cursor: 'pointer', color: '#0284c7', fontWeight: 600 }}
+            >
+              + STM32 MCU
+            </button>
+            <button
+              onClick={() => handleAddComponent('conn')}
+              style={{ padding: '3px 8px', borderRadius: '4px', background: '#f8fafc', border: '1px solid var(--border-subtle)', cursor: 'pointer', color: '#475569', fontWeight: 600 }}
+            >
+              + USB-C Port
             </button>
           </div>
 
@@ -1869,7 +1723,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
               overflow: 'hidden',
               minHeight: '390px',
               background: '#040608',
-              cursor: activeTool === 'route' ? 'crosshair' : isDragging ? 'grabbing' : 'grab',
+              cursor: viewMode === '3D' ? (isDragging ? 'grabbing' : 'grab') : activeTool === 'route' ? 'crosshair' : isDragging ? 'grabbing' : 'grab',
               touchAction: 'none'
             }}
             onMouseDown={(e) => handlePointerDown(e.clientX, e.clientY, e)}
@@ -1914,7 +1768,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
 
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
               <span className="font-mono" style={{ color: '#64748b' }}>
-                NETS: {traces.length} | VIAS: 18 | ZOOM: {(zoom * 100).toFixed(0)}%
+                PARTS: {components.length} | NETS: {traces.length} | ZOOM: {(zoom * 100).toFixed(0)}%
               </span>
               {(selectedComp || selectedTrace) && (
                 <button
@@ -1947,7 +1801,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
               LIVE SIGNAL ANALYZER
             </span>
             <span className="font-mono" style={{ fontSize: '0.68rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', animation: 'spinSlow 2s linear infinite' }} />
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />
               2.5 GSa/s
             </span>
           </div>
@@ -2013,17 +1867,54 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
             </div>
           </div>
 
-          {/* Selected Component / Trace Details */}
+          {/* Responsive Connect / Inspector Panel */}
           {selectedComp ? (
-            <div style={{ padding: '10px', borderRadius: '8px', background: '#f8fafc', border: '1px solid var(--border-subtle)', fontSize: '0.74rem' }}>
+            <div style={{ padding: '12px', borderRadius: '8px', background: '#f8fafc', border: '1px solid var(--border-subtle)', fontSize: '0.74rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                <strong style={{ color: '#0f172a', fontSize: '0.85rem' }}>{selectedComp.id}</strong>
+                <strong style={{ color: '#0f172a', fontSize: '0.88rem' }}>{selectedComp.id}</strong>
                 <span className="font-mono" style={{ color: '#b45309', fontWeight: 700 }}>{selectedComp.package}</span>
               </div>
-              <div style={{ color: '#0284c7', fontSize: '0.72rem', marginBottom: '6px' }}>{selectedComp.name}</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', color: '#64748b', fontSize: '0.7rem' }}>
+              <div style={{ color: '#0284c7', fontSize: '0.72rem', marginBottom: '8px' }}>{selectedComp.name}</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', color: '#64748b', fontSize: '0.7rem', marginBottom: '10px' }}>
                 <div>POS: <strong className="font-mono" style={{ color: '#0f172a' }}>{selectedComp.rx}, {selectedComp.ry}</strong></div>
-                <div>HEIGHT: <strong className="font-mono" style={{ color: '#0f172a' }}>{selectedComp.height3D}mm</strong></div>
+                <div>3D HEIGHT: <strong className="font-mono" style={{ color: '#0f172a' }}>{selectedComp.height3D}mm</strong></div>
+              </div>
+
+              {/* Responsive Direct Wire / Connection Dropdown */}
+              <div style={{ paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
+                <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>
+                  CONNECT TO NET:
+                </span>
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  <select
+                    value={targetConnectId}
+                    onChange={(e) => setTargetConnectId(e.target.value)}
+                    style={{ flex: 1, fontSize: '0.72rem', padding: '4px 6px', borderRadius: '4px', border: '1px solid var(--border-subtle)' }}
+                  >
+                    <option value="">Select Target Component...</option>
+                    {components
+                      .filter((c) => c.id !== selectedComp.id)
+                      .map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.id} ({c.name})
+                        </option>
+                      ))}
+                  </select>
+                  <button
+                    onClick={() => {
+                      if (targetConnectId) {
+                        connectComponents(selectedComp.id, targetConnectId);
+                        setTargetConnectId('');
+                      }
+                    }}
+                    disabled={!targetConnectId}
+                    className="btn-primary-lead"
+                    style={{ padding: '4px 10px', fontSize: '0.7rem', borderRadius: '4px', opacity: targetConnectId ? 1 : 0.5 }}
+                  >
+                    <Link size={12} />
+                    <span>Connect</span>
+                  </button>
+                </div>
               </div>
             </div>
           ) : selectedTrace ? (
@@ -2036,7 +1927,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
             </div>
           ) : (
             <div style={{ padding: '12px', textAlign: 'center', color: '#64748b', fontSize: '0.74rem', background: '#f8fafc', borderRadius: '8px' }}>
-              Select any component or probe channel above to inspect its real-time electrical waveform.
+              Select any component to wire it, move it, or inspect its real-time electrical signal waveform.
             </div>
           )}
 
