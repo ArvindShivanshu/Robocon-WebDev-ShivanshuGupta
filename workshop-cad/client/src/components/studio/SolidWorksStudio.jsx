@@ -508,28 +508,68 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
       light.y /= lightLen;
       light.z /= lightLen;
 
-      // Dimensions in CAD coordinate space
-      const hw = (params.width * 1.5) / 2;
-      const hl = (params.length * 1.5) / 2;
-      const hh = (params.height * 1.5) / 2;
+      // Dimensions in CAD coordinate space (clean, consistent axis scaling)
+      const hL = (params.length * 1.1) / 2; // X-axis: Length
+      const hW = (params.width * 1.1) / 2;  // Z-axis: Width
+      const hH = (params.height * 1.1) / 2; // Y-axis: Height (-hH = top, +hH = bottom)
+      const wallT = Math.max(2.0, params.wallThickness * 0.9);
+      const insetX = 14;
+      const insetZ = 14;
 
-      // Exploded View Offsets
-      const explodeFactor = explodedView / 100;
-      const lidExplodeY = -explodeFactor * 80; // Top lid floats upward
-      const pcbExplodeY = -explodeFactor * 32; // PCB floats mid-air
-      const screwExplodeY = -explodeFactor * 115; // Fastener screws float highest
+      // 4 Master Corner Anchor Axes (shared across Standoffs, PCB holes, Lid holes, and Screws)
+      const cornerAxes = [
+        { x: -hL + insetX, z: -hW + insetZ }, // 0: Front-Left
+        { x: hL - insetX, z: -hW + insetZ },  // 1: Front-Right
+        { x: hL - insetX, z: hW - insetZ },   // 2: Back-Right
+        { x: -hL + insetX, z: hW - insetZ }   // 3: Back-Left
+      ];
+
+      // Exploded Vertical Offsets along Y-Axis
+      const explode = explodedView / 100;
+      const chassisBaseY = hH;
+      const cavityFloorY = hH - wallT;
+      const chassisRimY = -hH;
+
+      const soHeight = Math.max(5, params.standoffHeight * 1.0);
+      const standoffTopY = cavityFloorY - soHeight;
+
+      // PCB sits on standoffs at 0% explode, floats upward in exploded view
+      const pcbY = (standoffTopY - 1.5) - explode * 55;
+
+      // Lid sits flush on chassis rim at 0% explode, floats upward in exploded view
+      const lidY = (chassisRimY - 3) - explode * 115;
+
+      // Screws sit flush in lid counterbores at 0% explode, float highest in exploded view
+      const screwY = (lidY - 4) - explode * 48;
 
       const mat = MATERIALS[params.material] || MATERIALS.aluminum;
 
-      // 4. Robocon Robot Mounting Flanges (Tabs with M4 teardrop bolt slots)
+      // 4. SolidWorks Exploded Assembly Guide Lines (Dashed Trace Lines)
+      if (explode > 0.05) {
+        cornerAxes.forEach((axis) => {
+          const pBot = project(axis.x, cavityFloorY, axis.z);
+          const pTop = project(axis.x, screwY + 6, axis.z);
+          ctx.save();
+          ctx.strokeStyle = 'rgba(0, 229, 255, 0.45)';
+          ctx.lineWidth = 1.2;
+          ctx.setLineDash([3, 4]);
+          ctx.beginPath();
+          ctx.moveTo(pBot.x, pBot.y);
+          ctx.lineTo(pTop.x, pTop.y);
+          ctx.stroke();
+          ctx.restore();
+        });
+      }
+
+      // 5. Robot Mounting Flanges (Solid CNC tabs with M4 teardrop bolt slots)
       if (params.robotFlanges) {
         const flangeW = 14;
-        const flangeY = hh - 4;
+        const flangeY = chassisBaseY - 3;
         // Left Flange
-        const lf1 = project(-hw - flangeW, flangeY, -hl * 0.6);
-        const lf2 = project(-hw, flangeY, -hl * 0.6);
-        const lf3 = project(-hw, flangeY, hl * 0.6);
-        const lf4 = project(-hw - flangeW, flangeY, hl * 0.6);
+        const lf1 = project(-hL - flangeW, flangeY, -hW * 0.55);
+        const lf2 = project(-hL, flangeY, -hW * 0.55);
+        const lf3 = project(-hL, flangeY, hW * 0.55);
+        const lf4 = project(-hL - flangeW, flangeY, hW * 0.55);
 
         ctx.fillStyle = '#1e293b';
         ctx.beginPath();
@@ -543,20 +583,19 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         ctx.lineWidth = 1.2;
         ctx.stroke();
 
-        // Left M4 Mounting Bolt Slots
-        const hole1 = project(-hw - flangeW * 0.5, flangeY, -hl * 0.35);
-        const hole2 = project(-hw - flangeW * 0.5, flangeY, hl * 0.35);
+        const lHole1 = project(-hL - flangeW * 0.5, flangeY, -hW * 0.3);
+        const lHole2 = project(-hL - flangeW * 0.5, flangeY, hW * 0.3);
         ctx.fillStyle = '#07090e';
         ctx.beginPath();
-        ctx.arc(hole1.x, hole1.y, 2.5 * zoom, 0, Math.PI * 2);
-        ctx.arc(hole2.x, hole2.y, 2.5 * zoom, 0, Math.PI * 2);
+        ctx.arc(lHole1.x, lHole1.y, 2.4 * zoom, 0, Math.PI * 2);
+        ctx.arc(lHole2.x, lHole2.y, 2.4 * zoom, 0, Math.PI * 2);
         ctx.fill();
 
         // Right Flange
-        const rf1 = project(hw, flangeY, -hl * 0.6);
-        const rf2 = project(hw + flangeW, flangeY, -hl * 0.6);
-        const rf3 = project(hw + flangeW, flangeY, hl * 0.6);
-        const rf4 = project(hw, flangeY, hl * 0.6);
+        const rf1 = project(hL, flangeY, -hW * 0.55);
+        const rf2 = project(hL + flangeW, flangeY, -hW * 0.55);
+        const rf3 = project(hL + flangeW, flangeY, hW * 0.55);
+        const rf4 = project(hL, flangeY, hW * 0.55);
 
         ctx.fillStyle = '#1e293b';
         ctx.beginPath();
@@ -570,31 +609,30 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         ctx.lineWidth = 1.2;
         ctx.stroke();
 
-        // Right M4 Mounting Bolt Slots
-        const rhole1 = project(hw + flangeW * 0.5, flangeY, -hl * 0.35);
-        const rhole2 = project(hw + flangeW * 0.5, flangeY, hl * 0.35);
+        const rHole1 = project(hL + flangeW * 0.5, flangeY, -hW * 0.3);
+        const rHole2 = project(hL + flangeW * 0.5, flangeY, hW * 0.3);
         ctx.fillStyle = '#07090e';
         ctx.beginPath();
-        ctx.arc(rhole1.x, rhole1.y, 2.5 * zoom, 0, Math.PI * 2);
-        ctx.arc(rhole2.x, rhole2.y, 2.5 * zoom, 0, Math.PI * 2);
+        ctx.arc(rHole1.x, rHole1.y, 2.4 * zoom, 0, Math.PI * 2);
+        ctx.arc(rHole2.x, rHole2.y, 2.4 * zoom, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // Render Solid Enclosure Body
+      // 6. Enclosure Base Chassis (Hollow Tub with Inner Cavity)
       const rawVerts = [
-        { x: -hw, y: -hh, z: -hl },
-        { x: hw, y: -hh, z: -hl },
-        { x: hw, y: hh, z: -hl },
-        { x: -hw, y: hh, z: -hl },
-        { x: -hw, y: -hh, z: hl },
-        { x: hw, y: -hh, z: hl },
-        { x: hw, y: hh, z: hl },
-        { x: -hw, y: hh, z: hl }
+        { x: -hL, y: chassisRimY, z: -hW }, // 0
+        { x: hL, y: chassisRimY, z: -hW },  // 1
+        { x: hL, y: chassisBaseY, z: -hW }, // 2
+        { x: -hL, y: chassisBaseY, z: -hW },// 3
+        { x: -hL, y: chassisRimY, z: hW },  // 4
+        { x: hL, y: chassisRimY, z: hW },   // 5
+        { x: hL, y: chassisBaseY, z: hW },  // 6
+        { x: -hL, y: chassisBaseY, z: hW }  // 7
       ];
 
       const projVerts = rawVerts.map((v) => project(v.x, v.y, v.z));
 
-      // 6 Solid Faces
+      // Outer Faces of the Chassis Tub
       const faces = [
         { pts: [0, 1, 2, 3], normal: { x: 0, y: 0, z: -1 }, baseColor: mat.color, name: 'front' },
         { pts: [5, 4, 7, 6], normal: { x: 0, y: 0, z: 1 }, baseColor: mat.color, name: 'back' },
@@ -616,16 +654,16 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         f.diffuse = Math.max(0.18, Math.min(1.0, dot * 0.75 + 0.35));
       });
 
-      // Sort faces back-to-front for Painter's algorithm
+      // Sort faces back-to-front
       faces.sort((a, b) => b.avgDepth - a.avgDepth);
 
       if (renderMode === 'shaded' || renderMode === 'fea' || renderMode === 'section') {
         faces.forEach((f) => {
-          // If top face and exploded, skip drawing on bottom chassis
-          if (f.name === 'top' && explodeFactor > 0.05) return;
+          // In exploded view, the top face is omitted so you look inside into the cavity!
+          if (f.name === 'top' && explode > 0.05) return;
           if (renderMode === 'shaded' && f.rotatedNormal.z > 0.08) return; // Back-face culling
 
-          // Section Slice Mode: If cutting through front/right face, render cut with 45° mechanical hatch lines
+          // Section Slice Mode
           if (renderMode === 'section' && (f.name === 'front' || f.name === 'right')) {
             ctx.beginPath();
             ctx.moveTo(projVerts[f.pts[0]].x, projVerts[f.pts[0]].y);
@@ -636,7 +674,7 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
             ctx.fillStyle = 'rgba(234, 88, 12, 0.08)';
             ctx.fill();
 
-            // Mechanical Cross-Hatch Lines (SolidWorks Engineering Section Standard)
+            // Mechanical Cross-Hatching
             ctx.save();
             ctx.clip();
             ctx.strokeStyle = 'rgba(234, 88, 12, 0.55)';
@@ -648,7 +686,6 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
               ctx.stroke();
             }
             ctx.restore();
-
             ctx.strokeStyle = '#ea580c';
             ctx.lineWidth = 1.8;
             ctx.stroke();
@@ -664,24 +701,22 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
 
           if (renderMode === 'fea') {
             if (feaType === 'thermal') {
-              // Realistic Finite Element Thermal Gradient (Blue 35°C -> Green 50°C -> Yellow 68°C -> Red 82°C Hotspot)
               const pA = projVerts[f.pts[0]];
               const pB = projVerts[f.pts[2]];
               const grad = ctx.createLinearGradient(pA.x, pA.y, pB.x, pB.y);
-              grad.addColorStop(0, 'rgba(14, 165, 233, 0.80)'); // 35°C
-              grad.addColorStop(0.35, 'rgba(16, 185, 129, 0.85)'); // 50°C
-              grad.addColorStop(0.7, 'rgba(245, 158, 11, 0.90)'); // 68°C
-              grad.addColorStop(1, 'rgba(239, 68, 68, 0.95)'); // 82°C Hotspot
+              grad.addColorStop(0, 'rgba(14, 165, 233, 0.80)');
+              grad.addColorStop(0.35, 'rgba(16, 185, 129, 0.85)');
+              grad.addColorStop(0.7, 'rgba(245, 158, 11, 0.90)');
+              grad.addColorStop(1, 'rgba(239, 68, 68, 0.95)');
               ctx.fillStyle = grad;
             } else {
-              // Structural Von Mises Stress Gradient (Blue 12 MPa -> Green 60 MPa -> Orange 125 MPa -> Crimson 185 MPa)
               const pA = projVerts[f.pts[0]];
               const pB = projVerts[f.pts[2]];
               const grad = ctx.createLinearGradient(pA.x, pA.y, pB.x, pB.y);
-              grad.addColorStop(0, 'rgba(30, 58, 138, 0.85)'); // 12 MPa
-              grad.addColorStop(0.4, 'rgba(16, 185, 129, 0.85)'); // 60 MPa
-              grad.addColorStop(0.8, 'rgba(249, 115, 22, 0.92)'); // 125 MPa
-              grad.addColorStop(1, 'rgba(220, 38, 38, 0.98)'); // 185 MPa Peak Corner Stress
+              grad.addColorStop(0, 'rgba(30, 58, 138, 0.85)');
+              grad.addColorStop(0.4, 'rgba(16, 185, 129, 0.85)');
+              grad.addColorStop(0.8, 'rgba(249, 115, 22, 0.92)');
+              grad.addColorStop(1, 'rgba(220, 38, 38, 0.98)');
               ctx.fillStyle = grad;
             }
           } else {
@@ -699,63 +734,96 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         });
       }
 
-      // Wireframe Mode Edges
-      if (renderMode === 'wireframe') {
-        ctx.strokeStyle = '#00e5ff';
-        ctx.lineWidth = 1.3;
-        const edges = [
-          [0, 1], [1, 2], [2, 3], [3, 0],
-          [4, 5], [5, 6], [6, 7], [7, 4],
-          [0, 4], [1, 5], [2, 6], [3, 7]
-        ];
-        edges.forEach(([i, j]) => {
-          ctx.beginPath();
-          ctx.moveTo(projVerts[i].x, projVerts[i].y);
-          ctx.lineTo(projVerts[j].x, projVerts[j].y);
-          ctx.stroke();
-        });
+      // 7. Inner Cavity Floor
+      if (params.cavityEnabled && explode > 0.05) {
+        const inL = hL - wallT;
+        const inW = hW - wallT;
+        const c0 = project(-inL, cavityFloorY, -inW);
+        const c1 = project(inL, cavityFloorY, -inW);
+        const c2 = project(inL, cavityFloorY, inW);
+        const c3 = project(-inL, cavityFloorY, inW);
+
+        ctx.fillStyle = '#141824';
+        ctx.beginPath();
+        ctx.moveTo(c0.x, c0.y);
+        ctx.lineTo(c1.x, c1.y);
+        ctx.lineTo(c2.x, c2.y);
+        ctx.lineTo(c3.x, c3.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = activeFeature === 'cavity' ? '#00e5ff' : '#334155';
+        ctx.lineWidth = 1;
+        ctx.stroke();
       }
 
-      // 5. Brass Threaded Mounting Standoffs (M3 Inserts)
-      const inset = params.standoffInset * 1.2;
-      const standoffs = [
-        project(-hw + inset, hh - params.standoffHeight * 1.4, -hl + inset),
-        project(hw - inset, hh - params.standoffHeight * 1.4, -hl + inset),
-        project(-hw + inset, hh - params.standoffHeight * 1.4, hl - inset),
-        project(hw - inset, hh - params.standoffHeight * 1.4, hl - inset)
-      ];
-
+      // 8. 4 Brass Threaded Standoffs (Seated upright on the cavity floor)
       if (params.bossesEnabled) {
-        standoffs.forEach((so) => {
-          // Standoff Brass Cylinder
+        cornerAxes.forEach((axis) => {
+          const pBot = project(axis.x, cavityFloorY, axis.z);
+          const pTop = project(axis.x, standoffTopY, axis.z);
+
+          // Standoff Brass Pillar
+          ctx.fillStyle = '#d97706';
+          ctx.beginPath();
+          ctx.moveTo(pBot.x - 4.5 * zoom, pBot.y);
+          ctx.lineTo(pTop.x - 4.5 * zoom, pTop.y);
+          ctx.lineTo(pTop.x + 4.5 * zoom, pTop.y);
+          ctx.lineTo(pBot.x + 4.5 * zoom, pBot.y);
+          ctx.closePath();
+          ctx.fill();
+
+          // Standoff Top Hex Face
           ctx.fillStyle = '#f59e0b';
           ctx.beginPath();
-          ctx.arc(so.x, so.y, (activeFeature === 'bosses' ? 6.5 : 4.8) * zoom, 0, Math.PI * 2);
+          ctx.arc(pTop.x, pTop.y, 4.8 * zoom, 0, Math.PI * 2);
           ctx.fill();
-          ctx.strokeStyle = activeFeature === 'bosses' ? '#00e5ff' : '#ffffff';
-          ctx.lineWidth = 1.2;
+          ctx.strokeStyle = activeFeature === 'bosses' ? '#00e5ff' : '#fbbf24';
+          ctx.lineWidth = 1.0;
           ctx.stroke();
 
-          // Center Threaded Hole
+          // M3 Threaded Tapped Hole
           ctx.fillStyle = '#0f172a';
           ctx.beginPath();
-          ctx.arc(so.x, so.y, 2.0 * zoom, 0, Math.PI * 2);
+          ctx.arc(pTop.x, pTop.y, 2.0 * zoom, 0, Math.PI * 2);
           ctx.fill();
         });
       }
 
-      // 6. Seated Electronics PCB Assembly (The Mechatronics Integration!)
+      // 9. Seated / Floating Electronics PCB Assembly
       if (params.pcbSeated) {
-        const pcbW = hw - params.wallThickness * 2.1;
-        const pcbL = hl - params.wallThickness * 2.1;
-        const pcbY = hh - params.standoffHeight * 1.4 + pcbExplodeY;
+        const pcbL = hL - wallT - 3;
+        const pcbW = hW - wallT - 3;
 
-        const pcb0 = project(-pcbW, pcbY, -pcbL);
-        const pcb1 = project(pcbW, pcbY, -pcbL);
-        const pcb2 = project(pcbW, pcbY, pcbL);
-        const pcb3 = project(-pcbW, pcbY, pcbL);
+        const pcb0 = project(-pcbL, pcbY, -pcbW);
+        const pcb1 = project(pcbL, pcbY, -pcbW);
+        const pcb2 = project(pcbL, pcbY, pcbW);
+        const pcb3 = project(-pcbL, pcbY, pcbW);
 
-        // Green Solder Mask PCB Plane
+        // FR4 Substrate Edge Thickness (1.6mm)
+        const pcbEdgeY = pcbY + 2.5;
+        const pe0 = project(-pcbL, pcbEdgeY, -pcbW);
+        const pe1 = project(pcbL, pcbEdgeY, -pcbW);
+        const pe2 = project(pcbL, pcbEdgeY, pcbW);
+
+        // PCB Edge Faces (FR4 Core)
+        ctx.fillStyle = '#1c150c';
+        ctx.beginPath();
+        ctx.moveTo(pcb0.x, pcb0.y);
+        ctx.lineTo(pcb1.x, pcb1.y);
+        ctx.lineTo(pe1.x, pe1.y);
+        ctx.lineTo(pe0.x, pe0.y);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(pcb1.x, pcb1.y);
+        ctx.lineTo(pcb2.x, pcb2.y);
+        ctx.lineTo(pe2.x, pe2.y);
+        ctx.lineTo(pe1.x, pe1.y);
+        ctx.closePath();
+        ctx.fill();
+
+        // Green Solder Mask Top Face
         ctx.fillStyle = '#064e3b';
         ctx.beginPath();
         ctx.moveTo(pcb0.x, pcb0.y);
@@ -764,79 +832,197 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         ctx.lineTo(pcb3.x, pcb3.y);
         ctx.closePath();
         ctx.fill();
-        ctx.strokeStyle = '#10b981';
+        ctx.strokeStyle = activeFeature === 'pcb' ? '#00e5ff' : '#10b981';
         ctx.lineWidth = 1.4;
         ctx.stroke();
 
-        // Copper Circuit Traces on PCB
-        const pcbCenter = project(0, pcbY, 0);
-        ctx.strokeStyle = '#d97706';
-        ctx.lineWidth = 0.8 * zoom;
-        ctx.beginPath();
-        ctx.moveTo(pcb0.x + 12 * zoom, pcb0.y + 12 * zoom);
-        ctx.lineTo(pcbCenter.x, pcbCenter.y);
-        ctx.lineTo(pcb2.x - 14 * zoom, pcb2.y - 14 * zoom);
-        ctx.stroke();
+        // 4 PCB Corner Mounting Holes (Perfect Co-Axial Alignment with Standoffs)
+        cornerAxes.forEach((axis) => {
+          const pHole = project(axis.x, pcbY, axis.z);
+          // Gold Annular Ring
+          ctx.fillStyle = '#f59e0b';
+          ctx.beginPath();
+          ctx.arc(pHole.x, pHole.y, 4.2 * zoom, 0, Math.PI * 2);
+          ctx.fill();
+          // Drill Hole
+          ctx.fillStyle = '#060a0e';
+          ctx.beginPath();
+          ctx.arc(pHole.x, pHole.y, 2.2 * zoom, 0, Math.PI * 2);
+          ctx.fill();
+        });
 
-        // 3D Mounted IC Footprints on the PCB
-        // MCU (STM32F4) Center Left
-        const mcuPos = project(-pcbW * 0.3, pcbY - 4, 0);
+        // Professional 45° Mitred Bus Traces connecting MCU and FPGA
+        const traceY = pcbY - 0.5;
+        const mcuCenter = { x: -pcbL * 0.28, z: 0 };
+        const fpgaCenter = { x: pcbL * 0.32, z: 0 };
+
+        ctx.strokeStyle = '#d97706';
+        ctx.lineWidth = 1.2 * zoom;
+        for (let t = -8; t <= 8; t += 8) {
+          const pt1 = project(mcuCenter.x + 16, traceY, mcuCenter.z + t);
+          const ptMid = project((mcuCenter.x + fpgaCenter.x) / 2, traceY, mcuCenter.z + t + 6);
+          const pt2 = project(fpgaCenter.x - 18, traceY, fpgaCenter.z + t + 6);
+
+          ctx.beginPath();
+          ctx.moveTo(pt1.x, pt1.y);
+          ctx.lineTo(ptMid.x, ptMid.y);
+          ctx.lineTo(pt2.x, pt2.y);
+          ctx.stroke();
+        }
+
+        // 3D Microcontroller (STM32F4) - Projected as a true 3D solid box
+        const mcuW = 15;
+        const mcuD = 15;
+        const mcuH = 3.5;
+        const mTopY = pcbY - mcuH;
+
+        const m0 = project(mcuCenter.x - mcuW, mTopY, mcuCenter.z - mcuD);
+        const m1 = project(mcuCenter.x + mcuW, mTopY, mcuCenter.z - mcuD);
+        const m2 = project(mcuCenter.x + mcuW, mTopY, mcuCenter.z + mcuD);
+        const m3 = project(mcuCenter.x - mcuW, mTopY, mcuCenter.z + mcuD);
+        const mb1 = project(mcuCenter.x + mcuW, pcbY, mcuCenter.z - mcuD);
+        const mb2 = project(mcuCenter.x + mcuW, pcbY, mcuCenter.z + mcuD);
+
+        // MCU Front Side
+        ctx.fillStyle = '#111827';
+        ctx.beginPath();
+        ctx.moveTo(m0.x, m0.y);
+        ctx.lineTo(m1.x, m1.y);
+        ctx.lineTo(mb1.x, mb1.y);
+        ctx.lineTo(m0.x, pcbY);
+        ctx.closePath();
+        ctx.fill();
+
+        // MCU Right Side
+        ctx.beginPath();
+        ctx.moveTo(m1.x, m1.y);
+        ctx.lineTo(m2.x, m2.y);
+        ctx.lineTo(mb2.x, mb2.y);
+        ctx.lineTo(mb1.x, mb1.y);
+        ctx.closePath();
+        ctx.fill();
+
+        // MCU Top Face
         ctx.fillStyle = '#1e2433';
         ctx.beginPath();
-        ctx.roundRect(mcuPos.x - 14 * zoom, mcuPos.y - 14 * zoom, 28 * zoom, 28 * zoom, 2);
+        ctx.moveTo(m0.x, m0.y);
+        ctx.lineTo(m1.x, m1.y);
+        ctx.lineTo(m2.x, m2.y);
+        ctx.lineTo(m3.x, m3.y);
+        ctx.closePath();
         ctx.fill();
         ctx.strokeStyle = activeFeature === 'pcb' ? '#00e5ff' : '#64748b';
         ctx.lineWidth = 1;
         ctx.stroke();
 
-        // Gold Pins on MCU
+        // Gull-Wing Lead Pins (Gold)
         ctx.fillStyle = '#fbbf24';
-        for (let p = -10; p <= 10; p += 5) {
-          ctx.fillRect(mcuPos.x + p * zoom, mcuPos.y - 16 * zoom, 1.5 * zoom, 2 * zoom);
-          ctx.fillRect(mcuPos.x + p * zoom, mcuPos.y + 14 * zoom, 1.5 * zoom, 2 * zoom);
+        for (let p = -mcuW + 3; p < mcuW - 3; p += 4) {
+          const pinTop = project(mcuCenter.x + p, pcbY - 1, mcuCenter.z - mcuD);
+          const pinBot = project(mcuCenter.x + p, pcbY, mcuCenter.z - mcuD - 3);
+          ctx.fillRect(pinBot.x - 1, pinBot.y - 1, 2 * zoom, 3 * zoom);
         }
 
-        // FPGA (Xilinx Artix-7) Center Right
-        const fpgaPos = project(pcbW * 0.4, pcbY - 5, 0);
+        // Silkscreen Label
+        const mcuLabel = project(mcuCenter.x, mTopY, mcuCenter.z);
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = `700 ${Math.max(7, 9 * zoom)}px "JetBrains Mono", monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillText('STM32F4', mcuLabel.x, mcuLabel.y + 3);
+
+        // 3D FPGA (Xilinx Artix-7) - Projected as a true 3D solid box
+        const fpgaW = 17;
+        const fpgaD = 17;
+        const fTopY = pcbY - 4.0;
+
+        const f0 = project(fpgaCenter.x - fpgaW, fTopY, fpgaCenter.z - fpgaD);
+        const f1 = project(fpgaCenter.x + fpgaW, fTopY, fpgaCenter.z - fpgaD);
+        const f2 = project(fpgaCenter.x + fpgaW, fTopY, fpgaCenter.z + fpgaD);
+        const f3 = project(fpgaCenter.x - fpgaW, fTopY, fpgaCenter.z + fpgaD);
+
         ctx.fillStyle = '#334155';
         ctx.beginPath();
-        ctx.roundRect(fpgaPos.x - 16 * zoom, fpgaPos.y - 16 * zoom, 32 * zoom, 32 * zoom, 2);
+        ctx.moveTo(f0.x, f0.y);
+        ctx.lineTo(f1.x, f1.y);
+        ctx.lineTo(f2.x, f2.y);
+        ctx.lineTo(f3.x, f3.y);
+        ctx.closePath();
         ctx.fill();
         ctx.strokeStyle = '#f59e0b';
         ctx.lineWidth = 1;
         ctx.stroke();
 
-        // USB-C Receptacle protruding to left bezel
-        const usbPos = project(-pcbW, pcbY - 3, 0);
+        const fpgaLabel = project(fpgaCenter.x, fTopY, fpgaCenter.z);
         ctx.fillStyle = '#cbd5e1';
-        ctx.fillRect(usbPos.x - 4 * zoom, usbPos.y - 5 * zoom, 12 * zoom, 10 * zoom);
-        ctx.strokeStyle = '#475569';
-        ctx.strokeRect(usbPos.x - 4 * zoom, usbPos.y - 5 * zoom, 12 * zoom, 10 * zoom);
+        ctx.fillText('ARTIX-7', fpgaLabel.x, fpgaLabel.y + 3);
+        ctx.textAlign = 'left';
 
-        // Real-time Blinking Status LEDs on PCB
-        const ledPwr = project(-pcbW * 0.5, pcbY - 3, -pcbL * 0.4);
-        ctx.fillStyle = '#10b981'; // Steady Green Power LED
+        // 3D USB-C Receptacle on Left Edge
+        const usbX = -pcbL + 2;
+        const usbY = pcbY - 3.5;
+        const u0 = project(usbX - 4, usbY, -8);
+        const u1 = project(usbX + 8, usbY, -8);
+        const u2 = project(usbX + 8, usbY, 8);
+        const u3 = project(usbX - 4, usbY, 8);
+
+        ctx.fillStyle = '#cbd5e1';
         ctx.beginPath();
-        ctx.arc(ledPwr.x, ledPwr.y, 2.4 * zoom, 0, Math.PI * 2);
+        ctx.moveTo(u0.x, u0.y);
+        ctx.lineTo(u1.x, u1.y);
+        ctx.lineTo(u2.x, u2.y);
+        ctx.lineTo(u3.x, u3.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#64748b';
+        ctx.stroke();
+
+        // Blinking Status LEDs
+        const ledPwr = project(-pcbL * 0.45, pcbY - 2, -pcbW * 0.4);
+        ctx.fillStyle = '#10b981'; // Steady Green
+        ctx.beginPath();
+        ctx.arc(ledPwr.x, ledPwr.y, 2.2 * zoom, 0, Math.PI * 2);
         ctx.fill();
 
-        const ledBeat = project(-pcbW * 0.5, pcbY - 3, -pcbL * 0.15);
+        const ledBeat = project(-pcbL * 0.45, pcbY - 2, -pcbW * 0.2);
         const blinkAlpha = (Math.sin(elapsed * 8) + 1) * 0.5;
-        ctx.fillStyle = `rgba(14, 165, 233, ${blinkAlpha})`; // Blinking Cyan System Heartbeat
+        ctx.fillStyle = `rgba(14, 165, 233, ${blinkAlpha})`; // Blinking Electric Cyan
         ctx.beginPath();
-        ctx.arc(ledBeat.x, ledBeat.y, 2.4 * zoom, 0, Math.PI * 2);
+        ctx.arc(ledBeat.x, ledBeat.y, 2.2 * zoom, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // 7. Exploded Top Heatsink Lid & Cooling Fins
-      if (params.finsEnabled && (explodeFactor > 0.01 || faces.find((f) => f.name === 'top')?.diffuse)) {
-        const lidY = -hh + lidExplodeY;
-        const lt0 = project(-hw, lidY, -hl);
-        const lt1 = project(hw, lidY, -hl);
-        const lt2 = project(hw, lidY, hl);
-        const lt3 = project(-hw, lidY, hl);
+      // 10. Exploded Top Heatsink Lid & Real 3D Extruded Cooling Fins
+      if (params.finsEnabled && (explode > 0.01 || faces.find((f) => f.name === 'top')?.diffuse)) {
+        const lt0 = project(-hL, lidY, -hW);
+        const lt1 = project(hL, lidY, -hW);
+        const lt2 = project(hL, lidY, hW);
+        const lt3 = project(-hL, lidY, hW);
 
-        // Top Lid Plate
+        // Lid Plate Thickness (4px)
+        const lbY = lidY + 4;
+        const lb1 = project(hL, lbY, -hW);
+        const lb2 = project(hL, lbY, hW);
+
+        // Lid Front Edge
+        ctx.fillStyle = '#1e2433';
+        ctx.beginPath();
+        ctx.moveTo(lt0.x, lt0.y);
+        ctx.lineTo(lt1.x, lt1.y);
+        ctx.lineTo(lb1.x, lb1.y);
+        ctx.lineTo(lt0.x, lbY);
+        ctx.closePath();
+        ctx.fill();
+
+        // Lid Right Edge
+        ctx.beginPath();
+        ctx.moveTo(lt1.x, lt1.y);
+        ctx.lineTo(lt2.x, lt2.y);
+        ctx.lineTo(lb2.x, lb2.y);
+        ctx.lineTo(lb1.x, lb1.y);
+        ctx.closePath();
+        ctx.fill();
+
+        // Lid Top Plate
         ctx.fillStyle = mat.alpha ? 'rgba(32, 45, 68, 0.75)' : '#232938';
         ctx.beginPath();
         ctx.moveTo(lt0.x, lt0.y);
@@ -849,114 +1035,130 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         ctx.lineWidth = 1.4;
         ctx.stroke();
 
-        // Parametric Cooling Fins
-        for (let f = 0; f < params.finCount; f++) {
-          const finZ = -hl + (2 * hl * (f + 1)) / (params.finCount + 1);
-          const fb1 = project(-hw + 14, lidY, finZ);
-          const fb2 = project(hw - 14, lidY, finZ);
-          const ft1 = project(-hw + 14, lidY - 14, finZ);
-          const ft2 = project(hw - 14, lidY - 14, finZ);
-
-          ctx.strokeStyle = activeFeature === 'fins' ? '#f59e0b' : '#ff7a50';
-          ctx.lineWidth = activeFeature === 'fins' ? 2.5 : 1.6;
+        // 4 Counterbored Screw Holes in Lid (Perfect Co-Axial Alignment)
+        cornerAxes.forEach((axis) => {
+          const lHole = project(axis.x, lidY, axis.z);
+          ctx.fillStyle = '#0f172a';
           ctx.beginPath();
-          ctx.moveTo(fb1.x, fb1.y);
-          ctx.lineTo(ft1.x, ft1.y);
-          ctx.lineTo(ft2.x, ft2.y);
-          ctx.lineTo(fb2.x, fb2.y);
+          ctx.arc(lHole.x, lHole.y, 4.0 * zoom, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#475569';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        });
+
+        // Real 3D Extruded Cooling Fins rising from the Lid Top
+        const finCount = Math.max(2, params.finCount);
+        const finHeight = 14;
+        const finTopY = lidY - finHeight;
+
+        for (let f = 0; f < finCount; f++) {
+          const finZ = -hW + 12 + (f * (2 * hW - 24)) / (finCount - 1);
+          const fStartX = -hL + 12;
+          const fEndX = hL - 12;
+          const fThick = 2.5;
+
+          const fBase1 = project(fStartX, lidY, finZ - fThick);
+          const fBase2 = project(fEndX, lidY, finZ - fThick);
+          const fTop1 = project(fStartX, finTopY, finZ - fThick);
+          const fTop2 = project(fEndX, finTopY, finZ - fThick);
+          const fTop3 = project(fEndX, finTopY, finZ + fThick);
+          const fTop4 = project(fStartX, finTopY, finZ + fThick);
+
+          // Fin Front Face
+          ctx.fillStyle = activeFeature === 'fins' ? '#f59e0b' : '#334155';
+          ctx.beginPath();
+          ctx.moveTo(fBase1.x, fBase1.y);
+          ctx.lineTo(fBase2.x, fBase2.y);
+          ctx.lineTo(fTop2.x, fTop2.y);
+          ctx.lineTo(fTop1.x, fTop1.y);
+          ctx.closePath();
+          ctx.fill();
+
+          // Fin Top Face (Blade Ridge)
+          ctx.fillStyle = activeFeature === 'fins' ? '#fbbf24' : '#475569';
+          ctx.beginPath();
+          ctx.moveTo(fTop1.x, fTop1.y);
+          ctx.lineTo(fTop2.x, fTop2.y);
+          ctx.lineTo(fTop3.x, fTop3.y);
+          ctx.lineTo(fTop4.x, fTop4.y);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.strokeStyle = activeFeature === 'fins' ? '#ea580c' : '#64748b';
+          ctx.lineWidth = 1.0;
           ctx.stroke();
 
           // Thermal Convection Waves in Thermal FEA Mode
           if (renderMode === 'fea' && feaType === 'thermal') {
-            const waveY = ft1.y - 12 - Math.sin(elapsed * 4 + f) * 7;
-            ctx.fillStyle = 'rgba(239, 68, 68, 0.65)';
+            const waveY = fTop1.y - 10 - Math.sin(elapsed * 4 + f) * 6;
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.75)';
             ctx.beginPath();
-            ctx.arc((ft1.x + ft2.x) / 2, waveY, 3.8 * zoom, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        }
-
-        // Structural Von Mises Clamping Load Vector Arrows in Stress FEA Mode
-        if (renderMode === 'fea' && feaType === 'stress') {
-          for (let f = 0; f < 3; f++) {
-            const loadZ = -hl * 0.4 + f * hl * 0.4;
-            const arrowBase = project(0, lidY - 26, loadZ);
-            const arrowTip = project(0, lidY - 4, loadZ);
-
-            ctx.strokeStyle = '#f97316';
-            ctx.lineWidth = 2.4;
-            ctx.beginPath();
-            ctx.moveTo(arrowBase.x, arrowBase.y);
-            ctx.lineTo(arrowTip.x, arrowTip.y);
-            ctx.stroke();
-
-            // Arrow tip triangle
-            ctx.fillStyle = '#ea580c';
-            ctx.beginPath();
-            ctx.moveTo(arrowTip.x, arrowTip.y);
-            ctx.lineTo(arrowTip.x - 5, arrowTip.y - 7);
-            ctx.lineTo(arrowTip.x + 5, arrowTip.y - 7);
-            ctx.closePath();
+            ctx.arc((fTop1.x + fTop2.x) / 2, waveY, 3.2 * zoom, 0, Math.PI * 2);
             ctx.fill();
           }
         }
       }
 
-      // 8. Exploded Stainless Steel M3 Fastener Screws
-      if (explodeFactor > 0.05) {
-        const screwY = -hh + screwExplodeY;
-        const screws = [
-          project(-hw + inset, screwY, -hl + inset),
-          project(hw - inset, screwY, -hl + inset),
-          project(-hw + inset, screwY, hl - inset),
-          project(hw - inset, screwY, hl - inset)
-        ];
+      // 11. 4 Stainless Steel M3 Fastener Screws (Perfect Co-Axial Vertical Alignment)
+      if (explode > 0.05) {
+        cornerAxes.forEach((axis) => {
+          const sc = project(axis.x, screwY, axis.z);
+          const scShank = project(axis.x, screwY + 9, axis.z);
 
-        screws.forEach((sc) => {
-          ctx.fillStyle = '#e2e8f0';
+          // Threaded M3 Shank pointing straight down toward the lid hole
+          ctx.strokeStyle = '#94a3b8';
+          ctx.lineWidth = 2.4 * zoom;
           ctx.beginPath();
-          ctx.arc(sc.x, sc.y, 4.2 * zoom, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#0284c7';
-          ctx.lineWidth = 1;
+          ctx.moveTo(sc.x, sc.y);
+          ctx.lineTo(scShank.x, scShank.y);
           ctx.stroke();
 
-          // Hex Socket drive
+          // Screw Head (Silver Stainless Steel with Specular Edge)
+          ctx.fillStyle = '#e2e8f0';
+          ctx.beginPath();
+          ctx.arc(sc.x, sc.y, 4.8 * zoom, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#0284c7';
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          // Hex Socket Drive (Allen Key M3)
           ctx.fillStyle = '#0f172a';
           ctx.beginPath();
-          ctx.arc(sc.x, sc.y, 1.8 * zoom, 0, Math.PI * 2);
+          ctx.arc(sc.x, sc.y, 2.0 * zoom, 0, Math.PI * 2);
           ctx.fill();
         });
       }
 
-      // 9. 3D Caliper Dimensions Overlay (Engineering Leader Lines & Callouts)
+      // 12. 3D Caliper Dimensions Overlay (Engineering Leader Lines & Callouts)
       if (showDimensions) {
         ctx.strokeStyle = '#00e5ff';
         ctx.fillStyle = '#00e5ff';
         ctx.lineWidth = 1.2;
         ctx.font = '700 10px "JetBrains Mono", monospace';
 
-        // Length Leader Line (X-Axis front bottom)
-        const dimL1 = project(-hw, hh + 16, -hl);
-        const dimL2 = project(hw, hh + 16, -hl);
+        // Length Leader Line (X-Axis)
+        const dimL1 = project(-hL, chassisBaseY + 16, -hW);
+        const dimL2 = project(hL, chassisBaseY + 16, -hW);
         ctx.beginPath();
         ctx.moveTo(dimL1.x, dimL1.y);
         ctx.lineTo(dimL2.x, dimL2.y);
         ctx.stroke();
         ctx.fillText(`${params.length}.00 mm`, (dimL1.x + dimL2.x) / 2 - 28, (dimL1.y + dimL2.y) / 2 + 14);
 
-        // Height Leader Line (Z-Axis front left)
-        const dimH1 = project(-hw - 18, -hh, -hl);
-        const dimH2 = project(-hw - 18, hh, -hl);
+        // Height Leader Line (Y-Axis)
+        const dimH1 = project(-hL - 18, chassisRimY, -hW);
+        const dimH2 = project(-hL - 18, chassisBaseY, -hW);
         ctx.beginPath();
         ctx.moveTo(dimH1.x, dimH1.y);
         ctx.lineTo(dimH2.x, dimH2.y);
         ctx.stroke();
         ctx.fillText(`${params.height}.00 mm`, dimH1.x - 52, (dimH1.y + dimH2.y) / 2);
 
-        // Width Leader Line (Y-Axis depth right)
-        const dimW1 = project(hw + 14, hh, -hl);
-        const dimW2 = project(hw + 14, hh, hl);
+        // Width Leader Line (Z-Axis)
+        const dimW1 = project(hL + 14, chassisBaseY, -hW);
+        const dimW2 = project(hL + 14, chassisBaseY, hW);
         ctx.beginPath();
         ctx.moveTo(dimW1.x, dimW1.y);
         ctx.lineTo(dimW2.x, dimW2.y);
