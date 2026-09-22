@@ -31,6 +31,11 @@ export default function App() {
   });
 
 
+  // Reset window scroll position to the very top whenever switching studio modes / pages
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [activeStudioMode]);
+
   // Fetch live workshop info from Express Backend (PERN)
   useEffect(() => {
     async function fetchStats() {

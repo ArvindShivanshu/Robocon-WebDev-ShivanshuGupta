@@ -67,6 +67,11 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Ensure clean viewport clearance for the floating capsule navbar */
+section, [id] {
+  scroll-margin-top: 96px;
+}
+
 body {
   margin: 0 !important;
   padding: 0 !important;

@@ -13,17 +13,28 @@ export default function Navbar({ activeMode, setActiveMode, seatsLeft, onGoToReg
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleModeChange = (mode) => {
+    setActiveMode(mode);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  };
+
   const handleRegisterClick = (e) => {
     e.preventDefault();
     if (activeMode !== 'portal') {
       setActiveMode('portal');
       setTimeout(() => {
         const el = document.getElementById('registration-section');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        if (el) {
+          const y = el.getBoundingClientRect().top + window.pageYOffset - 90;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
       }, 120);
     } else {
       const el = document.getElementById('registration-section');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      if (el) {
+        const y = el.getBoundingClientRect().top + window.pageYOffset - 90;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
     }
   };
 
@@ -32,11 +43,17 @@ export default function Navbar({ activeMode, setActiveMode, seatsLeft, onGoToReg
       setActiveMode('portal');
       setTimeout(() => {
         const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        if (el) {
+          const y = el.getBoundingClientRect().top + window.pageYOffset - 90;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
       }, 120);
     } else {
       const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      if (el) {
+        const y = el.getBoundingClientRect().top + window.pageYOffset - 90;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
     }
   };
 
@@ -45,25 +62,27 @@ export default function Navbar({ activeMode, setActiveMode, seatsLeft, onGoToReg
       className={`floating-capsule-navbar ${isScrolled ? 'scrolled' : ''}`}
       style={{
         position: 'fixed',
-        top: isScrolled ? '12px' : '18px',
-        left: '50%',
-        transform: 'translateX(-50%)',
+        top: isScrolled ? '12px' : '16px',
+        left: 0,
+        right: 0,
+        marginLeft: 'auto',
+        marginRight: 'auto',
         width: isScrolled ? 'min(94%, 1240px)' : 'min(95%, 1300px)',
-        padding: isScrolled ? '10px 24px' : '13px 28px',
+        padding: isScrolled ? '9px 22px' : '12px 26px',
         borderRadius: '9999px',
-        background: 'rgba(255, 255, 255, 0.92)',
+        background: 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(20px) saturate(180%)',
         WebkitBackdropFilter: 'blur(20px) saturate(180%)',
         border: '1px solid rgba(226, 232, 240, 0.95)',
         boxShadow: isScrolled
-          ? '0 12px 30px -6px rgba(15, 23, 42, 0.10), 0 4px 12px rgba(15, 23, 42, 0.04)'
+          ? '0 12px 30px -6px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.05)'
           : '0 16px 42px -10px rgba(15, 23, 42, 0.08), 0 6px 18px rgba(15, 23, 42, 0.03)',
         zIndex: 1000,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: '16px',
-        transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+        gap: '12px',
+        transition: 'top 0.25s ease, padding 0.25s ease, width 0.25s ease, box-shadow 0.25s ease, background 0.25s ease',
         boxSizing: 'border-box'
       }}
     >
@@ -71,7 +90,7 @@ export default function Navbar({ activeMode, setActiveMode, seatsLeft, onGoToReg
       <button
         onClick={() => {
           setActiveMode('portal');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
         }}
         style={{
           display: 'flex',
@@ -135,7 +154,7 @@ export default function Navbar({ activeMode, setActiveMode, seatsLeft, onGoToReg
         }}
       >
         <button
-          onClick={() => setActiveMode(activeMode === 'solidworks' ? 'portal' : 'solidworks')}
+          onClick={() => handleModeChange(activeMode === 'solidworks' ? 'portal' : 'solidworks')}
           style={{
             padding: isScrolled ? '5px 11px' : '6px 13px',
             borderRadius: '9999px',
@@ -158,7 +177,7 @@ export default function Navbar({ activeMode, setActiveMode, seatsLeft, onGoToReg
         </button>
 
         <button
-          onClick={() => setActiveMode(activeMode === 'altium' ? 'portal' : 'altium')}
+          onClick={() => handleModeChange(activeMode === 'altium' ? 'portal' : 'altium')}
           style={{
             padding: isScrolled ? '5px 11px' : '6px 13px',
             borderRadius: '9999px',
@@ -181,7 +200,7 @@ export default function Navbar({ activeMode, setActiveMode, seatsLeft, onGoToReg
         </button>
 
         <button
-          onClick={() => setActiveMode(activeMode === 'codesign' ? 'portal' : 'codesign')}
+          onClick={() => handleModeChange(activeMode === 'codesign' ? 'portal' : 'codesign')}
           style={{
             padding: isScrolled ? '5px 11px' : '6px 13px',
             borderRadius: '9999px',
