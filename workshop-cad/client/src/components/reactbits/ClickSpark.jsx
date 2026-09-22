@@ -99,9 +99,13 @@ export default function ClickSpark({
     }
   }, [sparkColor, sparkCount, sparkSize, sparkRadius, extraScale]);
 
+  useEffect(() => {
+    window.addEventListener('click', handleClick);
+    return () => window.removeEventListener('click', handleClick);
+  }, [handleClick]);
+
   return (
     <div
-      onClick={handleClick}
       className={`click-spark-container ${className}`}
       style={{
         position: 'relative',

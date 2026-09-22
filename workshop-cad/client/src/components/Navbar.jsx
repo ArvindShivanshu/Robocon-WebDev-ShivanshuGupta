@@ -15,7 +15,6 @@ export default function Navbar({ activeMode, setActiveMode, seatsLeft, onGoToReg
 
   const handleModeChange = (mode) => {
     setActiveMode(mode);
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   };
 
   const handleRegisterClick = (e) => {

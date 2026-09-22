@@ -31,10 +31,15 @@ export default function App() {
   });
 
 
-  // Reset window scroll position to the very top whenever switching studio modes / pages
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, [activeStudioMode]);
+  const scrollPositions = React.useRef({ portal: 0, solidworks: 0, altium: 0, codesign: 0 });
+  
+  const handleModeSwitch = (newMode) => {
+    // Save current scroll position before switching
+    scrollPositions.current[activeStudioMode] = window.scrollY;
+    setActiveStudioMode(newMode);
+    // Restore saved scroll position for the new mode, or 0 if none
+    window.scrollTo({ top: scrollPositions.current[newMode] || 0, behavior: 'instant' });
+  };
 
   // Fetch live workshop info from Express Backend (PERN) with timeout guard
   useEffect(() => {
@@ -169,7 +174,7 @@ export default function App() {
         {/* Single, Unified Master Navigation Bar */}
         <Navbar
           activeMode={activeStudioMode}
-          setActiveMode={setActiveStudioMode}
+          setActiveMode={handleModeSwitch}
           seatsLeft={workshopData?.workshop?.total_lab_seats - (workshopData?.workshop?.booked_lab_seats || 0)}
         />
 
@@ -179,7 +184,7 @@ export default function App() {
             isActive={activeStudioMode === 'solidworks'}
             onSyncToAltium={(env) => {
               setCoDesignEnvelope(env);
-              setActiveStudioMode('altium');
+              handleModeSwitch('altium');
             }}
           />
         </div>
@@ -189,7 +194,7 @@ export default function App() {
             isActive={activeStudioMode === 'altium'}
             boardDimensions={coDesignEnvelope}
             onSyncToSolidWorks={(data) => {
-              setActiveStudioMode('codesign');
+              handleModeSwitch('codesign');
             }}
           />
         </div>

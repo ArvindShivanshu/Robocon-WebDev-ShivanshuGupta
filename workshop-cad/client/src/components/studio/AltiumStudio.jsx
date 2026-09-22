@@ -558,7 +558,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions, isAc
         // 2. 3D Solid FR4 PCB Slab (Multi-layer Board with real thickness)
         const pcbHalfW = 210;
         const pcbHalfD = 120;
-        const pcbThick = 14; // ~1.6mm thickness scaled
+        const pcbThick = 24; // ~1.6mm thickness scaled
         const topY = -pcbThick / 2;
         const botY = pcbThick / 2;
 
@@ -585,6 +585,10 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions, isAc
 
         // 4 Multi-Layer FR4 Edge Faces (showing brown laminate core & gold copper foil stripes)
         const drawEdge = (i1, i2, i3, i4) => {
+          // Backface culling calculation
+          const p1 = verts[i1], p2 = verts[i2], p3 = verts[i3];
+          if ((p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) < 0) return;
+
           ctx.fillStyle = '#1c150c'; // FR4 core edge
           ctx.beginPath();
           ctx.moveTo(verts[i1].x, verts[i1].y);
@@ -921,27 +925,27 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions, isAc
 
           // Side Walls Shading
           ctx.fillStyle = comp.type === 'conn' ? '#94a3b8' : comp.type === 'bga' ? '#334155' : comp.type === 'smd_cap' ? '#8c6b4f' : '#1e2433';
-          // Front Side
-          ctx.beginPath();
-          ctx.moveTo(cv[0].x, cv[0].y);
-          ctx.lineTo(cv[1].x, cv[1].y);
-          ctx.lineTo(cv[5].x, cv[5].y);
-          ctx.lineTo(cv[4].x, cv[4].y);
-          ctx.closePath();
-          ctx.fill();
           ctx.strokeStyle = '#0f172a';
           ctx.lineWidth = 0.8;
-          ctx.stroke();
 
-          // Right Side
-          ctx.beginPath();
-          ctx.moveTo(cv[1].x, cv[1].y);
-          ctx.lineTo(cv[2].x, cv[2].y);
-          ctx.lineTo(cv[6].x, cv[6].y);
-          ctx.lineTo(cv[5].x, cv[5].y);
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
+          const drawCompEdge = (i1, i2, i3, i4) => {
+            const p1 = cv[i1], p2 = cv[i2], p3 = cv[i3];
+            if ((p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) < 0) return;
+            
+            ctx.beginPath();
+            ctx.moveTo(cv[i1].x, cv[i1].y);
+            ctx.lineTo(cv[i2].x, cv[i2].y);
+            ctx.lineTo(cv[i3].x, cv[i3].y);
+            ctx.lineTo(cv[i4].x, cv[i4].y);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+          };
+
+          drawCompEdge(0, 1, 5, 4); // Front
+          drawCompEdge(1, 2, 6, 5); // Right
+          drawCompEdge(2, 3, 7, 6); // Back
+          drawCompEdge(3, 0, 4, 7); // Left
 
           // Top Face
           if (comp.type === 'smd_led') {
