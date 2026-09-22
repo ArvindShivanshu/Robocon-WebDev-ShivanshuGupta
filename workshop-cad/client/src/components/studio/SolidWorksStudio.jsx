@@ -73,7 +73,7 @@ const MATERIALS = {
   }
 };
 
-export default function SolidWorksStudio({ onSyncToAltium }) {
+export default function SolidWorksStudio({ onSyncToAltium, isActive = true }) {
   // CAD Enclosure Parametric Dimensions
   const [params, setParams] = useState({
     length: 120, // mm
@@ -397,6 +397,11 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
 
   // Main 60FPS RAF 3D Engine Loop
   useEffect(() => {
+    if (!isActive) {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      return;
+    }
+
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
@@ -405,6 +410,8 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
     let startTime = performance.now();
 
     const render = (time) => {
+      if (!isActive) return;
+
       const elapsed = (time - startTime) * 0.001;
 
       // Turntable Auto-Rotate
@@ -412,13 +419,16 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         setRotation((prev) => ({ ...prev, y: prev.y + 0.45 }));
       }
 
-      const width = (canvas.width = container.clientWidth);
-      const height = (canvas.height = container.clientHeight);
+      const width = container.clientWidth;
+      const height = container.clientHeight;
 
       if (width === 0 || height === 0) {
         animFrameRef.current = requestAnimationFrame(render);
         return;
       }
+
+      if (canvas.width !== width) canvas.width = width;
+      if (canvas.height !== height) canvas.height = height;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -1378,7 +1388,7 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
 
     animFrameRef.current = requestAnimationFrame(render);
     return () => cancelAnimationFrame(animFrameRef.current);
-  }, [params, rotation, zoom, renderMode, activeFeature, explodedView, autoRotate, physicalMetrics, isDragging, feaType, showDimensions]);
+  }, [params, rotation, zoom, renderMode, activeFeature, explodedView, autoRotate, physicalMetrics, isDragging, feaType, showDimensions, isActive]);
 
   const handleSelectFeature = (featId) => {
     setActiveFeature(featId);

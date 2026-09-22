@@ -12,19 +12,29 @@ export default function HeroSection({ workshop, onSelectTrack }) {
 
   const headlineRef = useRef(null);
   const descRef = useRef(null);
+  const baseHeadlineRef = useRef(null);
+  const revealHeadlineRef = useRef(null);
+  const baseDescRef = useRef(null);
+  const revealDescRef = useRef(null);
 
-  const [headlineMask, setHeadlineMask] = useState({ reveal: 'none', base: 'none', active: false });
-  const [descMask, setDescMask] = useState({ reveal: 'none', base: 'none', active: false });
+  const hoverStateRef = useRef({
+    headlineHover: false,
+    hoverCoords: { x: 0, y: 0 },
+    descHover: false,
+    descCoords: { x: 0, y: 0 }
+  });
 
-  // Dynamic RAF loop: couples text illumination to BOTH direct cursor hover AND swirling black-purple fluid vortices
+  // Dynamic RAF loop: couples text illumination to BOTH direct cursor hover AND swirling fluid vortices
+  // Applies directly to DOM styles via refs with ZERO React re-render overhead!
   useEffect(() => {
     let animId = 0;
 
     const updateMasks = () => {
       const splats = (typeof window !== 'undefined' && window.__FLUID_ACTIVE_SPLATS__) || [];
+      const { headlineHover, hoverCoords, descHover, descCoords } = hoverStateRef.current;
 
       // 1. Headline Mask calculation
-      if (headlineRef.current) {
+      if (headlineRef.current && baseHeadlineRef.current && revealHeadlineRef.current) {
         const hRect = headlineRef.current.getBoundingClientRect();
         const hReveal = [];
         const hBase = [];
@@ -47,14 +57,24 @@ export default function HeroSection({ workshop, onSelectTrack }) {
         }
 
         if (hReveal.length > 0) {
-          setHeadlineMask({ reveal: hReveal.join(', '), base: hBase.join(', '), active: true });
+          const revStr = hReveal.join(', ');
+          const baseStr = hBase.join(', ');
+          baseHeadlineRef.current.style.webkitMaskImage = baseStr;
+          baseHeadlineRef.current.style.maskImage = baseStr;
+          revealHeadlineRef.current.style.webkitMaskImage = revStr;
+          revealHeadlineRef.current.style.maskImage = revStr;
+          revealHeadlineRef.current.style.opacity = '1';
         } else {
-          setHeadlineMask((prev) => (prev.active ? { reveal: 'none', base: 'none', active: false } : prev));
+          baseHeadlineRef.current.style.webkitMaskImage = 'none';
+          baseHeadlineRef.current.style.maskImage = 'none';
+          revealHeadlineRef.current.style.webkitMaskImage = 'none';
+          revealHeadlineRef.current.style.maskImage = 'none';
+          revealHeadlineRef.current.style.opacity = '0';
         }
       }
 
       // 2. Description Subtitle Mask calculation
-      if (descRef.current) {
+      if (descRef.current && baseDescRef.current && revealDescRef.current) {
         const dRect = descRef.current.getBoundingClientRect();
         const dReveal = [];
         const dBase = [];
@@ -77,9 +97,19 @@ export default function HeroSection({ workshop, onSelectTrack }) {
         }
 
         if (dReveal.length > 0) {
-          setDescMask({ reveal: dReveal.join(', '), base: dBase.join(', '), active: true });
+          const revStr = dReveal.join(', ');
+          const baseStr = dBase.join(', ');
+          baseDescRef.current.style.webkitMaskImage = baseStr;
+          baseDescRef.current.style.maskImage = baseStr;
+          revealDescRef.current.style.webkitMaskImage = revStr;
+          revealDescRef.current.style.maskImage = revStr;
+          revealDescRef.current.style.opacity = '1';
         } else {
-          setDescMask((prev) => (prev.active ? { reveal: 'none', base: 'none', active: false } : prev));
+          baseDescRef.current.style.webkitMaskImage = 'none';
+          baseDescRef.current.style.maskImage = 'none';
+          revealDescRef.current.style.webkitMaskImage = 'none';
+          revealDescRef.current.style.maskImage = 'none';
+          revealDescRef.current.style.opacity = '0';
         }
       }
 
@@ -88,7 +118,7 @@ export default function HeroSection({ workshop, onSelectTrack }) {
 
     animId = requestAnimationFrame(updateMasks);
     return () => cancelAnimationFrame(animId);
-  }, [headlineHover, hoverCoords, descHover, descCoords]);
+  }, []);
 
   const scrollToReg = (trackName) => {
     if (onSelectTrack && trackName) onSelectTrack(trackName);
@@ -100,21 +130,23 @@ export default function HeroSection({ workshop, onSelectTrack }) {
     <section id="hero" className="hero-section" style={{ paddingTop: '185px', paddingBottom: '85px', position: 'relative', zIndex: 2 }}>
       <div className="page-container" style={{ textAlign: 'center' }}>
 
-        {/* Minimalist Editorial Headline: NEVER light before; illuminates where cursor IS and where black-purple fluid IS */}
+        {/* Minimalist Editorial Headline: NEVER light before; illuminates where cursor IS and where fluid IS */}
         <div
           ref={headlineRef}
           className="hero-headline-wrapper"
           onMouseEnter={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
-            setHoverCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-            setHeadlineHover(true);
+            hoverStateRef.current.hoverCoords = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+            hoverStateRef.current.headlineHover = true;
           }}
           onMouseMove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
-            setHoverCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-            if (!headlineHover) setHeadlineHover(true);
+            hoverStateRef.current.hoverCoords = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+            hoverStateRef.current.headlineHover = true;
           }}
-          onMouseLeave={() => setHeadlineHover(false)}
+          onMouseLeave={() => {
+            hoverStateRef.current.headlineHover = false;
+          }}
           style={{
             position: 'relative',
             maxWidth: '920px',
@@ -125,16 +157,14 @@ export default function HeroSection({ workshop, onSelectTrack }) {
         >
           {/* Base Layer: Crisp Obsidian & Muted Slate by default; punches smooth holes under cursor & fluid vortices */}
           <h1
+            ref={baseHeadlineRef}
             className="heading-hero"
             style={{
               margin: 0,
               paddingBottom: '0.18em',
               color: '#0f172a',
-              WebkitMaskImage: headlineMask.active ? headlineMask.base : 'none',
-              maskImage: headlineMask.active ? headlineMask.base : 'none',
               WebkitMaskClip: 'no-clip',
-              maskClip: 'no-clip',
-              transition: 'WebkitMaskImage 0.08s ease, maskImage 0.08s ease'
+              maskClip: 'no-clip'
             }}
           >
             <span>Where Precision 3D Mechanics</span>
@@ -144,8 +174,9 @@ export default function HeroSection({ workshop, onSelectTrack }) {
             </span>
           </h1>
 
-          {/* Contrast Reveal Layer: 100% hidden before hover; revealed wherever cursor OR black-purple fluid is */}
+          {/* Contrast Reveal Layer: 100% hidden before hover; revealed wherever cursor OR fluid is */}
           <h1
+            ref={revealHeadlineRef}
             className="heading-hero contrast-reveal-layer"
             aria-hidden="true"
             style={{
@@ -158,10 +189,8 @@ export default function HeroSection({ workshop, onSelectTrack }) {
               color: '#ffffff',
               pointerEvents: 'none',
               zIndex: 3,
-              opacity: headlineMask.active ? 1 : 0,
-              transition: 'opacity 0.15s ease',
-              WebkitMaskImage: headlineMask.active ? headlineMask.reveal : 'none',
-              maskImage: headlineMask.active ? headlineMask.reveal : 'none',
+              opacity: 0,
+              transition: 'opacity 0.12s ease',
               WebkitMaskClip: 'no-clip',
               maskClip: 'no-clip'
             }}
@@ -174,21 +203,23 @@ export default function HeroSection({ workshop, onSelectTrack }) {
           </h1>
         </div>
 
-        {/* Restrained Subtitle: NEVER light before; illuminates where cursor IS and where black-purple fluid IS */}
+        {/* Restrained Subtitle: NEVER light before; illuminates where cursor IS and where fluid IS */}
         <div
           ref={descRef}
           className="hero-desc-wrapper"
           onMouseEnter={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
-            setDescCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-            setDescHover(true);
+            hoverStateRef.current.descCoords = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+            hoverStateRef.current.descHover = true;
           }}
           onMouseMove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
-            setDescCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-            if (!descHover) setDescHover(true);
+            hoverStateRef.current.descCoords = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+            hoverStateRef.current.descHover = true;
           }}
-          onMouseLeave={() => setDescHover(false)}
+          onMouseLeave={() => {
+            hoverStateRef.current.descHover = false;
+          }}
           style={{
             position: 'relative',
             maxWidth: '680px',
@@ -199,6 +230,7 @@ export default function HeroSection({ workshop, onSelectTrack }) {
         >
           {/* Base Layer: Crisp Muted Slate (#475569) by default; punches smooth holes under cursor & fluid vortices */}
           <p
+            ref={baseDescRef}
             style={{
               margin: 0,
               fontFamily: 'var(--font-main)',
@@ -206,17 +238,15 @@ export default function HeroSection({ workshop, onSelectTrack }) {
               color: '#475569',
               fontWeight: 400,
               lineHeight: 1.65,
-              letterSpacing: '-0.01em',
-              WebkitMaskImage: descMask.active ? descMask.base : 'none',
-              maskImage: descMask.active ? descMask.base : 'none',
-              transition: 'WebkitMaskImage 0.08s ease, maskImage 0.08s ease'
+              letterSpacing: '-0.01em'
             }}
           >
             <span>Master the complete hardware lifecycle. Design thermal-tested enclosures in SolidWorks, route high-frequency multi-layer boards in Altium Designer, and synchronize clearance envelopes bi-directionally without friction.</span>
           </p>
 
-          {/* Contrast Reveal Layer: 100% hidden before hover; revealed wherever cursor OR black-purple fluid is */}
+          {/* Contrast Reveal Layer: 100% hidden before hover; revealed wherever cursor OR fluid is */}
           <p
+            ref={revealDescRef}
             aria-hidden="true"
             style={{
               position: 'absolute',
@@ -232,10 +262,8 @@ export default function HeroSection({ workshop, onSelectTrack }) {
               letterSpacing: '-0.01em',
               pointerEvents: 'none',
               zIndex: 3,
-              opacity: descMask.active ? 1 : 0,
-              transition: 'opacity 0.15s ease',
-              WebkitMaskImage: descMask.active ? descMask.reveal : 'none',
-              maskImage: descMask.active ? descMask.reveal : 'none'
+              opacity: 0,
+              transition: 'opacity 0.12s ease'
             }}
           >
             <span>Master the complete hardware lifecycle. Design thermal-tested enclosures in SolidWorks, route high-frequency multi-layer boards in Altium Designer, and synchronize clearance envelopes bi-directionally without friction.</span>

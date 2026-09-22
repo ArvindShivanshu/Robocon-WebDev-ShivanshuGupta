@@ -36,17 +36,22 @@ export default function App() {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [activeStudioMode]);
 
-  // Fetch live workshop info from Express Backend (PERN)
+  // Fetch live workshop info from Express Backend (PERN) with timeout guard
   useEffect(() => {
     async function fetchStats() {
       try {
-        const res = await fetch('/api/workshop/info');
-        const data = await res.json();
-        if (data.success) {
-          setWorkshopData(data.data);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2500);
+        const res = await fetch('/api/workshop/info', { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            setWorkshopData(data.data);
+          }
         }
       } catch (err) {
-        console.warn('Could not fetch workshop stats, using defaults:', err);
+        // Quiet fallback to built-in workshop data if backend is offline or static hosting
       }
     }
     fetchStats();
@@ -171,6 +176,7 @@ export default function App() {
         {/* STUDIO VIEWS - Persistently mounted to preserve all custom CAD dimensions, 3D orbits, placed chips, routes, and edits */}
         <div style={{ display: activeStudioMode === 'solidworks' ? 'block' : 'none' }}>
           <SolidWorksStudio
+            isActive={activeStudioMode === 'solidworks'}
             onSyncToAltium={(env) => {
               setCoDesignEnvelope(env);
               setActiveStudioMode('altium');
@@ -180,6 +186,7 @@ export default function App() {
 
         <div style={{ display: activeStudioMode === 'altium' ? 'block' : 'none' }}>
           <AltiumStudio
+            isActive={activeStudioMode === 'altium'}
             boardDimensions={coDesignEnvelope}
             onSyncToSolidWorks={(data) => {
               setActiveStudioMode('codesign');

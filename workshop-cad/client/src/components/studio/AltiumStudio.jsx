@@ -279,7 +279,7 @@ const INITIAL_TRACES = [
   }
 ];
 
-export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
+export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions, isActive = true }) {
   const [boardSize] = useState({
     width: boardDimensions?.boardWidth || 115,
     height: boardDimensions?.boardLength || 75
@@ -464,6 +464,11 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
 
   // Main 60FPS Canvas Loop (2D Precision CAD + True 3D Perspective Isometric Board View)
   useEffect(() => {
+    if (!isActive) {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      return;
+    }
+
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
@@ -472,6 +477,8 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
     let startTime = performance.now();
 
     const render = (time) => {
+      if (!isActive) return;
+
       const elapsed = (time - startTime) * 0.001;
 
       // Turntable Auto-Rotate in 3D
@@ -479,13 +486,16 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
         setRotation3D((prev) => ({ ...prev, y: prev.y + 0.5 }));
       }
 
-      const width = (canvas.width = container.clientWidth);
-      const height = (canvas.height = container.clientHeight);
+      const width = container.clientWidth;
+      const height = container.clientHeight;
 
       if (width === 0 || height === 0) {
         animFrameRef.current = requestAnimationFrame(render);
         return;
       }
+
+      if (canvas.width !== width) canvas.width = width;
+      if (canvas.height !== height) canvas.height = height;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -1423,7 +1433,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
 
     animFrameRef.current = requestAnimationFrame(render);
     return () => cancelAnimationFrame(animFrameRef.current);
-  }, [components, traces, activeLayer, activeTool, solderMask, viewMode, zoom, panOffset, selectedComp, selectedTrace, selectedNet, routingSourceId, mouseBoardPos, isolateLayer, signalsActive, rotation3D, autoRotate3D, isDragging]);
+  }, [components, traces, activeLayer, activeTool, solderMask, viewMode, zoom, panOffset, selectedComp, selectedTrace, selectedNet, routingSourceId, mouseBoardPos, isolateLayer, signalsActive, rotation3D, autoRotate3D, isDragging, isActive]);
 
   // Pointer Down (Mouse & Touch)
   const handlePointerDown = (clientX, clientY, e) => {
