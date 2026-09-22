@@ -1,11 +1,22 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd workshop-cad/client && npm install && npm run build && cp -r dist/* ../",
+  "buildCommand": "cd workshop-cad/client && npm install && npm run build && cp -r dist/* ../ && mkdir -p ../../assets && cp -r dist/assets/* ../../assets/",
   "outputDirectory": ".",
   "rewrites": [
     {
       "source": "/workshop-cad/:path*",
       "destination": "/workshop-cad/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/workshop-cad(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
     }
   ]
 }
