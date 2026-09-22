@@ -168,25 +168,31 @@ export default function App() {
           seatsLeft={workshopData?.workshop?.total_lab_seats - (workshopData?.workshop?.booked_lab_seats || 0)}
         />
 
-        {/* STUDIO VIEWS */}
-        {activeStudioMode === 'solidworks' ? (
+        {/* STUDIO VIEWS - Persistently mounted to preserve all custom CAD dimensions, 3D orbits, placed chips, routes, and edits */}
+        <div style={{ display: activeStudioMode === 'solidworks' ? 'block' : 'none' }}>
           <SolidWorksStudio
             onSyncToAltium={(env) => {
               setCoDesignEnvelope(env);
               setActiveStudioMode('altium');
             }}
           />
-        ) : activeStudioMode === 'altium' ? (
+        </div>
+
+        <div style={{ display: activeStudioMode === 'altium' ? 'block' : 'none' }}>
           <AltiumStudio
             boardDimensions={coDesignEnvelope}
             onSyncToSolidWorks={(data) => {
               setActiveStudioMode('codesign');
             }}
           />
-        ) : activeStudioMode === 'codesign' ? (
+        </div>
+
+        <div style={{ display: activeStudioMode === 'codesign' ? 'block' : 'none' }}>
           <CoDesignBridge />
-        ) : (
-          /* WORKSHOP HUB & REGISTRATION PORTAL */
+        </div>
+
+        <div style={{ display: activeStudioMode === 'portal' ? 'block' : 'none' }}>
+          {/* WORKSHOP HUB & REGISTRATION PORTAL */}
           <main style={{ position: 'relative', zIndex: 2 }}>
             <HeroSection
               workshop={workshopData?.workshop}
@@ -210,7 +216,7 @@ export default function App() {
 
             <FAQSection />
           </main>
-        )}
+        </div>
 
         <Footer />
 

@@ -415,6 +415,11 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
       const width = (canvas.width = container.clientWidth);
       const height = (canvas.height = container.clientHeight);
 
+      if (width === 0 || height === 0) {
+        animFrameRef.current = requestAnimationFrame(render);
+        return;
+      }
+
       ctx.clearRect(0, 0, width, height);
 
       const cx = width / 2;

@@ -482,6 +482,11 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
       const width = (canvas.width = container.clientWidth);
       const height = (canvas.height = container.clientHeight);
 
+      if (width === 0 || height === 0) {
+        animFrameRef.current = requestAnimationFrame(render);
+        return;
+      }
+
       ctx.clearRect(0, 0, width, height);
 
       const cx = width / 2 + (viewMode === '2D' ? panOffset.x : 0);
@@ -602,7 +607,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
         drawEdge(2, 3, 7, 6); // Back
         drawEdge(3, 0, 4, 7); // Left
 
-        // Top Solder Mask Face
+        // Top Solder Mask Face with Solder Mask Relief
         ctx.fillStyle = mask.bg;
         ctx.beginPath();
         ctx.moveTo(verts[0].x, verts[0].y);
@@ -612,28 +617,227 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
         ctx.closePath();
         ctx.fill();
         ctx.strokeStyle = mask.border;
-        ctx.lineWidth = 2.0;
+        ctx.lineWidth = 2.2;
         ctx.stroke();
 
-        // 3D Standoff Mounting Holes (Plated through-holes with gold annular rings)
+        // Authentic Underlying Copper Ground Pour Sheen (Cross-hatched polygon flood)
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.04)';
+        ctx.lineWidth = 1;
+        for (let gx = -pcbHalfW + 12; gx <= pcbHalfW - 12; gx += 20) {
+          const pt1 = project3D(gx, topY, -pcbHalfD + 12);
+          const pt2 = project3D(gx + 30, topY, pcbHalfD - 12);
+          ctx.beginPath();
+          ctx.moveTo(pt1.x, pt1.y);
+          ctx.lineTo(pt2.x, pt2.y);
+          ctx.stroke();
+        }
+
+        // 3D Standoff Mounting Holes with 8-Point ENIG Gold Grounding Starburst Teeth
         const holes = [
-          project3D(-pcbHalfW + 18, topY, -pcbHalfD + 18),
-          project3D(pcbHalfW - 18, topY, -pcbHalfD + 18),
-          project3D(-pcbHalfW + 18, topY, pcbHalfD - 18),
-          project3D(pcbHalfW - 18, topY, pcbHalfD - 18)
+          { x: -pcbHalfW + 20, z: -pcbHalfD + 20 },
+          { x: pcbHalfW - 20, z: -pcbHalfD + 20 },
+          { x: -pcbHalfW + 20, z: pcbHalfD - 20 },
+          { x: pcbHalfW - 20, z: pcbHalfD - 20 }
         ];
-        holes.forEach((h) => {
-          ctx.fillStyle = '#f59e0b'; // Gold plated annular pad
+        holes.forEach((hPos) => {
+          const hp = project3D(hPos.x, topY, hPos.z);
+          // 8 radial gold contact teeth
+          ctx.fillStyle = '#f59e0b';
+          for (let a = 0; a < 8; a++) {
+            const ang = (a * Math.PI) / 4;
+            const tx = hp.x + Math.cos(ang) * 9 * zoom;
+            const ty = hp.y + Math.sin(ang) * 9 * zoom;
+            ctx.beginPath();
+            ctx.arc(tx, ty, 1.8 * zoom, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          // Gold annular ring
+          ctx.fillStyle = '#d97706';
           ctx.beginPath();
-          ctx.arc(h.x, h.y, 6.5 * zoom, 0, Math.PI * 2);
+          ctx.arc(hp.x, hp.y, 7.5 * zoom, 0, Math.PI * 2);
           ctx.fill();
-          ctx.fillStyle = '#060a0e'; // Drill hole
+          // Dark drill hole barrel
+          ctx.fillStyle = '#060a0e';
           ctx.beginPath();
-          ctx.arc(h.x, h.y, 3.8 * zoom, 0, Math.PI * 2);
+          ctx.arc(hp.x, hp.y, 4.2 * zoom, 0, Math.PI * 2);
+          ctx.fill();
+          // Silkscreen circular boundary
+          ctx.strokeStyle = '#f8fafc';
+          ctx.lineWidth = 0.9;
+          ctx.beginPath();
+          ctx.arc(hp.x, hp.y, 11 * zoom, 0, Math.PI * 2);
+          ctx.stroke();
+        });
+
+        // Perimeter Ground Stitching Vias Array (EMI Shielding)
+        const stitchingVias = [];
+        for (let vx = -pcbHalfW + 36; vx <= pcbHalfW - 36; vx += 24) {
+          stitchingVias.push({ x: vx, z: -pcbHalfD + 9 });
+          stitchingVias.push({ x: vx, z: pcbHalfD - 9 });
+        }
+        for (let vz = -pcbHalfD + 26; vz <= pcbHalfD - 26; vz += 22) {
+          stitchingVias.push({ x: -pcbHalfW + 9, z: vz });
+          stitchingVias.push({ x: pcbHalfW - 9, z: vz });
+        }
+        stitchingVias.forEach((sv) => {
+          const sp = project3D(sv.x, topY, sv.z);
+          ctx.fillStyle = '#f59e0b'; // Gold annular ring
+          ctx.beginPath();
+          ctx.arc(sp.x, sp.y, 2.6 * zoom, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#05070a'; // Drill hole
+          ctx.beginPath();
+          ctx.arc(sp.x, sp.y, 1.2 * zoom, 0, Math.PI * 2);
           ctx.fill();
         });
 
-        // 3. Render 3D Copper Traces on Top Solder Mask Plane
+        // Top Silkscreen Legend & Annotations (Top Overlay)
+        const silkMargin1 = project3D(-pcbHalfW + 12, topY, -pcbHalfD + 12);
+        const silkMargin2 = project3D(pcbHalfW - 12, topY, -pcbHalfD + 12);
+        const silkMargin3 = project3D(pcbHalfW - 12, topY, pcbHalfD - 12);
+        const silkMargin4 = project3D(-pcbHalfW + 12, topY, pcbHalfD - 12);
+        ctx.strokeStyle = 'rgba(248, 250, 252, 0.55)';
+        ctx.lineWidth = 0.9;
+        ctx.beginPath();
+        ctx.moveTo(silkMargin1.x, silkMargin1.y);
+        ctx.lineTo(silkMargin2.x, silkMargin2.y);
+        ctx.lineTo(silkMargin3.x, silkMargin3.y);
+        ctx.lineTo(silkMargin4.x, silkMargin4.y);
+        ctx.closePath();
+        ctx.stroke();
+
+        // Project Silk Stamp text
+        const titlePt = project3D(-pcbHalfW + 36, topY, -pcbHalfD + 26);
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = `700 ${Math.max(7, 8.5 * zoom)}px "JetBrains Mono", monospace`;
+        ctx.textAlign = 'left';
+        ctx.fillText('ROBOCON 2026 // MCAD-ECAD CO-DESIGN LAB', titlePt.x, titlePt.y);
+
+        const subTitlePt = project3D(-pcbHalfW + 36, topY, -pcbHalfD + 36);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = `600 ${Math.max(6, 7 * zoom)}px "JetBrains Mono", monospace`;
+        ctx.fillText('6-LAYER FR4 | IMPEDANCE 50Ω SE / 100Ω DIFF | REV 2.4', subTitlePt.x, subTitlePt.y);
+
+        // Hardware Test Points with probe pads
+        const testPoints = [
+          { label: 'TP1 [3V3]', x: -pcbHalfW + 40, z: pcbHalfD - 26 },
+          { label: 'TP2 [GND]', x: -pcbHalfW + 72, z: pcbHalfD - 26 },
+          { label: 'TP3 [CLK]', x: 20, z: pcbHalfD - 26 },
+          { label: 'TP4 [USB]', x: 60, z: pcbHalfD - 26 }
+        ];
+        testPoints.forEach((tp) => {
+          const tpp = project3D(tp.x, topY, tp.z);
+          ctx.fillStyle = '#fbbf24';
+          ctx.beginPath();
+          ctx.arc(tpp.x, tpp.y, 2.8 * zoom, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#f8fafc';
+          ctx.font = `600 ${Math.max(6, 7 * zoom)}px "JetBrains Mono", monospace`;
+          ctx.textAlign = 'center';
+          ctx.fillText(tp.label, tpp.x, tpp.y + 10 * zoom);
+        });
+
+        // Component Solder Pads on PCB Surface (ENIG Gold & Solder Fillets)
+        components.forEach((comp) => {
+          const cx3D = comp.rx + comp.w / 2;
+          const cz3D = comp.ry + comp.h / 2;
+          const hw = comp.w / 2;
+          const hd = comp.h / 2;
+
+          if (comp.type === 'qfp') {
+            // 64 Gold Rectangular Pads radiating around 4 edges
+            ctx.fillStyle = '#fbbf24';
+            for (let side = 0; side < 4; side++) {
+              for (let p = -hw + 6; p <= hw - 6; p += (hw * 2 - 12) / 15) {
+                let px = 0, pz = 0;
+                if (side === 0) { px = cx3D + p; pz = cz3D + hd + 3; }
+                else if (side === 1) { px = cx3D + p; pz = cz3D - hd - 3; }
+                else if (side === 2) { px = cx3D - hw - 3; pz = cz3D + p; }
+                else if (side === 3) { px = cx3D + hw + 3; pz = cz3D + p; }
+                const padPt = project3D(px, topY, pz);
+                ctx.fillRect(padPt.x - 1.2 * zoom, padPt.y - 1.2 * zoom, 2.4 * zoom, 2.4 * zoom);
+              }
+            }
+            // Silk box around QFP with pin 1 index dot
+            const s1 = project3D(cx3D - hw - 5, topY, cz3D - hd - 5);
+            const s2 = project3D(cx3D + hw + 5, topY, cz3D - hd - 5);
+            const s3 = project3D(cx3D + hw + 5, topY, cz3D + hd + 5);
+            const s4 = project3D(cx3D - hw - 5, topY, cz3D + hd + 5);
+            ctx.strokeStyle = '#f8fafc';
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(s1.x + 4 * zoom, s1.y);
+            ctx.lineTo(s2.x, s2.y);
+            ctx.lineTo(s3.x, s3.y);
+            ctx.lineTo(s4.x, s4.y);
+            ctx.lineTo(s1.x, s1.y + 4 * zoom);
+            ctx.stroke();
+            // Pin 1 dot
+            const p1Dot = project3D(cx3D - hw - 3, topY, cz3D - hd - 3);
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(p1Dot.x, p1Dot.y, 1.8 * zoom, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (comp.type === 'bga') {
+            // Gold BGA ball pads matrix
+            ctx.fillStyle = '#d97706';
+            for (let bx = -hw + 8; bx <= hw - 8; bx += 10) {
+              for (let bz = -hd + 8; bz <= hd - 8; bz += 10) {
+                const bPt = project3D(cx3D + bx, topY, cz3D + bz);
+                ctx.beginPath();
+                ctx.arc(bPt.x, bPt.y, 1.5 * zoom, 0, Math.PI * 2);
+                ctx.fill();
+              }
+            }
+          } else if (comp.type === 'conn') {
+            // 4 heavy through-hole gold plated slot pads for USB-C mechanical anchor tabs
+            const tabOffsets = [
+              { x: cx3D - hw + 4, z: cz3D - hd + 4 },
+              { x: cx3D + hw - 4, z: cz3D - hd + 4 },
+              { x: cx3D - hw + 4, z: cz3D + hd - 4 },
+              { x: cx3D + hw - 4, z: cz3D + hd - 4 }
+            ];
+            ctx.fillStyle = '#f59e0b';
+            tabOffsets.forEach((to) => {
+              const tp = project3D(to.x, topY, to.z);
+              ctx.beginPath();
+              ctx.arc(tp.x, tp.y, 3.2 * zoom, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.fillStyle = '#060a0e';
+              ctx.beginPath();
+              ctx.arc(tp.x, tp.y, 1.8 * zoom, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.fillStyle = '#f59e0b';
+            });
+          } else if (comp.type === 'smd_cap' || comp.type === 'smd_res' || comp.type === 'smd_led') {
+            // Two rectangular gold SMT solder pads
+            const p1 = project3D(cx3D - hw - 2, topY, cz3D);
+            const p2 = project3D(cx3D + hw + 2, topY, cz3D);
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(p1.x - 2 * zoom, p1.y - 3 * zoom, 4 * zoom, 6 * zoom);
+            ctx.fillRect(p2.x - 2 * zoom, p2.y - 3 * zoom, 4 * zoom, 6 * zoom);
+          } else if (comp.type === 'sot') {
+            // Wide thermal tab pad + 3 pin pads
+            const tabP = project3D(cx3D, topY, cz3D - hd - 3);
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(tabP.x - 8 * zoom, tabP.y - 2 * zoom, 16 * zoom, 4 * zoom);
+          } else if (comp.type === 'xtal') {
+            // 4 corner pads
+            const corners = [
+              { x: cx3D - hw, z: cz3D - hd },
+              { x: cx3D + hw, z: cz3D - hd },
+              { x: cx3D - hw, z: cz3D + hd },
+              { x: cx3D + hw, z: cz3D + hd }
+            ];
+            ctx.fillStyle = '#fbbf24';
+            corners.forEach((c) => {
+              const cp = project3D(c.x, topY, c.z);
+              ctx.fillRect(cp.x - 2 * zoom, cp.y - 2 * zoom, 4 * zoom, 4 * zoom);
+            });
+          }
+        });
+
+        // 3. Render 3D Copper Traces on Top Solder Mask Plane with Solder Mask Relief
         traces.forEach((tr) => {
           const cFrom = components.find((c) => c.id === tr.from);
           const cTo = components.find((c) => c.id === tr.to);
@@ -644,14 +848,16 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
 
           const isSelected = selectedTrace?.id === tr.id || selectedNet === tr.net;
 
-          ctx.strokeStyle = isSelected ? '#00e5ff' : tr.color;
-          ctx.lineWidth = (isSelected ? 3.0 : 1.8) * zoom;
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-
-          // 45-degree mitred dogleg in 3D
+          // Solder mask copper relief under-sheen
           const midX = (cFrom.rx + cTo.rx) / 2;
           const pMid = project3D(midX, topY - 1, cFrom.ry + cFrom.h / 2);
+
+          ctx.strokeStyle = isSelected ? '#00e5ff' : tr.color;
+          ctx.lineWidth = (isSelected ? 3.2 : 2.0) * zoom;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(pMid.x, pMid.y);
           ctx.lineTo(p2.x, p2.y);
           ctx.stroke();
@@ -704,7 +910,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
           ];
 
           // Side Walls Shading
-          ctx.fillStyle = comp.type === 'conn' ? '#94a3b8' : comp.type === 'bga' ? '#334155' : '#1e2433';
+          ctx.fillStyle = comp.type === 'conn' ? '#94a3b8' : comp.type === 'bga' ? '#334155' : comp.type === 'smd_cap' ? '#8c6b4f' : '#1e2433';
           // Front Side
           ctx.beginPath();
           ctx.moveTo(cv[0].x, cv[0].y);
@@ -731,11 +937,17 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
           if (comp.type === 'smd_led') {
             ctx.fillStyle = '#10b981'; // Luminous Emerald
             ctx.shadowColor = '#10b981';
-            ctx.shadowBlur = 10;
+            ctx.shadowBlur = 12;
           } else if (comp.type === 'conn') {
             ctx.fillStyle = '#cbd5e1'; // Stainless Steel
           } else if (comp.type === 'xtal') {
             ctx.fillStyle = '#e2e8f0'; // Shiny Silver Can
+          } else if (comp.type === 'smd_cap') {
+            ctx.fillStyle = '#b48a60'; // Realistic tan ceramic MLCC
+          } else if (comp.type === 'smd_res') {
+            ctx.fillStyle = '#0f172a'; // Glossy black chip resistor
+          } else if (comp.type === 'bga') {
+            ctx.fillStyle = '#64748b'; // Heat spreader lid
           } else {
             ctx.fillStyle = isSelected ? '#2d3748' : '#1a202c'; // Molded Epoxy Package
           }
@@ -753,22 +965,63 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
           ctx.lineWidth = isSelected ? 2.0 : 1.0;
           ctx.stroke();
 
-          // Gold Gull-Wing Pins on QFP (STM32)
+          // Realistic Gull-Wing Pins on QFP (STM32 on all 4 sides)
           if (comp.type === 'qfp') {
-            ctx.fillStyle = '#fbbf24';
-            for (let p = -hw + 8; p < hw - 8; p += 6) {
-              const pTop = project3D(cx3D + p, compBotY - 2, cz3D + hd);
-              const pBot = project3D(cx3D + p, compBotY + 2, cz3D + hd + 4);
-              ctx.fillRect(pTop.x - 1, pTop.y, 2.5 * zoom, 4 * zoom);
+            ctx.fillStyle = '#e2e8f0'; // Tinned copper alloy pins
+            const pinStep = (hw * 2 - 12) / 15;
+            for (let p = -hw + 6; p <= hw - 6; p += pinStep) {
+              // South pins
+              const pTopS = project3D(cx3D + p, compBotY - 2, cz3D + hd);
+              const pBotS = project3D(cx3D + p, compBotY + 1, cz3D + hd + 4);
+              ctx.fillRect(pTopS.x - 1, pTopS.y, 2.2 * zoom, 4 * zoom);
+
+              // North pins
+              const pTopN = project3D(cx3D + p, compBotY - 2, cz3D - hd);
+              const pBotN = project3D(cx3D + p, compBotY + 1, cz3D - hd - 4);
+              ctx.fillRect(pTopN.x - 1, pTopN.y - 3 * zoom, 2.2 * zoom, 4 * zoom);
             }
           }
 
-          // Top Face Silkscreen / Part ID
+          // Ceramic Cap Silver End Terminals
+          if (comp.type === 'smd_cap' || comp.type === 'smd_res') {
+            ctx.fillStyle = '#e2e8f0'; // Shiny tinned solder cap
+            const t1 = project3D(cx3D - hw, compTopY, cz3D);
+            const t2 = project3D(cx3D + hw, compTopY, cz3D);
+            ctx.fillRect(t1.x - 1, t1.y - 3 * zoom, 3 * zoom, 6 * zoom);
+            ctx.fillRect(t2.x - 2 * zoom, t2.y - 3 * zoom, 3 * zoom, 6 * zoom);
+          }
+
+          // Top Face Laser Etched Markings / Silkscreen
           const labelPt = project3D(cx3D, compTopY, cz3D);
-          ctx.fillStyle = comp.type === 'conn' ? '#0f172a' : '#f8fafc';
-          ctx.font = `700 ${Math.max(8, 10 * zoom)}px "JetBrains Mono", monospace`;
-          ctx.textAlign = 'center';
-          ctx.fillText(comp.id, labelPt.x, labelPt.y + 4);
+          if (comp.type === 'qfp') {
+            ctx.fillStyle = '#cbd5e1';
+            ctx.font = `700 ${Math.max(7, 8 * zoom)}px "JetBrains Mono", monospace`;
+            ctx.textAlign = 'center';
+            ctx.fillText('ARM®', labelPt.x, labelPt.y - 4);
+            ctx.fillText('STM32F4', labelPt.x, labelPt.y + 6);
+          } else if (comp.type === 'bga') {
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = `700 ${Math.max(7, 8.5 * zoom)}px "JetBrains Mono", monospace`;
+            ctx.textAlign = 'center';
+            ctx.fillText('XILINX', labelPt.x, labelPt.y - 4);
+            ctx.font = `600 ${Math.max(6, 7 * zoom)}px "JetBrains Mono", monospace`;
+            ctx.fillText('ARTIX-7', labelPt.x, labelPt.y + 6);
+          } else if (comp.type === 'conn') {
+            ctx.fillStyle = '#0f172a';
+            ctx.font = `700 ${Math.max(7, 8 * zoom)}px "JetBrains Mono", monospace`;
+            ctx.textAlign = 'center';
+            ctx.fillText('USB-C 3.2', labelPt.x, labelPt.y + 3);
+          } else if (comp.type === 'xtal') {
+            ctx.fillStyle = '#475569';
+            ctx.font = `700 ${Math.max(6, 7 * zoom)}px "JetBrains Mono", monospace`;
+            ctx.textAlign = 'center';
+            ctx.fillText('25.0MHz', labelPt.x, labelPt.y + 3);
+          } else {
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = `700 ${Math.max(7, 8.5 * zoom)}px "JetBrains Mono", monospace`;
+            ctx.textAlign = 'center';
+            ctx.fillText(comp.id, labelPt.x, labelPt.y + 3);
+          }
         });
 
         // 3D Viewport HUD Metadata
@@ -822,6 +1075,16 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
       ctx.lineWidth = 2.2;
       ctx.stroke();
 
+      // Realistic Underlying Copper Ground Pour Sheen
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.05)';
+      ctx.lineWidth = 1;
+      for (let gx = pcbX + 10; gx <= pcbX + pcbW - 10; gx += 16) {
+        ctx.beginPath();
+        ctx.moveTo(gx, pcbY + 10);
+        ctx.lineTo(gx + 24, pcbY + pcbH - 10);
+        ctx.stroke();
+      }
+
       // Mechanical Keepout Route Line (Yellow Dashed)
       ctx.save();
       ctx.strokeStyle = '#eab308';
@@ -830,8 +1093,110 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
       ctx.strokeRect(pcbX + 4, pcbY + 4, pcbW - 8, pcbH - 8);
       ctx.restore();
 
+      // 4 M3 Plated Standoff Mounting Holes with Radial Starburst Teeth
+      const standoff2D = [
+        { x: pcbX + 22, y: pcbY + 22 },
+        { x: pcbX + pcbW - 22, y: pcbY + 22 },
+        { x: pcbX + 22, y: pcbY + pcbH - 22 },
+        { x: pcbX + pcbW - 22, y: pcbY + pcbH - 22 }
+      ];
+      standoff2D.forEach((sh) => {
+        // 8 gold contact starburst pads
+        ctx.fillStyle = '#f59e0b';
+        for (let a = 0; a < 8; a++) {
+          const ang = (a * Math.PI) / 4;
+          ctx.beginPath();
+          ctx.arc(sh.x + Math.cos(ang) * 9, sh.y + Math.sin(ang) * 9, 1.8, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        // Gold annular ring
+        ctx.fillStyle = '#d97706';
+        ctx.beginPath();
+        ctx.arc(sh.x, sh.y, 7.5, 0, Math.PI * 2);
+        ctx.fill();
+        // Center drill barrel
+        ctx.fillStyle = '#05070a';
+        ctx.beginPath();
+        ctx.arc(sh.x, sh.y, 4.2, 0, Math.PI * 2);
+        ctx.fill();
+        // Silkscreen circle & crosshairs
+        ctx.strokeStyle = '#f8fafc';
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.arc(sh.x, sh.y, 11, 0, Math.PI * 2);
+        ctx.moveTo(sh.x - 13, sh.y);
+        ctx.lineTo(sh.x + 13, sh.y);
+        ctx.moveTo(sh.x, sh.y - 13);
+        ctx.lineTo(sh.x, sh.y + 13);
+        ctx.stroke();
+      });
+
+      // Perimeter Ground Stitching Vias Array (EMI Shielding)
+      ctx.fillStyle = '#f59e0b';
+      for (let vx = pcbX + 42; vx <= pcbX + pcbW - 42; vx += 24) {
+        // Top edge vias
+        ctx.beginPath();
+        ctx.arc(vx, pcbY + 12, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+        // Bottom edge vias
+        ctx.beginPath();
+        ctx.arc(vx, pcbY + pcbH - 12, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      for (let vy = pcbY + 38; vy <= pcbY + pcbH - 38; vy += 20) {
+        // Left edge vias
+        ctx.beginPath();
+        ctx.arc(pcbX + 12, vy, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+        // Right edge vias
+        ctx.beginPath();
+        ctx.arc(pcbX + pcbW - 12, vy, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // Via center drill holes
+      ctx.fillStyle = '#05070a';
+      for (let vx = pcbX + 42; vx <= pcbX + pcbW - 42; vx += 24) {
+        ctx.beginPath();
+        ctx.arc(vx, pcbY + 12, 1.2, 0, Math.PI * 2);
+        ctx.arc(vx, pcbY + pcbH - 12, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      for (let vy = pcbY + 38; vy <= pcbY + pcbH - 38; vy += 20) {
+        ctx.beginPath();
+        ctx.arc(pcbX + 12, vy, 1.2, 0, Math.PI * 2);
+        ctx.arc(pcbX + pcbW - 12, vy, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Top Silkscreen Legend & Annotations (Top Overlay)
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '700 8.5px "JetBrains Mono", monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('ROBOCON 2026 // MCAD-ECAD CO-DESIGN LAB', pcbX + 42, pcbY + 28);
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '600 7px "JetBrains Mono", monospace';
+      ctx.fillText('6-LAYER FR4 | IMPEDANCE 50Ω SE / 100Ω DIFF | REV 2.4', pcbX + 42, pcbY + 38);
+
+      // Hardware Test Points with probe pads
+      const testPoints2D = [
+        { label: 'TP1 [3V3]', x: pcbX + 46, y: pcbY + pcbH - 28 },
+        { label: 'TP2 [GND]', x: pcbX + 82, y: pcbY + pcbH - 28 },
+        { label: 'TP3 [CLK]', x: pcbX + 118, y: pcbY + pcbH - 28 },
+        { label: 'TP4 [USB]', x: pcbX + 154, y: pcbY + pcbH - 28 }
+      ];
+      testPoints2D.forEach((tp) => {
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath();
+        ctx.arc(tp.x, tp.y, 2.8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = '600 7px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(tp.label, tp.x, tp.y + 9);
+      });
+
       // CAD Snap Grid Dots
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.10)';
       for (let x = pcbX + 16; x < pcbX + pcbW; x += 16) {
         for (let y = pcbY + 16; y < pcbY + pcbH; y += 16) {
           ctx.fillRect(x - 0.5, y - 0.5, 1.2, 1.2);
@@ -840,9 +1205,9 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
 
       // Optical Fiducials in Board Corners
       const fiducials = [
-        { x: pcbX + 18, y: pcbY + 36 },
-        { x: pcbX + pcbW - 18, y: pcbY + 36 },
-        { x: pcbX + 18, y: pcbY + pcbH - 24 }
+        { x: pcbX + 18, y: pcbY + 48 },
+        { x: pcbX + pcbW - 18, y: pcbY + 48 },
+        { x: pcbX + 18, y: pcbY + pcbH - 42 }
       ];
       fiducials.forEach((fid) => {
         ctx.fillStyle = '#f59e0b';
@@ -933,36 +1298,119 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
         }
       }
 
-      // 5. Render 2D Components
+      // 5. Render 2D Components with Realistic SMT Pads & Silk Outlines
       components.forEach((comp) => {
         const isSelected = selectedComp?.id === comp.id;
+
+        // Render SMT Solder Pads on PCB Surface
+        if (comp.type === 'qfp') {
+          // 64 Gold Gull-wing landing pads
+          ctx.fillStyle = '#fbbf24';
+          const pinStep = (comp.w - 12) / 15;
+          for (let p = 6; p <= comp.w - 6; p += pinStep) {
+            ctx.fillRect(comp.rx + p - 1, comp.ry - 5, 2, 5); // North
+            ctx.fillRect(comp.rx + p - 1, comp.ry + comp.h, 2, 5); // South
+            ctx.fillRect(comp.rx - 5, comp.ry + p - 1, 5, 2); // West
+            ctx.fillRect(comp.rx + comp.w, comp.ry + p - 1, 5, 2); // East
+          }
+          // White silkscreen outline box with Pin 1 chamfer
+          ctx.strokeStyle = '#f8fafc';
+          ctx.lineWidth = 0.8;
+          ctx.beginPath();
+          ctx.moveTo(comp.rx - 6 + 4, comp.ry - 6);
+          ctx.lineTo(comp.rx + comp.w + 6, comp.ry - 6);
+          ctx.lineTo(comp.rx + comp.w + 6, comp.ry + comp.h + 6);
+          ctx.lineTo(comp.rx - 6, comp.ry + comp.h + 6);
+          ctx.lineTo(comp.rx - 6, comp.ry - 6 + 4);
+          ctx.closePath();
+          ctx.stroke();
+        } else if (comp.type === 'bga') {
+          // Gold BGA balls array
+          ctx.fillStyle = '#d97706';
+          for (let bx = 6; bx <= comp.w - 6; bx += 8) {
+            for (let by = 6; by <= comp.h - 6; by += 8) {
+              ctx.beginPath();
+              ctx.arc(comp.rx + bx, comp.ry + by, 1.4, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        } else if (comp.type === 'conn') {
+          // 4 gold plated through-hole retention slots
+          ctx.fillStyle = '#f59e0b';
+          const slots = [
+            { x: comp.rx + 3, y: comp.ry + 3 },
+            { x: comp.rx + comp.w - 3, y: comp.ry + 3 },
+            { x: comp.rx + 3, y: comp.ry + comp.h - 3 },
+            { x: comp.rx + comp.w - 3, y: comp.ry + comp.h - 3 }
+          ];
+          slots.forEach((sl) => {
+            ctx.beginPath();
+            ctx.arc(sl.x, sl.y, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#060a0e';
+            ctx.beginPath();
+            ctx.arc(sl.x, sl.y, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#f59e0b';
+          });
+        } else if (comp.type === 'smd_cap' || comp.type === 'smd_res' || comp.type === 'smd_led') {
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(comp.rx - 3, comp.ry, 3, comp.h);
+          ctx.fillRect(comp.rx + comp.w, comp.ry, 3, comp.h);
+        }
 
         // Selection Highlight
         if (isSelected) {
           ctx.strokeStyle = '#00e5ff';
           ctx.lineWidth = 2;
           ctx.setLineDash([4, 4]);
-          ctx.strokeRect(comp.rx - 5, comp.ry - 5, comp.w + 10, comp.h + 10);
+          ctx.strokeRect(comp.rx - 7, comp.ry - 7, comp.w + 14, comp.h + 14);
           ctx.setLineDash([]);
         }
 
-        // Component Body
-        ctx.fillStyle = comp.type === 'conn' ? '#475569' : comp.type === 'bga' ? '#1e293b' : '#111827';
+        // Component Body with Realistic Colors
+        if (comp.type === 'smd_led') {
+          ctx.fillStyle = '#10b981';
+          ctx.shadowColor = '#10b981';
+          ctx.shadowBlur = 8;
+        } else if (comp.type === 'conn') {
+          ctx.fillStyle = '#94a3b8';
+        } else if (comp.type === 'xtal') {
+          ctx.fillStyle = '#cbd5e1';
+        } else if (comp.type === 'smd_cap') {
+          ctx.fillStyle = '#b48a60'; // Realistic tan ceramic
+        } else if (comp.type === 'smd_res') {
+          ctx.fillStyle = '#0f172a'; // Glossy black resistor
+        } else if (comp.type === 'bga') {
+          ctx.fillStyle = '#334155';
+        } else {
+          ctx.fillStyle = '#1e293b';
+        }
+
         ctx.beginPath();
-        ctx.roundRect(comp.rx, comp.ry, comp.w, comp.h, 3);
+        ctx.roundRect(comp.rx, comp.ry, comp.w, comp.h, 2);
         ctx.fill();
-        ctx.strokeStyle = isSelected ? '#00e5ff' : '#64748b';
-        ctx.lineWidth = 1.2;
+        ctx.shadowBlur = 0;
+
+        ctx.strokeStyle = isSelected ? '#00e5ff' : '#475569';
+        ctx.lineWidth = 1.0;
         ctx.stroke();
+
+        // Silver End Caps for passives
+        if (comp.type === 'smd_cap' || comp.type === 'smd_res') {
+          ctx.fillStyle = '#e2e8f0';
+          ctx.fillRect(comp.rx, comp.ry, 2.5, comp.h);
+          ctx.fillRect(comp.rx + comp.w - 2.5, comp.ry, 2.5, comp.h);
+        }
 
         // Pin 1 Index Dot
         ctx.fillStyle = '#f8fafc';
         ctx.beginPath();
-        ctx.arc(comp.rx + 5, comp.ry + 5, 2, 0, Math.PI * 2);
+        ctx.arc(comp.rx + 5, comp.ry + 5, 1.8, 0, Math.PI * 2);
         ctx.fill();
 
         // Silkscreen Text
-        ctx.fillStyle = '#f8fafc';
+        ctx.fillStyle = comp.type === 'conn' || comp.type === 'xtal' ? '#0f172a' : '#f8fafc';
         ctx.font = '700 9px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText(comp.id, comp.rx + comp.w / 2, comp.ry + comp.h / 2 + 3);
