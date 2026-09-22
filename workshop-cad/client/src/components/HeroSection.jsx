@@ -41,8 +41,7 @@ export default function HeroSection({ workshop, onSelectTrack }) {
           if (lx > -s.radius && lx < hRect.width + s.radius && ly > -s.radius && ly < hRect.height + s.radius) {
             const r = Math.round(s.radius);
             const a = Math.min(1, s.opacity * 1.2).toFixed(2);
-            const midA = (a * 0.6).toFixed(2);
-            hReveal.push(`radial-gradient(circle ${r}px at ${lx}px ${ly}px, rgba(0,0,0,${a}) 0%, rgba(0,0,0,${midA}) 50%, transparent 100%)`);
+            hReveal.push(`radial-gradient(circle ${r}px at ${lx}px ${ly}px, rgba(0,0,0,${a}) 0%, rgba(0,0,0,${a}) 45%, transparent 100%)`);
             hBase.push(`radial-gradient(circle ${r}px at ${lx}px ${ly}px, transparent 0%, transparent 40%, black 85%)`);
           }
         }
@@ -72,8 +71,7 @@ export default function HeroSection({ workshop, onSelectTrack }) {
           if (lx > -s.radius && lx < dRect.width + s.radius && ly > -s.radius && ly < dRect.height + s.radius) {
             const r = Math.round(s.radius);
             const a = Math.min(1, s.opacity * 1.2).toFixed(2);
-            const midA = (a * 0.6).toFixed(2);
-            dReveal.push(`radial-gradient(circle ${r}px at ${lx}px ${ly}px, rgba(0,0,0,${a}) 0%, rgba(0,0,0,${midA}) 50%, transparent 100%)`);
+            dReveal.push(`radial-gradient(circle ${r}px at ${lx}px ${ly}px, rgba(0,0,0,${a}) 0%, rgba(0,0,0,${a}) 45%, transparent 100%)`);
             dBase.push(`radial-gradient(circle ${r}px at ${lx}px ${ly}px, transparent 0%, transparent 40%, black 85%)`);
           }
         }
@@ -158,14 +156,13 @@ export default function HeroSection({ workshop, onSelectTrack }) {
               zIndex: 3,
               opacity: headlineMask.active ? 1 : 0,
               transition: 'opacity 0.15s ease',
-              textShadow: '0 0 16px rgba(255, 255, 255, 0.95), 0 0 35px rgba(56, 189, 248, 0.65)',
               WebkitMaskImage: headlineMask.active ? headlineMask.reveal : 'none',
               maskImage: headlineMask.active ? headlineMask.reveal : 'none'
             }}
           >
             <span>Where Precision 3D Mechanics</span>
             <br />
-            <span style={{ color: '#38bdf8', textShadow: '0 0 20px rgba(56, 189, 248, 0.95), 0 0 40px rgba(14, 165, 233, 0.7)' }}>
+            <span style={{ color: '#38bdf8' }}>
               Meets High-Frequency Silicon.
             </span>
           </h1>
@@ -231,7 +228,6 @@ export default function HeroSection({ workshop, onSelectTrack }) {
               zIndex: 3,
               opacity: descMask.active ? 1 : 0,
               transition: 'opacity 0.15s ease',
-              textShadow: '0 0 16px rgba(255, 255, 255, 0.95), 0 0 28px rgba(56, 189, 248, 0.85)',
               WebkitMaskImage: descMask.active ? descMask.reveal : 'none',
               maskImage: descMask.active ? descMask.reveal : 'none'
             }}

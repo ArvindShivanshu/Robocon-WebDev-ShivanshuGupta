@@ -303,6 +303,14 @@ export default function FluidSimulation({
     const activeSplats = [];
     let lastSplatTime = 0;
 
+    let idleTimer = null;
+    const resetIdleTimer = () => {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        isIdle = true;
+      }, 3000);
+    };
+
     const applyMove = (px, py) => {
       pointer.moved = true;
       pointer.dx = 5 * (px - pointer.x);
@@ -310,32 +318,32 @@ export default function FluidSimulation({
       pointer.x = px;
       pointer.y = py;
 
-      if (!isIdle) {
-        const now = performance.now();
-        if (now - lastSplatTime > 35) {
-          lastSplatTime = now;
-          activeSplats.push({
-            x: px,
-            y: py,
-            vx: pointer.dx * 0.12,
-            vy: pointer.dy * 0.12,
-            radius: 180,
-            opacity: 1.0
-          });
-          if (activeSplats.length > 14) activeSplats.shift();
-        }
+      const now = performance.now();
+      if (now - lastSplatTime > 35) {
+        lastSplatTime = now;
+        activeSplats.push({
+          x: px,
+          y: py,
+          vx: pointer.dx * 0.12,
+          vy: pointer.dy * 0.12,
+          radius: 180,
+          opacity: 1.0
+        });
+        if (activeSplats.length > 20) activeSplats.shift();
       }
     };
 
     const onMouseMove = (e) => {
       isIdle = false;
-      applyMove(e.pageX, e.pageY);
+      applyMove(e.clientX, e.clientY);
+      resetIdleTimer();
     };
 
     const onTouchMove = (e) => {
       isIdle = false;
       const t = e.targetTouches[0];
-      if (t) applyMove(t.pageX, t.pageY);
+      if (t) applyMove(t.clientX, t.clientY);
+      resetIdleTimer();
     };
 
     resize();
@@ -442,6 +450,7 @@ export default function FluidSimulation({
     animFrameRef.current = requestAnimationFrame(render);
 
     return () => {
+      clearTimeout(idleTimer);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('touchmove', onTouchMove);
