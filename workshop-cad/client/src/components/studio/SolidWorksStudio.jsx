@@ -450,6 +450,49 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         };
       };
 
+      // Helper to project and draw a true 3D perspective circle on the horizontal X-Z plane at elevation y
+      const draw3DCircle = (cx, y, cz, radius, fillStyle = null, strokeStyle = null, lineWidth = 1) => {
+        ctx.beginPath();
+        const segments = 24;
+        for (let i = 0; i <= segments; i++) {
+          const angle = (i * Math.PI * 2) / segments;
+          const pt = project(cx + radius * Math.cos(angle), y, cz + radius * Math.sin(angle));
+          if (i === 0) ctx.moveTo(pt.x, pt.y);
+          else ctx.lineTo(pt.x, pt.y);
+        }
+        ctx.closePath();
+        if (fillStyle) {
+          ctx.fillStyle = fillStyle;
+          ctx.fill();
+        }
+        if (strokeStyle) {
+          ctx.strokeStyle = strokeStyle;
+          ctx.lineWidth = lineWidth;
+          ctx.stroke();
+        }
+      };
+
+      // Helper to draw a true 3D perspective regular polygon (e.g. 6-sided hex) on the horizontal X-Z plane
+      const draw3DHex = (cx, y, cz, radius, fillStyle = null, strokeStyle = null, lineWidth = 1) => {
+        ctx.beginPath();
+        for (let i = 0; i <= 6; i++) {
+          const angle = (i * Math.PI) / 3;
+          const pt = project(cx + radius * Math.cos(angle), y, cz + radius * Math.sin(angle));
+          if (i === 0) ctx.moveTo(pt.x, pt.y);
+          else ctx.lineTo(pt.x, pt.y);
+        }
+        ctx.closePath();
+        if (fillStyle) {
+          ctx.fillStyle = fillStyle;
+          ctx.fill();
+        }
+        if (strokeStyle) {
+          ctx.strokeStyle = strokeStyle;
+          ctx.lineWidth = lineWidth;
+          ctx.stroke();
+        }
+      };
+
       // 1. Ground Datum Plane (CAD Grid)
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
       ctx.lineWidth = 1;
@@ -538,14 +581,20 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
       const soHeight = Math.max(5, params.standoffHeight * 1.0);
       const standoffTopY = cavityFloorY - soHeight;
 
-      // PCB sits on standoffs at 0% explode, floats upward in exploded view
-      const pcbY = (standoffTopY - 1.5) - explode * 55;
+      // When exploded, PCB rises clearly above the chassis rim to avoid awkward intersection
+      const pcbY = explode > 0.01 
+        ? chassisRimY - 14 - explode * 72 
+        : standoffTopY - 1.5;
 
-      // Lid sits flush on chassis rim at 0% explode, floats upward in exploded view
-      const lidY = (chassisRimY - 3) - explode * 115;
+      // Lid sits flush on chassis rim at 0% explode, floats high above PCB in exploded view
+      const lidY = explode > 0.01 
+        ? pcbY - 28 - explode * 78 
+        : chassisRimY - 3;
 
       // Screws sit flush in lid counterbores at 0% explode, float highest in exploded view
-      const screwY = (lidY - 4) - explode * 48;
+      const screwY = explode > 0.01 
+        ? lidY - 24 - explode * 42 
+        : lidY - 4;
 
       const mat = MATERIALS[params.material] || MATERIALS.aluminum;
 
@@ -761,36 +810,40 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         ctx.stroke();
       }
 
-      // 8. 4 Brass Threaded Standoffs (Seated upright on the cavity floor)
+      // 8. 4 Hexagonal Brass Standoffs (Seated upright on the cavity floor)
       if (params.bossesEnabled) {
         cornerAxes.forEach((axis) => {
-          const pBot = project(axis.x, cavityFloorY, axis.z);
-          const pTop = project(axis.x, standoffTopY, axis.z);
+          const hexR = 4.2;
 
-          // Standoff Brass Pillar
-          ctx.fillStyle = '#d97706';
-          ctx.beginPath();
-          ctx.moveTo(pBot.x - 4.5 * zoom, pBot.y);
-          ctx.lineTo(pTop.x - 4.5 * zoom, pTop.y);
-          ctx.lineTo(pTop.x + 4.5 * zoom, pTop.y);
-          ctx.lineTo(pBot.x + 4.5 * zoom, pBot.y);
-          ctx.closePath();
-          ctx.fill();
+          // Draw 6 hexagonal pillar vertical side faces
+          for (let i = 0; i < 6; i++) {
+            const a1 = (i * Math.PI) / 3;
+            const a2 = ((i + 1) * Math.PI) / 3;
 
-          // Standoff Top Hex Face
-          ctx.fillStyle = '#f59e0b';
-          ctx.beginPath();
-          ctx.arc(pTop.x, pTop.y, 4.8 * zoom, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = activeFeature === 'bosses' ? '#00e5ff' : '#fbbf24';
-          ctx.lineWidth = 1.0;
-          ctx.stroke();
+            const p1 = project(axis.x + hexR * Math.cos(a1), cavityFloorY, axis.z + hexR * Math.sin(a1));
+            const p2 = project(axis.x + hexR * Math.cos(a2), cavityFloorY, axis.z + hexR * Math.sin(a2));
+            const p3 = project(axis.x + hexR * Math.cos(a2), standoffTopY, axis.z + hexR * Math.sin(a2));
+            const p4 = project(axis.x + hexR * Math.cos(a1), standoffTopY, axis.z + hexR * Math.sin(a1));
 
-          // M3 Threaded Tapped Hole
-          ctx.fillStyle = '#0f172a';
-          ctx.beginPath();
-          ctx.arc(pTop.x, pTop.y, 2.0 * zoom, 0, Math.PI * 2);
-          ctx.fill();
+            const shade = Math.floor(180 + Math.sin(a1 + radY) * 45);
+            ctx.fillStyle = `rgb(${shade}, ${Math.floor(shade * 0.72)}, 14)`;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.lineTo(p3.x, p3.y);
+            ctx.lineTo(p4.x, p4.y);
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = activeFeature === 'bosses' ? '#00e5ff' : '#b45309';
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+
+          // Top Hex Face (Flat 3D Perspective Hexagon)
+          draw3DHex(axis.x, standoffTopY, axis.z, hexR, '#f59e0b', activeFeature === 'bosses' ? '#00e5ff' : '#d97706', 1);
+
+          // Internal M3 Threaded Tapped Hole (Flat 3D Perspective Ellipse)
+          draw3DCircle(axis.x, standoffTopY, axis.z, 1.8, '#0f172a', '#451a03', 0.8);
         });
       }
 
@@ -841,32 +894,28 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         ctx.lineWidth = 1.4;
         ctx.stroke();
 
-        // 4 PCB Corner Mounting Holes (Perfect Co-Axial Alignment with Standoffs)
+        // 4 PCB Corner Mounting Holes (True 3D Perspective Ellipses Co-Axial with Standoffs)
         cornerAxes.forEach((axis) => {
-          const pHole = project(axis.x, pcbY, axis.z);
-          // Gold Annular Ring
-          ctx.fillStyle = '#f59e0b';
-          ctx.beginPath();
-          ctx.arc(pHole.x, pHole.y, 4.2 * zoom, 0, Math.PI * 2);
-          ctx.fill();
-          // Drill Hole
-          ctx.fillStyle = '#060a0e';
-          ctx.beginPath();
-          ctx.arc(pHole.x, pHole.y, 2.2 * zoom, 0, Math.PI * 2);
-          ctx.fill();
+          // Outer Gold Annular Ring
+          draw3DCircle(axis.x, pcbY, axis.z, 3.8, '#f59e0b', '#d97706', 0.8);
+          // Concentric Silkscreen Keepout Ring
+          draw3DCircle(axis.x, pcbY, axis.z, 4.6, null, 'rgba(255, 255, 255, 0.65)', 0.6);
+          // Dark Drill Barrel Hole
+          draw3DCircle(axis.x, pcbY, axis.z, 2.0, '#060a0e', '#334155', 0.8);
         });
+
+        // Diagonally spaced MCU and FPGA so they NEVER collide or overlap from any viewing angle
+        const mcuCenter = { x: -pcbL * 0.32, z: -pcbW * 0.22 };
+        const fpgaCenter = { x: pcbL * 0.28, z: pcbW * 0.22 };
 
         // Professional 45° Mitred Bus Traces connecting MCU and FPGA
         const traceY = pcbY - 0.5;
-        const mcuCenter = { x: -pcbL * 0.28, z: 0 };
-        const fpgaCenter = { x: pcbL * 0.32, z: 0 };
-
         ctx.strokeStyle = '#d97706';
         ctx.lineWidth = 1.2 * zoom;
-        for (let t = -8; t <= 8; t += 8) {
-          const pt1 = project(mcuCenter.x + 16, traceY, mcuCenter.z + t);
-          const ptMid = project((mcuCenter.x + fpgaCenter.x) / 2, traceY, mcuCenter.z + t + 6);
-          const pt2 = project(fpgaCenter.x - 18, traceY, fpgaCenter.z + t + 6);
+        for (let t = -6; t <= 6; t += 4) {
+          const pt1 = project(mcuCenter.x + 14, traceY, mcuCenter.z + t);
+          const ptMid = project((mcuCenter.x + fpgaCenter.x) / 2, traceY, (mcuCenter.z + fpgaCenter.z) / 2 + t);
+          const pt2 = project(fpgaCenter.x - 16, traceY, fpgaCenter.z + t);
 
           ctx.beginPath();
           ctx.moveTo(pt1.x, pt1.y);
@@ -876,9 +925,9 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         }
 
         // 3D Microcontroller (STM32F4) - Projected as a true 3D solid box
-        const mcuW = 15;
-        const mcuD = 15;
-        const mcuH = 3.5;
+        const mcuW = 14;
+        const mcuD = 14;
+        const mcuH = 3.2;
         const mTopY = pcbY - mcuH;
 
         const m0 = project(mcuCenter.x - mcuW, mTopY, mcuCenter.z - mcuD);
@@ -920,24 +969,26 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         ctx.lineWidth = 1;
         ctx.stroke();
 
+        // Pin 1 Index Dot
+        draw3DCircle(mcuCenter.x - mcuW + 3.5, mTopY, mcuCenter.z - mcuD + 3.5, 0.8, '#cbd5e1');
+
         // Gull-Wing Lead Pins (Gold)
         ctx.fillStyle = '#fbbf24';
-        for (let p = -mcuW + 3; p < mcuW - 3; p += 4) {
-          const pinTop = project(mcuCenter.x + p, pcbY - 1, mcuCenter.z - mcuD);
-          const pinBot = project(mcuCenter.x + p, pcbY, mcuCenter.z - mcuD - 3);
-          ctx.fillRect(pinBot.x - 1, pinBot.y - 1, 2 * zoom, 3 * zoom);
+        for (let p = -mcuW + 3; p < mcuW - 3; p += 3.5) {
+          const pinBot = project(mcuCenter.x + p, pcbY, mcuCenter.z - mcuD - 2.5);
+          ctx.fillRect(pinBot.x - 1, pinBot.y - 1, 2 * zoom, 2.5 * zoom);
         }
 
-        // Silkscreen Label
+        // Clean Silkscreen Label centered inside MCU package
         const mcuLabel = project(mcuCenter.x, mTopY, mcuCenter.z);
         ctx.fillStyle = '#f8fafc';
-        ctx.font = `700 ${Math.max(7, 9 * zoom)}px "JetBrains Mono", monospace`;
+        ctx.font = `700 ${Math.max(7, 8 * zoom)}px "JetBrains Mono", monospace`;
         ctx.textAlign = 'center';
-        ctx.fillText('STM32F4', mcuLabel.x, mcuLabel.y + 3);
+        ctx.fillText('STM32F4', mcuLabel.x, mcuLabel.y + 2.5);
 
-        // 3D FPGA (Xilinx Artix-7) - Projected as a true 3D solid box
-        const fpgaW = 17;
-        const fpgaD = 17;
+        // 3D FPGA (Xilinx Artix-7) - Projected as a true 3D solid box with heat spreader lid
+        const fpgaW = 16;
+        const fpgaD = 16;
         const fTopY = pcbY - 4.0;
 
         const f0 = project(fpgaCenter.x - fpgaW, fTopY, fpgaCenter.z - fpgaD);
@@ -957,10 +1008,43 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         ctx.lineWidth = 1;
         ctx.stroke();
 
+        // FPGA Silkscreen Label cleanly centered inside FPGA package
         const fpgaLabel = project(fpgaCenter.x, fTopY, fpgaCenter.z);
-        ctx.fillStyle = '#cbd5e1';
-        ctx.fillText('ARTIX-7', fpgaLabel.x, fpgaLabel.y + 3);
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = `700 ${Math.max(7, 8 * zoom)}px "JetBrains Mono", monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillText('ARTIX-7', fpgaLabel.x, fpgaLabel.y + 2.5);
         ctx.textAlign = 'left';
+
+        // 3D Thermal Interface Pad (TIM) floating over the FPGA in Exploded View
+        if (explode > 0.05) {
+          const timY = pcbY - 12 - explode * 26;
+          const timW = 12;
+          const timD = 12;
+          const t0 = project(fpgaCenter.x - timW, timY, fpgaCenter.z - timD);
+          const t1 = project(fpgaCenter.x + timW, timY, fpgaCenter.z - timD);
+          const t2 = project(fpgaCenter.x + timW, timY, fpgaCenter.z + timD);
+          const t3 = project(fpgaCenter.x - timW, timY, fpgaCenter.z + timD);
+
+          ctx.fillStyle = 'rgba(147, 197, 253, 0.85)'; // Soft blue silicone thermal interface pad
+          ctx.beginPath();
+          ctx.moveTo(t0.x, t0.y);
+          ctx.lineTo(t1.x, t1.y);
+          ctx.lineTo(t2.x, t2.y);
+          ctx.lineTo(t3.x, t3.y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = '#3b82f6';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          const timLbl = project(fpgaCenter.x, timY, fpgaCenter.z);
+          ctx.fillStyle = '#1e3a8a';
+          ctx.font = `700 ${Math.max(6, 7 * zoom)}px "JetBrains Mono", monospace`;
+          ctx.textAlign = 'center';
+          ctx.fillText('3.0W/mK TIM', timLbl.x, timLbl.y + 2);
+          ctx.textAlign = 'left';
+        }
 
         // 3D USB-C Receptacle on Left Edge
         const usbX = -pcbL + 2;
@@ -1040,16 +1124,12 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
         ctx.lineWidth = 1.4;
         ctx.stroke();
 
-        // 4 Counterbored Screw Holes in Lid (Perfect Co-Axial Alignment)
+        // 4 Counterbored Screw Holes in Lid (True 3D Perspective Ellipses)
         cornerAxes.forEach((axis) => {
-          const lHole = project(axis.x, lidY, axis.z);
-          ctx.fillStyle = '#0f172a';
-          ctx.beginPath();
-          ctx.arc(lHole.x, lHole.y, 4.0 * zoom, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#475569';
-          ctx.lineWidth = 1;
-          ctx.stroke();
+          // Counterbore Recess (Flat 3D Ellipse)
+          draw3DCircle(axis.x, lidY, axis.z, 4.2, '#0f172a', '#475569', 1.0);
+          // Through-Hole Clearance (Flat 3D Ellipse)
+          draw3DCircle(axis.x, lidY, axis.z, 2.2, '#050810', '#1e293b', 0.8);
         });
 
         // Real 3D Extruded Cooling Fins rising from the Lid Top
@@ -1070,8 +1150,26 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
           const fTop3 = project(fEndX, finTopY, finZ + fThick);
           const fTop4 = project(fStartX, finTopY, finZ + fThick);
 
+          // Thermal Heat Dissipation Shading in FEA Mode
+          let finColor = activeFeature === 'fins' ? '#f59e0b' : '#334155';
+          let finTopColor = activeFeature === 'fins' ? '#fbbf24' : '#475569';
+
+          if (renderMode === 'fea' && feaType === 'thermal') {
+            const distFromCenter = Math.abs(f - (finCount - 1) / 2) / ((finCount - 1) / 2);
+            if (distFromCenter < 0.35) {
+              finColor = 'rgba(239, 68, 68, 0.90)'; // Hot red core over FPGA/MCU
+              finTopColor = '#fca5a5';
+            } else if (distFromCenter < 0.70) {
+              finColor = 'rgba(245, 158, 11, 0.88)'; // Warm amber mid-fins
+              finTopColor = '#fde68a';
+            } else {
+              finColor = 'rgba(16, 185, 129, 0.85)'; // Cool emerald perimeter
+              finTopColor = '#a7f3d0';
+            }
+          }
+
           // Fin Front Face
-          ctx.fillStyle = activeFeature === 'fins' ? '#f59e0b' : '#334155';
+          ctx.fillStyle = finColor;
           ctx.beginPath();
           ctx.moveTo(fBase1.x, fBase1.y);
           ctx.lineTo(fBase2.x, fBase2.y);
@@ -1081,7 +1179,7 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
           ctx.fill();
 
           // Fin Top Face (Blade Ridge)
-          ctx.fillStyle = activeFeature === 'fins' ? '#fbbf24' : '#475569';
+          ctx.fillStyle = finTopColor;
           ctx.beginPath();
           ctx.moveTo(fTop1.x, fTop1.y);
           ctx.lineTo(fTop2.x, fTop2.y);
@@ -1093,46 +1191,97 @@ Project: Mechatronics Autonomous Robot Controller Enclosure
           ctx.strokeStyle = activeFeature === 'fins' ? '#ea580c' : '#64748b';
           ctx.lineWidth = 1.0;
           ctx.stroke();
+        }
 
-          // Thermal Convection Waves in Thermal FEA Mode
-          if (renderMode === 'fea' && feaType === 'thermal') {
-            const waveY = fTop1.y - 10 - Math.sin(elapsed * 4 + f) * 6;
-            ctx.fillStyle = 'rgba(239, 68, 68, 0.75)';
+        // Rising Heat Convection Airflow Streamlines in FEA Mode (SolidWorks Flow Simulation)
+        if (renderMode === 'fea' && feaType === 'thermal') {
+          ctx.save();
+          for (let s = -3; s <= 3; s++) {
+            const streamX = s * (hL * 0.24);
+            const streamZ = Math.sin(elapsed * 2.5 + s) * 5;
+            const pStart = project(streamX, finTopY, streamZ);
+            const pEnd = project(streamX + Math.sin(elapsed * 3.5 + s) * 6, finTopY - 24, streamZ);
+
+            const streamGrad = ctx.createLinearGradient(pStart.x, pStart.y, pEnd.x, pEnd.y);
+            streamGrad.addColorStop(0, 'rgba(239, 68, 68, 0.65)');
+            streamGrad.addColorStop(0.5, 'rgba(245, 158, 11, 0.35)');
+            streamGrad.addColorStop(1, 'rgba(14, 165, 233, 0)');
+
+            ctx.strokeStyle = streamGrad;
+            ctx.lineWidth = 1.5;
             ctx.beginPath();
-            ctx.arc((fTop1.x + fTop2.x) / 2, waveY, 3.2 * zoom, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.moveTo(pStart.x, pStart.y);
+            ctx.lineTo(pEnd.x, pEnd.y);
+            ctx.stroke();
           }
+          ctx.restore();
         }
       }
 
-      // 11. 4 Stainless Steel M3 Fastener Screws (Perfect Co-Axial Vertical Alignment)
+      // 11. 4 Stainless Steel M3 Socket-Head Cap Screws (True Co-Axial 3D Solid Geometry)
       if (explode > 0.05) {
         cornerAxes.forEach((axis) => {
-          const sc = project(axis.x, screwY, axis.z);
-          const scShank = project(axis.x, screwY + 9, axis.z);
+          const headTopY = screwY;
+          const headBotY = screwY + 5.0;
+          const shankBotY = screwY + 14.0;
+          const headR = 3.2;
 
-          // Threaded M3 Shank pointing straight down toward the lid hole
+          // Threaded M3 Shank Cylinder descending along guide line toward lid hole
+          const sTop = project(axis.x, headBotY, axis.z);
+          const sBot = project(axis.x, shankBotY, axis.z);
+
+          ctx.save();
           ctx.strokeStyle = '#94a3b8';
-          ctx.lineWidth = 2.4 * zoom;
+          ctx.lineWidth = 2.6 * zoom;
           ctx.beginPath();
-          ctx.moveTo(sc.x, sc.y);
-          ctx.lineTo(scShank.x, scShank.y);
+          ctx.moveTo(sTop.x, sTop.y);
+          ctx.lineTo(sBot.x, sBot.y);
           ctx.stroke();
 
-          // Screw Head (Silver Stainless Steel with Specular Edge)
-          ctx.fillStyle = '#e2e8f0';
-          ctx.beginPath();
-          ctx.arc(sc.x, sc.y, 4.8 * zoom, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#0284c7';
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
+          // Subtle thread pitch ridges along M3 shank
+          ctx.strokeStyle = '#475569';
+          ctx.lineWidth = 0.9;
+          for (let th = headBotY + 2.5; th < shankBotY; th += 2.2) {
+            const th1 = project(axis.x - 1.5, th, axis.z);
+            const th2 = project(axis.x + 1.5, th + 0.5, axis.z);
+            ctx.beginPath();
+            ctx.moveTo(th1.x, th1.y);
+            ctx.lineTo(th2.x, th2.y);
+            ctx.stroke();
+          }
+          ctx.restore();
 
-          // Hex Socket Drive (Allen Key M3)
-          ctx.fillStyle = '#0f172a';
-          ctx.beginPath();
-          ctx.arc(sc.x, sc.y, 2.0 * zoom, 0, Math.PI * 2);
-          ctx.fill();
+          // Cylindrical Screw Head Sides (3D Shaded Metallic Body)
+          const sideSegments = 16;
+          for (let i = 0; i < sideSegments; i++) {
+            const a1 = (i * Math.PI * 2) / sideSegments;
+            const a2 = ((i + 1) * Math.PI * 2) / sideSegments;
+
+            // Face cull back sides
+            const normalZ = -Math.sin(a1 + radY);
+            if (normalZ < -0.2) continue;
+
+            const p1 = project(axis.x + headR * Math.cos(a1), headTopY, axis.z + headR * Math.sin(a1));
+            const p2 = project(axis.x + headR * Math.cos(a2), headTopY, axis.z + headR * Math.sin(a2));
+            const p3 = project(axis.x + headR * Math.cos(a2), headBotY, axis.z + headR * Math.sin(a2));
+            const p4 = project(axis.x + headR * Math.cos(a1), headBotY, axis.z + headR * Math.sin(a1));
+
+            const shade = Math.floor(160 + Math.sin(a1 + 1.2) * 55);
+            ctx.fillStyle = `rgb(${shade}, ${shade + 4}, ${shade + 10})`;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.lineTo(p3.x, p3.y);
+            ctx.lineTo(p4.x, p4.y);
+            ctx.closePath();
+            ctx.fill();
+          }
+
+          // Top Head Rim (Flat 3D Perspective Ellipse)
+          draw3DCircle(axis.x, headTopY, axis.z, headR, '#e2e8f0', '#94a3b8', 1.0);
+
+          // Internal Hexagonal Allen Key Socket Drive (Projected into Head Top)
+          draw3DHex(axis.x, headTopY, axis.z, 1.6, '#0f172a', '#334155', 0.8);
         });
       }
 
