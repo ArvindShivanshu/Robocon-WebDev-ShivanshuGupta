@@ -466,20 +466,20 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
   ];
 
   return (
-    <div style={{ maxWidth: '1400px', margin: '16px auto', padding: '0 clamp(12px, 3vw, 24px)' }}>
+    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '110px clamp(12px, 3vw, 24px) 36px' }}>
       {/* Studio Header Bar */}
       <div className="studio-header-wrap" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Box size={20} color="#ff5722" />
-            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
+            <Box size={20} color="#ea580c" />
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
               SolidWorks 3D Parametric CAD Studio
             </h2>
             <span className="tag-badge sw-tag font-mono" style={{ fontSize: '0.68rem' }}>
               INTERACTIVE VIEWPORT
             </span>
           </div>
-          <p style={{ color: '#8c96a8', fontSize: '0.84rem', marginTop: '2px' }}>
+          <p style={{ color: '#475569', fontSize: '0.84rem', marginTop: '2px' }}>
             Model custom mechatronics enclosures, adjust mounting boss standoffs, and inspect 3D thermal FEA dissipation.
           </p>
         </div>
@@ -519,10 +519,10 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
         {/* Left: SolidWorks Feature Tree Manager */}
         <div className="pro-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span className="font-mono" style={{ fontSize: '0.72rem', color: '#687385', textTransform: 'uppercase', fontWeight: 600 }}>
+            <span className="font-mono" style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>
               FEATUREMANAGER DESIGN TREE
             </span>
-            <span className="font-mono" style={{ fontSize: '0.64rem', color: '#ff5722' }}>
+            <span className="font-mono" style={{ fontSize: '0.64rem', color: '#ea580c' }}>
               5 FEATURES
             </span>
           </div>
@@ -538,7 +538,7 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
                   style={{
                     borderRadius: '8px',
                     border: isSelected ? `1.5px solid ${feat.color}` : '1px solid var(--border-subtle)',
-                    background: isSelected ? 'rgba(255, 87, 34, 0.12)' : feat.isSuppressed ? '#06070a' : '#090a0f',
+                    background: isSelected ? '#fff2ed' : feat.isSuppressed ? '#f1f5f9' : '#ffffff',
                     opacity: feat.isSuppressed ? 0.62 : 1,
                     transition: 'all 0.18s ease',
                     overflow: 'hidden'
@@ -557,10 +557,10 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-                      <Icon size={14} color={isSelected ? feat.color : feat.isSuppressed ? '#525a6b' : '#ff7a50'} style={{ flexShrink: 0 }} />
+                      <Icon size={14} color={isSelected ? feat.color : feat.isSuppressed ? '#94a3b8' : '#ea580c'} style={{ flexShrink: 0 }} />
                       <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-                        <span style={{ color: isSelected ? '#fff' : feat.isSuppressed ? '#8c96a8' : '#e2e8f0', fontSize: '0.78rem', fontWeight: isSelected ? 700 : 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {feat.name} <span style={{ color: '#687385', fontSize: '0.72rem' }}>{feat.sub}</span>
+                        <span style={{ color: isSelected ? '#0f172a' : feat.isSuppressed ? '#94a3b8' : '#1e293b', fontSize: '0.78rem', fontWeight: isSelected ? 700 : 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {feat.name} <span style={{ color: '#64748b', fontSize: '0.72rem' }}>{feat.sub}</span>
                         </span>
                       </div>
                     </div>
@@ -605,8 +605,8 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
                     <div
                       style={{
                         padding: '10px 11px',
-                        background: 'rgba(0, 0, 0, 0.4)',
-                        borderTop: '1px solid rgba(255, 255, 255, 0.07)',
+                        background: '#f8fafc',
+                        borderTop: '1px solid var(--border-subtle)',
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '8px',
@@ -615,9 +615,9 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
                     >
                       {feat.id === 'base' && (
                         <>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#64748b' }}>
                             <span>Length / Width:</span>
-                            <span className="font-mono" style={{ color: '#fff', fontWeight: 600 }}>{params.length} × {params.width}mm</span>
+                            <span className="font-mono" style={{ color: '#0f172a', fontWeight: 600 }}>{params.length} × {params.width}mm</span>
                           </div>
                           <input
                             type="range"
@@ -625,16 +625,16 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
                             max="180"
                             value={params.length}
                             onChange={(e) => setParams({ ...params, length: Number(e.target.value) })}
-                            style={{ width: '100%', accentColor: '#ff5722' }}
+                            style={{ width: '100%', accentColor: '#ea580c' }}
                           />
                         </>
                       )}
 
                       {feat.id === 'cavity' && (
                         <>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#64748b' }}>
                             <span>Wall Thickness:</span>
-                            <span className="font-mono" style={{ color: '#ff7a50', fontWeight: 600 }}>{params.wallThickness}mm</span>
+                            <span className="font-mono" style={{ color: '#ea580c', fontWeight: 600 }}>{params.wallThickness}mm</span>
                           </div>
                           <input
                             type="range"
@@ -644,16 +644,16 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
                             disabled={!params.cavityEnabled}
                             value={params.wallThickness}
                             onChange={(e) => setParams({ ...params, wallThickness: Number(e.target.value) })}
-                            style={{ width: '100%', accentColor: '#ff5722' }}
+                            style={{ width: '100%', accentColor: '#ea580c' }}
                           />
                         </>
                       )}
 
                       {feat.id === 'bosses' && (
                         <>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#64748b' }}>
                             <span>Standoff Height:</span>
-                            <span className="font-mono" style={{ color: '#e2b768', fontWeight: 600 }}>{params.standoffHeight}mm</span>
+                            <span className="font-mono" style={{ color: '#b45309', fontWeight: 600 }}>{params.standoffHeight}mm</span>
                           </div>
                           <input
                             type="range"
@@ -663,16 +663,16 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
                             disabled={!params.bossesEnabled}
                             value={params.standoffHeight}
                             onChange={(e) => setParams({ ...params, standoffHeight: Number(e.target.value) })}
-                            style={{ width: '100%', accentColor: '#e2b768' }}
+                            style={{ width: '100%', accentColor: '#b45309' }}
                           />
                         </>
                       )}
 
                       {feat.id === 'fins' && (
                         <>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#64748b' }}>
                             <span>Fin Count:</span>
-                            <span className="font-mono" style={{ color: '#fff', fontWeight: 600 }}>{params.finCount} Fins</span>
+                            <span className="font-mono" style={{ color: '#0f172a', fontWeight: 600 }}>{params.finCount} Fins</span>
                           </div>
                           <input
                             type="range"
@@ -682,22 +682,22 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
                             disabled={!params.finsEnabled}
                             value={params.finCount}
                             onChange={(e) => setParams({ ...params, finCount: Number(e.target.value) })}
-                            style={{ width: '100%', accentColor: '#ff5722' }}
+                            style={{ width: '100%', accentColor: '#ea580c' }}
                           />
                         </>
                       )}
 
                       {feat.id === 'vents' && (
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ color: '#94a3b8' }}>Airflow Status:</span>
+                          <span style={{ color: '#64748b' }}>Airflow Status:</span>
                           <button
                             onClick={() => toggleFeatureSuppression('vents')}
                             style={{
                               padding: '4px 10px',
                               borderRadius: '4px',
-                              border: params.ventOpenings ? '1px solid rgba(0, 229, 255, 0.4)' : '1px solid rgba(239, 68, 68, 0.4)',
-                              background: params.ventOpenings ? 'rgba(0, 229, 255, 0.12)' : 'rgba(239, 68, 68, 0.12)',
-                              color: params.ventOpenings ? '#00e5ff' : '#fca5a5',
+                              border: params.ventOpenings ? '1px solid #0284c7' : '1px solid #ef4444',
+                              background: params.ventOpenings ? '#e0f2fe' : '#fee2e2',
+                              color: params.ventOpenings ? '#0284c7' : '#b91c1c',
                               cursor: 'pointer',
                               fontWeight: 600
                             }}
@@ -746,7 +746,7 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              background: '#090a0f'
+              background: '#f8fafc'
             }}
           >
             <div style={{ display: 'flex', gap: '6px' }}>
@@ -764,9 +764,10 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
                     borderRadius: '5px',
                     fontSize: '0.74rem',
                     fontWeight: 600,
-                    border: renderMode === m.id ? '1px solid #ff5722' : '1px solid var(--border-subtle)',
-                    background: renderMode === m.id ? 'rgba(255, 87, 34, 0.2)' : '#11131c',
-                    color: renderMode === m.id ? '#ff7a50' : '#8c96a8',
+                    border: renderMode === m.id ? '1px solid #ea580c' : '1px solid var(--border-subtle)',
+                    background: renderMode === m.id ? '#fff2ed' : '#ffffff',
+                    color: renderMode === m.id ? '#ea580c' : '#64748b',
+                    boxShadow: renderMode === m.id ? '0 1px 3px rgba(234, 88, 12, 0.12)' : 'none',
                     cursor: 'pointer'
                   }}
                 >
@@ -775,7 +776,7 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
               ))}
             </div>
 
-            <span className="font-mono" style={{ fontSize: '0.68rem', color: '#687385' }}>
+            <span className="font-mono" style={{ fontSize: '0.68rem', color: '#64748b' }}>
               TOUCH OR DRAG TO 360° ORBIT
             </span>
           </div>
@@ -789,7 +790,7 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
               overflow: 'hidden',
               cursor: isDragging ? 'grabbing' : 'grab',
               minHeight: '380px',
-              background: '#06070b',
+              background: '#07090e',
               touchAction: 'none'
             }}
             onMouseDown={handleMouseDown}
@@ -808,7 +809,7 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
           <div
             style={{
               padding: '8px 14px',
-              background: '#07080d',
+              background: '#f8fafc',
               borderTop: '1px solid var(--border-subtle)',
               display: 'flex',
               justifyContent: 'space-between',
@@ -816,7 +817,7 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
               fontSize: '0.74rem'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#10b981' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#059669' }}>
               <CheckCircle2 size={13} />
               <span className="font-mono">{statusMessage}</span>
             </div>
@@ -824,13 +825,13 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
             <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
               <button
                 onClick={() => setZoom((z) => Math.max(0.6, z - 0.15))}
-                style={{ padding: '3px 7px', borderRadius: '4px', background: '#121520', border: '1px solid var(--border-subtle)', color: '#fff', cursor: 'pointer' }}
+                style={{ padding: '3px 7px', borderRadius: '4px', background: '#ffffff', border: '1px solid var(--border-subtle)', color: '#0f172a', cursor: 'pointer' }}
               >
                 <ZoomOut size={12} />
               </button>
               <button
                 onClick={() => setZoom((z) => Math.min(1.8, z + 0.15))}
-                style={{ padding: '3px 7px', borderRadius: '4px', background: '#121520', border: '1px solid var(--border-subtle)', color: '#fff', cursor: 'pointer' }}
+                style={{ padding: '3px 7px', borderRadius: '4px', background: '#ffffff', border: '1px solid var(--border-subtle)', color: '#0f172a', cursor: 'pointer' }}
               >
                 <ZoomIn size={12} />
               </button>
@@ -840,14 +841,14 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
 
         {/* Right: Parametric Dimensions Inspector */}
         <div className="pro-panel" style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <div className="font-mono" style={{ fontSize: '0.72rem', color: '#ff7a50', textTransform: 'uppercase', fontWeight: 600 }}>
+          <div className="font-mono" style={{ fontSize: '0.72rem', color: '#ea580c', textTransform: 'uppercase', fontWeight: 600 }}>
             PARAMETRIC DIMENSIONS // CAD
           </div>
 
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#adb6c7', marginBottom: '4px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#475569', marginBottom: '4px' }}>
               <span>Length (X-Axis):</span>
-              <span className="font-mono" style={{ color: '#fff', fontWeight: 700 }}>{params.length} mm</span>
+              <span className="font-mono" style={{ color: '#0f172a', fontWeight: 700 }}>{params.length} mm</span>
             </div>
             <input
               type="range"
@@ -855,14 +856,14 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
               max="180"
               value={params.length}
               onChange={(e) => setParams({ ...params, length: Number(e.target.value) })}
-              style={{ width: '100%', accentColor: '#ff5722' }}
+              style={{ width: '100%', accentColor: '#ea580c' }}
             />
           </div>
 
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#adb6c7', marginBottom: '4px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#475569', marginBottom: '4px' }}>
               <span>Width (Y-Axis):</span>
-              <span className="font-mono" style={{ color: '#fff', fontWeight: 700 }}>{params.width} mm</span>
+              <span className="font-mono" style={{ color: '#0f172a', fontWeight: 700 }}>{params.width} mm</span>
             </div>
             <input
               type="range"
@@ -870,14 +871,14 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
               max="130"
               value={params.width}
               onChange={(e) => setParams({ ...params, width: Number(e.target.value) })}
-              style={{ width: '100%', accentColor: '#ff5722' }}
+              style={{ width: '100%', accentColor: '#ea580c' }}
             />
           </div>
 
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#adb6c7', marginBottom: '4px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#475569', marginBottom: '4px' }}>
               <span>Height (Z-Axis):</span>
-              <span className="font-mono" style={{ color: '#fff', fontWeight: 700 }}>{params.height} mm</span>
+              <span className="font-mono" style={{ color: '#0f172a', fontWeight: 700 }}>{params.height} mm</span>
             </div>
             <input
               type="range"
@@ -885,14 +886,14 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
               max="60"
               value={params.height}
               onChange={(e) => setParams({ ...params, height: Number(e.target.value) })}
-              style={{ width: '100%', accentColor: '#ff5722' }}
+              style={{ width: '100%', accentColor: '#ea580c' }}
             />
           </div>
 
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#adb6c7', marginBottom: '4px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#475569', marginBottom: '4px' }}>
               <span>Wall Thickness:</span>
-              <span className="font-mono" style={{ color: '#ff7a50', fontWeight: 700 }}>{params.wallThickness} mm</span>
+              <span className="font-mono" style={{ color: '#ea580c', fontWeight: 700 }}>{params.wallThickness} mm</span>
             </div>
             <input
               type="range"
@@ -901,14 +902,14 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
               step="0.5"
               value={params.wallThickness}
               onChange={(e) => setParams({ ...params, wallThickness: Number(e.target.value) })}
-              style={{ width: '100%', accentColor: '#ff5722' }}
+              style={{ width: '100%', accentColor: '#ea580c' }}
             />
           </div>
 
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#adb6c7', marginBottom: '4px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#475569', marginBottom: '4px' }}>
               <span>Standoff Height:</span>
-              <span className="font-mono" style={{ color: '#e2b768', fontWeight: 700 }}>{params.standoffHeight} mm</span>
+              <span className="font-mono" style={{ color: '#b45309', fontWeight: 700 }}>{params.standoffHeight} mm</span>
             </div>
             <input
               type="range"
@@ -917,14 +918,14 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
               step="0.5"
               value={params.standoffHeight}
               onChange={(e) => setParams({ ...params, standoffHeight: Number(e.target.value) })}
-              style={{ width: '100%', accentColor: '#e2b768' }}
+              style={{ width: '100%', accentColor: '#b45309' }}
             />
           </div>
 
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#adb6c7', marginBottom: '4px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.76rem', color: '#475569', marginBottom: '4px' }}>
               <span>Heat Sink Fin Count:</span>
-              <span className="font-mono" style={{ color: '#fff', fontWeight: 700 }}>{params.finCount}</span>
+              <span className="font-mono" style={{ color: '#0f172a', fontWeight: 700 }}>{params.finCount}</span>
             </div>
             <input
               type="range"
@@ -932,7 +933,7 @@ export default function SolidWorksStudio({ onSyncToAltium }) {
               max="12"
               value={params.finCount}
               onChange={(e) => setParams({ ...params, finCount: Number(e.target.value) })}
-              style={{ width: '100%', accentColor: '#ff5722' }}
+              style={{ width: '100%', accentColor: '#ea580c' }}
             />
           </div>
         </div>

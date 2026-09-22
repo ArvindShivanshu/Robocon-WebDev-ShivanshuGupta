@@ -38,8 +38,8 @@ export default function TicketConfirmationModal({ registration, onClose }) {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '20px',
-        background: 'rgba(5, 6, 10, 0.85)',
-        backdropFilter: 'blur(20px)'
+        background: 'rgba(15, 23, 42, 0.45)',
+        backdropFilter: 'blur(16px)'
       }}
     >
       <div
@@ -48,9 +48,9 @@ export default function TicketConfirmationModal({ registration, onClose }) {
           maxWidth: '520px',
           width: '100%',
           padding: '36px 32px',
-          background: '#0c0e15',
+          background: '#ffffff',
           border: '1px solid var(--border-medium)',
-          boxShadow: '0 25px 70px rgba(0, 0, 0, 0.8)',
+          boxShadow: '0 25px 70px rgba(15, 23, 42, 0.22)',
           position: 'relative'
         }}
       >
@@ -61,7 +61,7 @@ export default function TicketConfirmationModal({ registration, onClose }) {
             position: 'absolute',
             top: '18px',
             right: '18px',
-            background: '#161924',
+            background: '#f1f5f9',
             border: '1px solid var(--border-subtle)',
             borderRadius: '50%',
             width: '32px',
@@ -69,7 +69,7 @@ export default function TicketConfirmationModal({ registration, onClose }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#adb6c7',
+            color: '#475569',
             cursor: 'pointer'
           }}
         >
@@ -83,7 +83,7 @@ export default function TicketConfirmationModal({ registration, onClose }) {
               width: '56px',
               height: '56px',
               borderRadius: '50%',
-              background: 'rgba(16, 185, 129, 0.1)',
+              background: '#ecfdf5',
               border: '1.5px solid #10b981',
               display: 'flex',
               alignItems: 'center',
@@ -94,21 +94,21 @@ export default function TicketConfirmationModal({ registration, onClose }) {
             <CheckCircle2 size={28} color="#10b981" />
           </div>
 
-          <span className="font-mono" style={{ fontSize: '0.72rem', color: '#10b981', fontWeight: 600, letterSpacing: '0.04em' }}>
+          <span className="font-mono" style={{ fontSize: '0.72rem', color: '#059669', fontWeight: 600, letterSpacing: '0.04em' }}>
             REGISTRATION PROVISIONED // SUPABASE RECORD #{registration.id || 'OK'}
           </span>
-          <h3 style={{ fontSize: '1.55rem', fontWeight: 800, color: '#fff', marginTop: '6px' }}>
+          <h3 style={{ fontSize: '1.55rem', fontWeight: 800, color: '#0f172a', marginTop: '6px' }}>
             Lab Workstation Confirmed
           </h3>
-          <p style={{ color: '#8c96a8', fontSize: '0.88rem', marginTop: '4px' }}>
-            Confirmation details and software license assistance dispatched to <strong style={{ color: '#fff' }}>{registration.email}</strong>.
+          <p style={{ color: '#475569', fontSize: '0.88rem', marginTop: '4px' }}>
+            Confirmation details and software license assistance dispatched to <strong style={{ color: '#0f172a' }}>{registration.email}</strong>.
           </p>
         </div>
 
         {/* Registration Card Spec */}
         <div
           style={{
-            background: '#07080d',
+            background: '#f8fafc',
             border: '1px solid var(--border-subtle)',
             borderRadius: '12px',
             padding: '20px',
@@ -117,32 +117,32 @@ export default function TicketConfirmationModal({ registration, onClose }) {
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '12px' }}>
             <div>
-              <div style={{ fontSize: '0.68rem', color: '#687385', textTransform: 'uppercase' }}>Registration Code</div>
-              <div className="font-mono" style={{ fontSize: '1.3rem', fontWeight: 800, color: '#e2b768', letterSpacing: '0.04em' }}>
+              <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase' }}>Registration Code</div>
+              <div className="font-mono" style={{ fontSize: '1.3rem', fontWeight: 800, color: '#b45309', letterSpacing: '0.04em' }}>
                 {registration.registration_id || registration.ticket_code}
               </div>
             </div>
-            <span className="tag-badge font-mono" style={{ fontSize: '0.72rem', color: '#10b981', borderColor: 'rgba(16, 185, 129, 0.4)' }}>
+            <span className="tag-badge font-mono" style={{ fontSize: '0.72rem', color: '#059669', borderColor: '#a7f3d0', background: '#ecfdf5' }}>
               100% FREE ADMISSION
             </span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '0.84rem' }}>
             <div>
-              <span style={{ color: '#687385', display: 'block', fontSize: '0.7rem' }}>DELEGATE</span>
-              <strong style={{ color: '#fff' }}>{registration.full_name}</strong>
+              <span style={{ color: '#64748b', display: 'block', fontSize: '0.7rem' }}>DELEGATE</span>
+              <strong style={{ color: '#0f172a' }}>{registration.full_name}</strong>
             </div>
             <div>
-              <span style={{ color: '#687385', display: 'block', fontSize: '0.7rem' }}>INSTITUTION</span>
-              <strong style={{ color: '#00e5ff' }}>{registration.institution}</strong>
+              <span style={{ color: '#64748b', display: 'block', fontSize: '0.7rem' }}>INSTITUTION</span>
+              <strong style={{ color: '#0284c7' }}>{registration.institution}</strong>
             </div>
             <div>
-              <span style={{ color: '#687385', display: 'block', fontSize: '0.7rem' }}>TRACK</span>
-              <strong style={{ color: '#ff7a50', textTransform: 'capitalize' }}>{registration.track?.replace('_', ' ')}</strong>
+              <span style={{ color: '#64748b', display: 'block', fontSize: '0.7rem' }}>TRACK</span>
+              <strong style={{ color: '#ea580c', textTransform: 'capitalize' }}>{registration.track?.replace('_', ' ')}</strong>
             </div>
             <div>
-              <span style={{ color: '#687385', display: 'block', fontSize: '0.7rem' }}>ATTENDANCE MODE</span>
-              <strong style={{ color: '#fff', textTransform: 'capitalize' }}>{registration.attendance_mode?.replace('_', ' ') || 'In-Person'}</strong>
+              <span style={{ color: '#64748b', display: 'block', fontSize: '0.7rem' }}>ATTENDANCE MODE</span>
+              <strong style={{ color: '#0f172a', textTransform: 'capitalize' }}>{registration.attendance_mode?.replace('_', ' ') || 'In-Person'}</strong>
             </div>
           </div>
         </div>

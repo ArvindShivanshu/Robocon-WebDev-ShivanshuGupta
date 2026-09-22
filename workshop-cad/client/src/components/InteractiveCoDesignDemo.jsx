@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Cpu, Layers, RefreshCw, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { DecryptedText, SpecularButton } from './reactbits';
 
 export default function InteractiveCoDesignDemo() {
   const [activeTab, setActiveTab] = useState('both');
@@ -22,33 +23,34 @@ export default function InteractiveCoDesignDemo() {
   };
 
   return (
-    <section id="simulator" style={{ padding: '90px 0', position: 'relative', zIndex: 2 }}>
+    <section id="simulator" style={{ padding: '80px 0', position: 'relative', zIndex: 2 }}>
       <div className="page-container">
-        <div className="pro-panel" style={{ padding: 'clamp(18px, 4vw, 36px)', border: '1px solid var(--border-medium)' }}>
+        <div className="pro-panel" style={{ padding: 'clamp(18px, 3.5vw, 32px)', border: '1px solid var(--border-subtle)' }}>
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
             <div>
               <span className="tag-badge font-mono" style={{ marginBottom: '10px' }}>
-                LIVE CAD VIEWPORT SIMULATOR
+                <DecryptedText text="SIMULATOR // CO-DESIGN CLEARANCE" speed={25} maxIterations={10} animateOn="view" />
               </span>
-              <h3 style={{ fontSize: '1.65rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
+              <h3 style={{ fontSize: '1.45rem', fontWeight: 750, color: '#0f172a', letterSpacing: '-0.02em' }}>
                 Bi-Directional ECAD-MCAD Clearance Inspector
               </h3>
-              <p style={{ color: '#8c96a8', fontSize: '0.9rem', maxWidth: '580px', marginTop: '4px' }}>
+              <p style={{ color: '#475569', fontSize: '0.88rem', maxWidth: '580px', marginTop: '4px' }}>
                 Adjust mechanical mounting boss height to verify how Altium Designer's 3D component keepouts react in real time.
               </p>
             </div>
 
             {/* Viewport View Toggles */}
-            <div style={{ display: 'flex', gap: '8px', background: '#090a10', padding: '4px', borderRadius: '10px', border: '1px solid var(--border-subtle)', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '6px', background: '#f1f5f9', padding: '4px', borderRadius: '10px', border: '1px solid var(--border-subtle)', flexWrap: 'wrap' }}>
               <button
                 onClick={() => setActiveTab('solidworks')}
                 style={{
                   padding: '7px 14px',
                   borderRadius: '7px',
                   border: 'none',
-                  background: activeTab === 'solidworks' ? '#181b26' : 'transparent',
-                  color: activeTab === 'solidworks' ? '#ff7a50' : '#778296',
+                  background: activeTab === 'solidworks' ? '#ffffff' : 'transparent',
+                  color: activeTab === 'solidworks' ? '#ea580c' : '#64748b',
+                  boxShadow: activeTab === 'solidworks' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
                   fontSize: '0.82rem',
                   fontWeight: 600,
                   cursor: 'pointer',
@@ -57,7 +59,7 @@ export default function InteractiveCoDesignDemo() {
                   gap: '6px'
                 }}
               >
-                <Box size={14} color="#ff5722" />
+                <Box size={14} color="#ea580c" />
                 <span>SolidWorks Shell</span>
               </button>
 
@@ -67,8 +69,9 @@ export default function InteractiveCoDesignDemo() {
                   padding: '7px 14px',
                   borderRadius: '7px',
                   border: 'none',
-                  background: activeTab === 'altium' ? '#181b26' : 'transparent',
-                  color: activeTab === 'altium' ? '#00e5ff' : '#778296',
+                  background: activeTab === 'altium' ? '#ffffff' : 'transparent',
+                  color: activeTab === 'altium' ? '#0284c7' : '#64748b',
+                  boxShadow: activeTab === 'altium' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
                   fontSize: '0.82rem',
                   fontWeight: 600,
                   cursor: 'pointer',
@@ -77,7 +80,7 @@ export default function InteractiveCoDesignDemo() {
                   gap: '6px'
                 }}
               >
-                <Cpu size={14} color="#00e5ff" />
+                <Cpu size={14} color="#0284c7" />
                 <span>Altium PCB</span>
               </button>
 
@@ -87,8 +90,9 @@ export default function InteractiveCoDesignDemo() {
                   padding: '7px 14px',
                   borderRadius: '7px',
                   border: 'none',
-                  background: activeTab === 'both' ? '#181b26' : 'transparent',
-                  color: activeTab === 'both' ? '#ffffff' : '#778296',
+                  background: activeTab === 'both' ? '#ffffff' : 'transparent',
+                  color: activeTab === 'both' ? '#0f172a' : '#64748b',
+                  boxShadow: activeTab === 'both' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
                   fontSize: '0.82rem',
                   fontWeight: 600,
                   cursor: 'pointer',
@@ -97,7 +101,7 @@ export default function InteractiveCoDesignDemo() {
                   gap: '6px'
                 }}
               >
-                <Layers size={14} color="#a78bfa" />
+                <Layers size={14} color="#7c3aed" />
                 <span>Unified Cross-Section</span>
               </button>
             </div>
@@ -298,7 +302,7 @@ export default function InteractiveCoDesignDemo() {
                 <div style={{ marginBottom: '22px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                     <label className="form-label" style={{ margin: 0 }}>Standoff Boss Height</label>
-                    <span className="font-mono" style={{ fontSize: '0.85rem', color: '#e2b768', fontWeight: 700 }}>
+                    <span className="font-mono" style={{ fontSize: '0.85rem', color: '#b45309', fontWeight: 700 }}>
                       {standoffHeight.toFixed(1)} mm
                     </span>
                   </div>
@@ -309,9 +313,9 @@ export default function InteractiveCoDesignDemo() {
                     step="0.5"
                     value={standoffHeight}
                     onChange={(e) => setStandoffHeight(parseFloat(e.target.value))}
-                    style={{ width: '100%', accentColor: '#ff5722', cursor: 'pointer' }}
+                    style={{ width: '100%', accentColor: '#ea580c', cursor: 'pointer' }}
                   />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: '#626d82', marginTop: '4px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#64748b', marginTop: '4px' }}>
                     <span>Min: 3.0mm</span>
                     <span>Nominal: 6.5mm</span>
                     <span>Max: 10.0mm</span>
@@ -335,10 +339,11 @@ export default function InteractiveCoDesignDemo() {
                           borderRadius: '7px',
                           fontSize: '0.78rem',
                           textAlign: 'left',
-                          border: activeLayer === l.id ? '1px solid #00e5ff' : '1px solid var(--border-subtle)',
-                          background: activeLayer === l.id ? 'rgba(0, 229, 255, 0.1)' : '#0a0b10',
-                          color: activeLayer === l.id ? '#00e5ff' : '#8893a7',
-                          cursor: 'pointer'
+                          border: activeLayer === l.id ? '1px solid #0284c7' : '1px solid var(--border-subtle)',
+                          background: activeLayer === l.id ? '#e0f2fe' : '#f8fafc',
+                          color: activeLayer === l.id ? '#0284c7' : '#64748b',
+                          cursor: 'pointer',
+                          fontWeight: activeLayer === l.id ? 600 : 400
                         }}
                       >
                         {l.label}
@@ -349,17 +354,17 @@ export default function InteractiveCoDesignDemo() {
               </div>
 
               <div>
-                <button
+                <SpecularButton
+                  variant="secondary"
                   onClick={triggerSync}
                   disabled={isSyncing}
-                  className="btn-secondary-pro"
                   style={{ width: '100%', justifyContent: 'center', padding: '11px', fontSize: '0.88rem' }}
                 >
                   <RefreshCw size={14} className={isSyncing ? 'rotating' : ''} />
                   <span>{isSyncing ? 'Synchronizing...' : 'Simulate Bi-Directional IDX Sync'}</span>
-                </button>
+                </SpecularButton>
 
-                <p style={{ fontSize: '0.75rem', color: '#626d82', marginTop: '8px', textAlign: 'center' }}>
+                <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '8px', textAlign: 'center' }}>
                   In the lab, changes in SolidWorks push directly to Altium via native CoDesigner connector.
                 </p>
               </div>

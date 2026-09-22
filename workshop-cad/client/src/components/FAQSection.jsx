@@ -32,14 +32,14 @@ export default function FAQSection() {
   };
 
   return (
-    <section id="faq" style={{ padding: '90px 0', position: 'relative', zIndex: 2 }}>
-      <div className="page-container" style={{ maxWidth: '820px' }}>
-        <div style={{ marginBottom: '45px' }}>
-          <span className="tag-badge font-mono" style={{ marginBottom: '14px' }}>
-            FREQUENTLY ASKED QUESTIONS
+    <section id="faq" style={{ padding: '80px 0', position: 'relative', zIndex: 2 }}>
+      <div className="page-container" style={{ maxWidth: '800px' }}>
+        <div style={{ marginBottom: '36px' }}>
+          <span className="tag-badge font-mono" style={{ marginBottom: '12px' }}>
+            FAQ // ACCREDITATION & ACCESS
           </span>
-          <h2 style={{ fontSize: 'clamp(2rem, 3.2vw, 2.8rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#fff', marginBottom: '12px' }}>
-            Workshop Details & Accreditation.
+          <h2 style={{ fontSize: 'clamp(1.9rem, 3vw, 2.5rem)', fontWeight: 750, letterSpacing: '-0.03em', color: '#0f172a', marginBottom: '10px' }}>
+            Frequently Asked Questions.
           </h2>
         </div>
 
@@ -53,7 +53,8 @@ export default function FAQSection() {
                 style={{
                   borderRadius: '12px',
                   border: isOpen ? '1px solid var(--border-medium)' : '1px solid var(--border-subtle)',
-                  background: isOpen ? '#10131d' : '#0a0b10',
+                  background: '#ffffff',
+                  boxShadow: isOpen ? '0 3px 12px rgba(0, 0, 0, 0.05)' : '0 1px 3px rgba(0, 0, 0, 0.03)',
                   overflow: 'hidden',
                   transition: 'all 0.2s ease'
                 }}
@@ -68,7 +69,7 @@ export default function FAQSection() {
                     justifyContent: 'space-between',
                     background: 'transparent',
                     border: 'none',
-                    color: '#fff',
+                    color: '#0f172a',
                     fontSize: '1rem',
                     fontWeight: 600,
                     cursor: 'pointer',
@@ -78,7 +79,7 @@ export default function FAQSection() {
                   <span>{faq.q}</span>
                   <ChevronDown
                     size={18}
-                    color={isOpen ? '#00e5ff' : '#687385'}
+                    color={isOpen ? '#0284c7' : '#64748b'}
                     style={{
                       transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
                       transition: 'transform 0.2s ease',
@@ -88,7 +89,7 @@ export default function FAQSection() {
                 </button>
 
                 {isOpen && (
-                  <div style={{ padding: '0 22px 20px', color: '#8c96a8', fontSize: '0.92rem', lineHeight: 1.6 }}>
+                  <div style={{ padding: '0 22px 20px', color: '#475569', fontSize: '0.92rem', lineHeight: 1.6 }}>
                     {faq.a}
                   </div>
                 )}

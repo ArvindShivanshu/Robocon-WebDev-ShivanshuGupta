@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Cpu, Layers, Loader2, ArrowRight, ShieldCheck, Check, Sparkles, UserCheck } from 'lucide-react';
 import LivePassPreview from './LivePassPreview.jsx';
+import { DecryptedText, SpecularButton } from './reactbits';
 
 export default function RegistrationForm({ selectedTrack, onRegisterSuccess, workshopStats }) {
   const [formData, setFormData] = useState({
@@ -71,18 +72,18 @@ export default function RegistrationForm({ selectedTrack, onRegisterSuccess, wor
   };
 
   return (
-    <section id="registration-section" style={{ padding: '100px 0', position: 'relative', zIndex: 2 }}>
+    <section id="registration-section" style={{ padding: '80px 0', position: 'relative', zIndex: 2 }}>
       <div className="page-container">
         {/* Section Header */}
-        <div style={{ marginBottom: '45px', maxWidth: '680px' }}>
-          <span className="tag-badge font-mono" style={{ marginBottom: '14px' }}>
-            REGISTRATION GATEWAY // OFFICIAL ENROLLMENT
+        <div style={{ marginBottom: '38px', maxWidth: '640px' }}>
+          <span className="tag-badge font-mono" style={{ marginBottom: '12px' }}>
+            <DecryptedText text="REGISTRATION // DELEGATE ENROLLMENT" speed={25} maxIterations={10} animateOn="view" />
           </span>
-          <h2 style={{ fontSize: 'clamp(2.1rem, 3.5vw, 3rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#fff', marginBottom: '12px' }}>
+          <h2 style={{ fontSize: 'clamp(1.9rem, 3vw, 2.6rem)', fontWeight: 750, letterSpacing: '-0.03em', color: '#0f172a', marginBottom: '10px' }}>
             Reserve Your Workshop Workstation.
           </h2>
-          <p style={{ color: '#8c96a8', fontSize: '1rem', lineHeight: 1.6 }}>
-            Free admission for engineering students, researchers, and developers. Complete your delegate credentials to reserve an in-person hardware lab bench or virtual stream seat.
+          <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: 1.6 }}>
+            Zero registration fee for engineering students, researchers, and developers. Complete your credentials to reserve a workstation or virtual stream seat.
           </p>
         </div>
 
@@ -104,9 +105,9 @@ export default function RegistrationForm({ selectedTrack, onRegisterSuccess, wor
                   style={{
                     padding: '12px 16px',
                     borderRadius: '8px',
-                    background: 'rgba(239, 68, 68, 0.1)',
-                    border: '1px solid rgba(239, 68, 68, 0.3)',
-                    color: '#fca5a5',
+                    background: '#fef2f2',
+                    border: '1px solid #fecaca',
+                    color: '#b91c1c',
                     fontSize: '0.88rem'
                   }}
                 >
@@ -116,15 +117,15 @@ export default function RegistrationForm({ selectedTrack, onRegisterSuccess, wor
 
               {/* 1. Track Selection */}
               <div>
-                <label className="form-label font-mono" style={{ fontSize: '0.78rem', color: '#687385' }}>
+                <label className="form-label font-mono" style={{ fontSize: '0.78rem', color: '#64748b' }}>
                   01 // SELECT WORKSHOP TRACK
                 </label>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '10px' }}>
                   {[
-                    { id: 'solidworks', name: 'SolidWorks 3D CAD', tag: 'Mechanical & FEA', icon: Box, accent: '#ff5722' },
-                    { id: 'altium', name: 'Altium Designer', tag: '12-Layer ECAD', icon: Cpu, accent: '#00e5ff' },
-                    { id: 'both_mechatronics', name: 'Unified Co-Design', tag: 'Complete Fellowship', icon: Layers, accent: '#e2b768' }
+                    { id: 'solidworks', name: 'SolidWorks 3D CAD', tag: 'Mechanical & FEA', icon: Box, accent: '#ea580c' },
+                    { id: 'altium', name: 'Altium Designer', tag: '12-Layer ECAD', icon: Cpu, accent: '#0284c7' },
+                    { id: 'both_mechatronics', name: 'Unified Co-Design', tag: 'Complete Fellowship', icon: Layers, accent: '#b45309' }
                   ].map((t) => {
                     const isSelected = formData.track === t.id;
                     const Icon = t.icon;
@@ -136,7 +137,8 @@ export default function RegistrationForm({ selectedTrack, onRegisterSuccess, wor
                           padding: '14px 16px',
                           borderRadius: '10px',
                           border: isSelected ? `1.5px solid ${t.accent}` : '1px solid var(--border-subtle)',
-                          background: isSelected ? '#12141e' : '#0a0b10',
+                          background: isSelected ? '#ffffff' : '#f8fafc',
+                          boxShadow: isSelected ? '0 2px 8px rgba(0, 0, 0, 0.06)' : 'none',
                           cursor: 'pointer',
                           transition: 'all 0.2s ease',
                           display: 'flex',
@@ -145,10 +147,10 @@ export default function RegistrationForm({ selectedTrack, onRegisterSuccess, wor
                         }}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                          <Icon size={16} color={isSelected ? t.accent : '#687385'} />
-                          <span style={{ fontSize: '0.88rem', fontWeight: 600, color: '#fff' }}>{t.name}</span>
+                          <Icon size={16} color={isSelected ? t.accent : '#64748b'} />
+                          <span style={{ fontSize: '0.88rem', fontWeight: 600, color: '#0f172a' }}>{t.name}</span>
                         </div>
-                        <span style={{ fontSize: '0.75rem', color: isSelected ? t.accent : '#626d82' }}>{t.tag}</span>
+                        <span style={{ fontSize: '0.75rem', color: isSelected ? t.accent : '#64748b' }}>{t.tag}</span>
                       </div>
                     );
                   })}
@@ -257,7 +259,7 @@ export default function RegistrationForm({ selectedTrack, onRegisterSuccess, wor
 
               {/* 3. Attendance Mode & Software Setup */}
               <div>
-                <label className="form-label font-mono" style={{ fontSize: '0.78rem', color: '#687385', marginBottom: '12px' }}>
+                <label className="form-label font-mono" style={{ fontSize: '0.78rem', color: '#64748b', marginBottom: '12px' }}>
                   03 // ATTENDANCE MODE & LAB ASSISTANCE
                 </label>
 
@@ -269,12 +271,13 @@ export default function RegistrationForm({ selectedTrack, onRegisterSuccess, wor
                       padding: '12px 16px',
                       borderRadius: '8px',
                       border: formData.attendanceMode === 'in_person' ? '1.5px solid #10b981' : '1px solid var(--border-subtle)',
-                      background: formData.attendanceMode === 'in_person' ? 'rgba(16, 185, 129, 0.08)' : '#0a0b10',
+                      background: formData.attendanceMode === 'in_person' ? '#ecfdf5' : '#f8fafc',
+                      boxShadow: formData.attendanceMode === 'in_person' ? '0 1px 4px rgba(16, 185, 129, 0.12)' : 'none',
                       cursor: 'pointer'
                     }}
                   >
-                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#fff' }}>🏢 In-Person Lab Bench</div>
-                    <div style={{ fontSize: '0.75rem', color: '#8893a7', marginTop: '2px' }}>Physical CAD rig + Hardware Kit</div>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#0f172a' }}>🏢 In-Person Lab Bench</div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px' }}>Physical CAD rig + Hardware Kit</div>
                   </div>
 
                   <div
@@ -282,27 +285,28 @@ export default function RegistrationForm({ selectedTrack, onRegisterSuccess, wor
                     style={{
                       padding: '12px 16px',
                       borderRadius: '8px',
-                      border: formData.attendanceMode === 'virtual' ? '1.5px solid #00e5ff' : '1px solid var(--border-subtle)',
-                      background: formData.attendanceMode === 'virtual' ? 'rgba(0, 229, 255, 0.08)' : '#0a0b10',
+                      border: formData.attendanceMode === 'virtual' ? '1.5px solid #0284c7' : '1px solid var(--border-subtle)',
+                      background: formData.attendanceMode === 'virtual' ? '#f0f9ff' : '#f8fafc',
+                      boxShadow: formData.attendanceMode === 'virtual' ? '0 1px 4px rgba(2, 132, 199, 0.12)' : 'none',
                       cursor: 'pointer'
                     }}
                   >
-                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#fff' }}>💻 Virtual 4K Stream</div>
-                    <div style={{ fontSize: '0.75rem', color: '#8893a7', marginTop: '2px' }}>Live Discord CAD room + Q&A</div>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#0f172a' }}>💻 Virtual 4K Stream</div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px' }}>Live Discord CAD room + Q&A</div>
                   </div>
                 </div>
 
                 {/* License Assistance Checkbox */}
-                <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer', fontSize: '0.86rem', color: '#cbd5e1' }}>
+                <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer', fontSize: '0.86rem', color: '#334155' }}>
                   <input
                     type="checkbox"
                     name="licenseAssistance"
                     checked={formData.licenseAssistance}
                     onChange={handleChange}
-                    style={{ accentColor: '#ff5722', width: '16px', height: '16px', marginTop: '2px' }}
+                    style={{ accentColor: '#ea580c', width: '16px', height: '16px', marginTop: '2px' }}
                   />
                   <span>
-                    <strong>Request Educational License Assistance:</strong> I would like guidance obtaining 60-day student evaluation licenses for SolidWorks 2024 and Altium Designer 24.
+                    <strong style={{ color: '#0f172a' }}>Request Educational License Assistance:</strong> I would like guidance obtaining 60-day student evaluation licenses for SolidWorks 2024 and Altium Designer 24.
                   </span>
                 </label>
               </div>
@@ -315,26 +319,25 @@ export default function RegistrationForm({ selectedTrack, onRegisterSuccess, wor
                   gap: '12px',
                   padding: '14px 18px',
                   borderRadius: '10px',
-                  background: '#0a0b10',
+                  background: '#f8fafc',
                   border: '1px solid var(--border-subtle)'
                 }}
               >
                 <ShieldCheck size={20} color="#10b981" style={{ flexShrink: 0 }} />
-                <div style={{ fontSize: '0.82rem', color: '#9aa5b8' }}>
-                  <strong style={{ color: '#fff' }}>Zero Registration Fee:</strong> This workshop is fully sponsored by the Engineering Research Group. Workstations are reserved on a verified first-come, first-served basis.
+                <div style={{ fontSize: '0.82rem', color: '#475569' }}>
+                  <strong style={{ color: '#0f172a' }}>Zero Registration Fee:</strong> This workshop is fully sponsored by the Engineering Research Group. Workstations are reserved on a verified first-come, first-served basis.
                 </div>
               </div>
 
-              {/* Submit CTA */}
-              <button
+              {/* Submit CTA with SpecularButton */}
+              <SpecularButton
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-primary-lead"
+                variant="primary"
                 style={{
                   width: '100%',
-                  padding: '15px',
-                  fontSize: '1rem',
-                  cursor: isSubmitting ? 'not-allowed' : 'pointer'
+                  padding: '14px',
+                  fontSize: '0.96rem'
                 }}
               >
                 {isSubmitting ? (
@@ -348,7 +351,7 @@ export default function RegistrationForm({ selectedTrack, onRegisterSuccess, wor
                     <ArrowRight size={16} />
                   </>
                 )}
-              </button>
+              </SpecularButton>
             </form>
           </div>
 

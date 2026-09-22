@@ -538,20 +538,20 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
   };
 
   return (
-    <div style={{ maxWidth: '1400px', margin: '16px auto', padding: '0 clamp(12px, 3vw, 24px)' }}>
+    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '110px clamp(12px, 3vw, 24px) 36px' }}>
       {/* Studio Header */}
       <div className="studio-header-wrap" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Cpu size={20} color="#00e5ff" />
-            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
-              Altium Designer High-Speed ECAD Studio
+            <Cpu size={20} color="#0284c7" />
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
+              Altium Designer 24 ECAD Studio
             </h2>
             <span className="tag-badge alt-tag font-mono" style={{ fontSize: '0.68rem' }}>
               MULTI-LAYER PCB ROUTER
             </span>
           </div>
-          <p style={{ color: '#8c96a8', fontSize: '0.84rem', marginTop: '2px' }}>
+          <p style={{ color: '#475569', fontSize: '0.84rem', marginTop: '2px' }}>
             Interactive ECAD engine: Drag IC footprints, route 45° differential traces, inspect impedance, and verify clearance DRC rules in real time.
           </p>
         </div>
@@ -590,7 +590,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
         {/* Left: Layer Stackup & Placed Component Netlist */}
         <div className="pro-panel" style={{ padding: '18px', display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span className="font-mono" style={{ fontSize: '0.72rem', color: '#00e5ff', textTransform: 'uppercase', fontWeight: 600 }}>
+            <span className="font-mono" style={{ fontSize: '0.72rem', color: '#0284c7', textTransform: 'uppercase', fontWeight: 600 }}>
               LAYER STACKUP MANAGER
             </span>
             <button
@@ -599,9 +599,9 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                 fontSize: '0.66rem',
                 padding: '2px 7px',
                 borderRadius: '4px',
-                background: isolateLayer ? 'rgba(0, 229, 255, 0.2)' : 'rgba(255, 255, 255, 0.06)',
-                border: isolateLayer ? '1px solid #00e5ff' : '1px solid var(--border-subtle)',
-                color: isolateLayer ? '#00e5ff' : '#8893a7',
+                background: isolateLayer ? '#e0f2fe' : '#f1f5f9',
+                border: isolateLayer ? '1px solid #0284c7' : '1px solid var(--border-subtle)',
+                color: isolateLayer ? '#0284c7' : '#64748b',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -617,9 +617,9 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '18px' }}>
             {[
               { id: 'L1_TOP', name: 'L1 Top Signals [RF/56G]', color: '#ef4444' },
-              { id: 'L2_GND', name: 'L2 Ground Plane', color: '#00e5ff' },
-              { id: 'L3_PWR', name: 'L3 Power Rails', color: '#e2b768' },
-              { id: 'L12_BOT', name: 'L12 Bottom Signals', color: '#3b82f6' }
+              { id: 'L2_GND', name: 'L2 Ground Plane', color: '#0284c7' },
+              { id: 'L3_PWR', name: 'L3 Power Rails', color: '#b45309' },
+              { id: 'L12_BOT', name: 'L12 Bottom Signals', color: '#2563eb' }
             ].map((layer) => (
               <button
                 key={layer.id}
@@ -628,8 +628,9 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                   padding: '9px 12px',
                   borderRadius: '6px',
                   border: activeLayer === layer.id ? `1.5px solid ${layer.color}` : '1px solid var(--border-subtle)',
-                  background: activeLayer === layer.id ? '#161a26' : '#090a0f',
-                  color: activeLayer === layer.id ? '#fff' : '#8c96a8',
+                  background: activeLayer === layer.id ? '#ffffff' : '#f8fafc',
+                  color: activeLayer === layer.id ? '#0f172a' : '#64748b',
+                  boxShadow: activeLayer === layer.id ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
                   fontSize: '0.8rem',
                   fontWeight: 600,
                   cursor: 'pointer',
@@ -648,7 +649,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
 
           {/* Placed Footprint List */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-            <span className="font-mono" style={{ fontSize: '0.72rem', color: '#687385', textTransform: 'uppercase', fontWeight: 600 }}>
+            <span className="font-mono" style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>
               PLACED COMPONENTS ({components.length})
             </span>
           </div>
@@ -666,11 +667,11 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                   style={{
                     padding: '6px 10px',
                     borderRadius: '5px',
-                    background: selectedComp?.id === comp.id ? 'rgba(0, 229, 255, 0.15)' : '#090a0f',
+                    background: selectedComp?.id === comp.id ? '#e0f2fe' : '#f8fafc',
                     border: isColliding
                       ? '1px solid #ef4444'
                       : selectedComp?.id === comp.id
-                      ? '1px solid #00e5ff'
+                      ? '1px solid #0284c7'
                       : '1px solid var(--border-subtle)',
                     cursor: 'pointer',
                     display: 'flex',
@@ -678,8 +679,8 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                     alignItems: 'center'
                   }}
                 >
-                  <strong style={{ color: isColliding ? '#ef4444' : '#fff' }}>{comp.id}</strong>
-                  <span style={{ color: '#8893a7', fontSize: '0.74rem' }}>{comp.name}</span>
+                  <strong style={{ color: isColliding ? '#ef4444' : '#0f172a' }}>{comp.id}</strong>
+                  <span style={{ color: '#64748b', fontSize: '0.74rem' }}>{comp.name}</span>
                 </div>
               );
             })}
@@ -692,9 +693,9 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                 width: '100%',
                 padding: '7px',
                 borderRadius: '6px',
-                background: '#0a0b10',
+                background: '#ffffff',
                 border: '1px solid var(--border-subtle)',
-                color: '#adb6c7',
+                color: '#475569',
                 fontSize: '0.74rem',
                 cursor: 'pointer',
                 display: 'flex',
@@ -727,7 +728,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              background: '#090a0f',
+              background: '#f8fafc',
               flexWrap: 'wrap',
               gap: '8px'
             }}
@@ -743,9 +744,9 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                 style={{
                   padding: '5px 12px',
                   borderRadius: '5px',
-                  border: activeTool === 'select' ? '1px solid #00e5ff' : '1px solid var(--border-subtle)',
-                  background: activeTool === 'select' ? 'rgba(0, 229, 255, 0.15)' : '#11131c',
-                  color: activeTool === 'select' ? '#00e5ff' : '#8c96a8',
+                  border: activeTool === 'select' ? '1px solid #0284c7' : '1px solid var(--border-subtle)',
+                  background: activeTool === 'select' ? '#e0f2fe' : '#ffffff',
+                  color: activeTool === 'select' ? '#0284c7' : '#64748b',
                   fontSize: '0.74rem',
                   fontWeight: 600,
                   cursor: 'pointer',
@@ -769,8 +770,8 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                   padding: '5px 12px',
                   borderRadius: '5px',
                   border: activeTool === 'route' ? '1px solid #10b981' : '1px solid var(--border-subtle)',
-                  background: activeTool === 'route' ? 'rgba(16, 185, 129, 0.18)' : '#11131c',
-                  color: activeTool === 'route' ? '#10b981' : '#8c96a8',
+                  background: activeTool === 'route' ? '#ecfdf5' : '#ffffff',
+                  color: activeTool === 'route' ? '#059669' : '#64748b',
                   fontSize: '0.74rem',
                   fontWeight: 600,
                   cursor: 'pointer',
@@ -786,31 +787,31 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
 
             {/* Quick Component Placement Palette */}
             <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-              <span className="font-mono" style={{ fontSize: '0.66rem', color: '#687385' }}>+ PLACE:</span>
+              <span className="font-mono" style={{ fontSize: '0.66rem', color: '#64748b' }}>+ PLACE:</span>
               <button
                 onClick={() => handleAddComponent('cap')}
-                style={{ padding: '4px 8px', borderRadius: '4px', background: '#131622', border: '1px solid var(--border-subtle)', color: '#fff', fontSize: '0.7rem', cursor: 'pointer' }}
+                style={{ padding: '4px 8px', borderRadius: '4px', background: '#ffffff', border: '1px solid var(--border-subtle)', color: '#0f172a', fontSize: '0.7rem', cursor: 'pointer' }}
                 title="Place 0402 Bypass Capacitor"
               >
                 Cap
               </button>
               <button
                 onClick={() => handleAddComponent('led')}
-                style={{ padding: '4px 8px', borderRadius: '4px', background: '#131622', border: '1px solid var(--border-subtle)', color: '#10b981', fontSize: '0.7rem', cursor: 'pointer' }}
+                style={{ padding: '4px 8px', borderRadius: '4px', background: '#ffffff', border: '1px solid var(--border-subtle)', color: '#059669', fontSize: '0.7rem', cursor: 'pointer' }}
                 title="Place 0805 Status LED"
               >
                 LED
               </button>
               <button
                 onClick={() => handleAddComponent('res')}
-                style={{ padding: '4px 8px', borderRadius: '4px', background: '#131622', border: '1px solid var(--border-subtle)', color: '#00e5ff', fontSize: '0.7rem', cursor: 'pointer' }}
+                style={{ padding: '4px 8px', borderRadius: '4px', background: '#ffffff', border: '1px solid var(--border-subtle)', color: '#0284c7', fontSize: '0.7rem', cursor: 'pointer' }}
                 title="Place 0603 Termination Resistor"
               >
                 Res
               </button>
               <button
                 onClick={() => handleAddComponent('xtal')}
-                style={{ padding: '4px 8px', borderRadius: '4px', background: '#131622', border: '1px solid var(--border-subtle)', color: '#e2b768', fontSize: '0.7rem', cursor: 'pointer' }}
+                style={{ padding: '4px 8px', borderRadius: '4px', background: '#ffffff', border: '1px solid var(--border-subtle)', color: '#b45309', fontSize: '0.7rem', cursor: 'pointer' }}
                 title="Place 25MHz TCXO Crystal"
               >
                 Crystal
@@ -854,7 +855,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
           <div
             style={{
               padding: '8px 14px',
-              background: '#07080d',
+              background: '#f8fafc',
               borderTop: '1px solid var(--border-subtle)',
               display: 'flex',
               justifyContent: 'space-between',
@@ -864,13 +865,13 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
               gap: '8px'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: drcPassed ? '#10b981' : '#ef4444' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: drcPassed ? '#059669' : '#dc2626' }}>
               {drcPassed ? <CheckCircle2 size={13} /> : <AlertTriangle size={13} />}
               <span className="font-mono">{statusText}</span>
             </div>
 
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <span className="font-mono" style={{ color: '#687385' }}>
+              <span className="font-mono" style={{ color: '#64748b' }}>
                 TRACES: {traces.length} | VIAS: 12
               </span>
               {(selectedComp || selectedTrace) && (
@@ -879,9 +880,9 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                   style={{
                     padding: '2px 8px',
                     borderRadius: '4px',
-                    background: 'rgba(239, 68, 68, 0.12)',
-                    border: '1px solid rgba(239, 68, 68, 0.35)',
-                    color: '#fca5a5',
+                    background: '#fee2e2',
+                    border: '1px solid #fecaca',
+                    color: '#b91c1c',
                     fontSize: '0.68rem',
                     cursor: 'pointer',
                     display: 'flex',
@@ -899,49 +900,49 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
 
         {/* Right: Component & High-Speed Signal Inspector */}
         <div className="pro-panel" style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <div className="font-mono" style={{ fontSize: '0.72rem', color: '#00e5ff', textTransform: 'uppercase', fontWeight: 600 }}>
+          <div className="font-mono" style={{ fontSize: '0.72rem', color: '#0284c7', textTransform: 'uppercase', fontWeight: 600 }}>
             SIGNAL & PACKAGE PROPERTIES
           </div>
 
           {selectedComp ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ padding: '12px', borderRadius: '8px', background: '#090a0f', border: '1px solid var(--border-subtle)' }}>
-                <div style={{ fontSize: '0.7rem', color: '#687385' }}>DESIGNATOR</div>
-                <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff' }}>{selectedComp.id}</div>
-                <div style={{ fontSize: '0.8rem', color: '#00e5ff', marginTop: '2px' }}>{selectedComp.name}</div>
+              <div style={{ padding: '12px', borderRadius: '8px', background: '#f8fafc', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ fontSize: '0.7rem', color: '#64748b' }}>DESIGNATOR</div>
+                <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a' }}>{selectedComp.id}</div>
+                <div style={{ fontSize: '0.8rem', color: '#0284c7', marginTop: '2px' }}>{selectedComp.name}</div>
               </div>
 
               {/* Dynamic Coordinate Inspector */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '0.76rem' }}>
-                <div style={{ padding: '8px', borderRadius: '6px', background: '#090a0f', border: '1px solid var(--border-subtle)' }}>
-                  <span style={{ color: '#687385', display: 'block', fontSize: '0.66rem' }}>X COORD</span>
-                  <strong className="font-mono" style={{ color: '#e2b768' }}>{selectedComp.rx.toFixed(1)} mm</strong>
+                <div style={{ padding: '8px', borderRadius: '6px', background: '#f8fafc', border: '1px solid var(--border-subtle)' }}>
+                  <span style={{ color: '#64748b', display: 'block', fontSize: '0.66rem' }}>X COORD</span>
+                  <strong className="font-mono" style={{ color: '#b45309' }}>{selectedComp.rx.toFixed(1)} mm</strong>
                 </div>
-                <div style={{ padding: '8px', borderRadius: '6px', background: '#090a0f', border: '1px solid var(--border-subtle)' }}>
-                  <span style={{ color: '#687385', display: 'block', fontSize: '0.66rem' }}>Y COORD</span>
-                  <strong className="font-mono" style={{ color: '#e2b768' }}>{selectedComp.ry.toFixed(1)} mm</strong>
+                <div style={{ padding: '8px', borderRadius: '6px', background: '#f8fafc', border: '1px solid var(--border-subtle)' }}>
+                  <span style={{ color: '#64748b', display: 'block', fontSize: '0.66rem' }}>Y COORD</span>
+                  <strong className="font-mono" style={{ color: '#b45309' }}>{selectedComp.ry.toFixed(1)} mm</strong>
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '0.76rem' }}>
-                <div style={{ padding: '8px', borderRadius: '6px', background: '#090a0f', border: '1px solid var(--border-subtle)' }}>
-                  <span style={{ color: '#687385', display: 'block', fontSize: '0.66rem' }}>FOOTPRINT</span>
-                  <strong style={{ color: '#fff' }}>{selectedComp.type.toUpperCase()}</strong>
+                <div style={{ padding: '8px', borderRadius: '6px', background: '#f8fafc', border: '1px solid var(--border-subtle)' }}>
+                  <span style={{ color: '#64748b', display: 'block', fontSize: '0.66rem' }}>FOOTPRINT</span>
+                  <strong style={{ color: '#0f172a' }}>{selectedComp.type.toUpperCase()}</strong>
                 </div>
-                <div style={{ padding: '8px', borderRadius: '6px', background: '#090a0f', border: '1px solid var(--border-subtle)' }}>
-                  <span style={{ color: '#687385', display: 'block', fontSize: '0.66rem' }}>PIN COUNT</span>
-                  <strong className="font-mono" style={{ color: '#fff' }}>{selectedComp.pins} PADS</strong>
+                <div style={{ padding: '8px', borderRadius: '6px', background: '#f8fafc', border: '1px solid var(--border-subtle)' }}>
+                  <span style={{ color: '#64748b', display: 'block', fontSize: '0.66rem' }}>PIN COUNT</span>
+                  <strong className="font-mono" style={{ color: '#0f172a' }}>{selectedComp.pins} PADS</strong>
                 </div>
               </div>
 
-              <div style={{ padding: '10px', borderRadius: '8px', background: '#090a0f', border: '1px solid var(--border-subtle)', fontSize: '0.74rem' }}>
-                <span style={{ color: '#687385', display: 'block', fontSize: '0.66rem', marginBottom: '3px' }}>3D STEP HEIGHT CLEARANCE</span>
-                <span className="font-mono" style={{ color: '#e2b768', fontWeight: 700 }}>3.20mm [Fits inside SolidWorks Enclosure]</span>
+              <div style={{ padding: '10px', borderRadius: '8px', background: '#f8fafc', border: '1px solid var(--border-subtle)', fontSize: '0.74rem' }}>
+                <span style={{ color: '#64748b', display: 'block', fontSize: '0.66rem', marginBottom: '3px' }}>3D STEP HEIGHT CLEARANCE</span>
+                <span className="font-mono" style={{ color: '#b45309', fontWeight: 700 }}>3.20mm [Fits inside SolidWorks Enclosure]</span>
               </div>
 
               {/* Connected Nets for this Component */}
               <div>
-                <span style={{ color: '#687385', display: 'block', fontSize: '0.68rem', marginBottom: '6px', fontWeight: 600 }}>CONNECTED NETS</span>
+                <span style={{ color: '#64748b', display: 'block', fontSize: '0.68rem', marginBottom: '6px', fontWeight: 600 }}>CONNECTED NETS</span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                   {traces
                     .filter((tr) => tr.from === selectedComp.id || tr.to === selectedComp.id)
@@ -952,7 +953,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                         style={{
                           padding: '5px 8px',
                           borderRadius: '4px',
-                          background: '#090a0f',
+                          background: '#ffffff',
                           border: '1px solid var(--border-subtle)',
                           fontSize: '0.72rem',
                           display: 'flex',
@@ -960,7 +961,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
                           cursor: 'pointer'
                         }}
                       >
-                        <span style={{ color: tr.color }}>{tr.from} ➔ {tr.to}</span>
+                        <span style={{ color: tr.color, fontWeight: 600 }}>{tr.from} ➔ {tr.to}</span>
                         <span className="font-mono" style={{ color: '#64748b' }}>{tr.layer}</span>
                       </div>
                     ))}
@@ -972,51 +973,51 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions }) {
             </div>
           ) : selectedTrace ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ padding: '12px', borderRadius: '8px', background: '#090a0f', border: '1px solid var(--border-subtle)' }}>
-                <div style={{ fontSize: '0.7rem', color: '#687385' }}>SELECTED TRACE NET</div>
+              <div style={{ padding: '12px', borderRadius: '8px', background: '#f8fafc', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ fontSize: '0.7rem', color: '#64748b' }}>SELECTED TRACE NET</div>
                 <div style={{ fontSize: '1.1rem', fontWeight: 800, color: selectedTrace.color }}>{selectedTrace.from} ➔ {selectedTrace.to}</div>
-                <div className="font-mono" style={{ fontSize: '0.76rem', color: '#cbd5e1', marginTop: '4px' }}>LAYER: {selectedTrace.layer}</div>
+                <div className="font-mono" style={{ fontSize: '0.76rem', color: '#475569', marginTop: '4px' }}>LAYER: {selectedTrace.layer}</div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '0.76rem' }}>
-                <div style={{ padding: '8px', borderRadius: '6px', background: '#090a0f', border: '1px solid var(--border-subtle)' }}>
-                  <span style={{ color: '#687385', display: 'block', fontSize: '0.66rem' }}>IMPEDANCE</span>
-                  <strong className="font-mono" style={{ color: '#10b981' }}>50.0 Ω ±3%</strong>
+                <div style={{ padding: '8px', borderRadius: '6px', background: '#f8fafc', border: '1px solid var(--border-subtle)' }}>
+                  <span style={{ color: '#64748b', display: 'block', fontSize: '0.66rem' }}>IMPEDANCE</span>
+                  <strong className="font-mono" style={{ color: '#059669' }}>50.0 Ω ±3%</strong>
                 </div>
-                <div style={{ padding: '8px', borderRadius: '6px', background: '#090a0f', border: '1px solid var(--border-subtle)' }}>
-                  <span style={{ color: '#687385', display: 'block', fontSize: '0.66rem' }}>TRACE WIDTH</span>
-                  <strong className="font-mono" style={{ color: '#fff' }}>0.20 mm</strong>
+                <div style={{ padding: '8px', borderRadius: '6px', background: '#f8fafc', border: '1px solid var(--border-subtle)' }}>
+                  <span style={{ color: '#64748b', display: 'block', fontSize: '0.66rem' }}>TRACE WIDTH</span>
+                  <strong className="font-mono" style={{ color: '#0f172a' }}>0.20 mm</strong>
                 </div>
               </div>
 
-              <div style={{ padding: '10px', borderRadius: '8px', background: '#090a0f', border: '1px solid var(--border-subtle)', fontSize: '0.74rem' }}>
-                <span style={{ color: '#687385', display: 'block', fontSize: '0.66rem', marginBottom: '3px' }}>SIGNAL FLIGHT DELAY</span>
-                <span className="font-mono" style={{ color: '#00e5ff', fontWeight: 700 }}>~215 ps [Delay-matched differential pair]</span>
+              <div style={{ padding: '10px', borderRadius: '8px', background: '#f8fafc', border: '1px solid var(--border-subtle)', fontSize: '0.74rem' }}>
+                <span style={{ color: '#64748b', display: 'block', fontSize: '0.66rem', marginBottom: '3px' }}>SIGNAL FLIGHT DELAY</span>
+                <span className="font-mono" style={{ color: '#0284c7', fontWeight: 700 }}>~215 ps [Delay-matched differential pair]</span>
               </div>
 
               <button
                 onClick={handleDeleteSelected}
                 className="btn-secondary-pro"
-                style={{ justifyContent: 'center', padding: '9px', fontSize: '0.78rem', color: '#fca5a5', borderColor: 'rgba(239, 68, 68, 0.4)' }}
+                style={{ justifyContent: 'center', padding: '9px', fontSize: '0.78rem', color: '#b91c1c', borderColor: '#fecaca', background: '#fef2f2' }}
               >
                 <Trash2 size={13} />
                 <span>Rip Up (Delete) Net</span>
               </button>
             </div>
           ) : (
-            <div style={{ padding: '24px 16px', textAlign: 'center', color: '#687385', fontSize: '0.8rem', lineHeight: 1.5 }}>
+            <div style={{ padding: '24px 16px', textAlign: 'center', color: '#64748b', fontSize: '0.8rem', lineHeight: 1.5 }}>
               Click and drag any footprint on the board to reposition, or switch to <strong>Route 45° Net</strong> to connect copper traces.
             </div>
           )}
 
           <div style={{ marginTop: 'auto', paddingTop: '14px', borderTop: '1px solid var(--border-subtle)' }}>
-            <div className="font-mono" style={{ fontSize: '0.7rem', color: '#687385', marginBottom: '6px' }}>
+            <div className="font-mono" style={{ fontSize: '0.7rem', color: '#64748b', marginBottom: '6px' }}>
               BOARD CONSTRAINTS
             </div>
-            <div style={{ fontSize: '0.76rem', color: '#adb6c7', lineHeight: 1.5 }}>
-              • Microstrip Impedance: <strong>50Ω ±5%</strong><br />
-              • Differential Pair: <strong>90Ω USB / 100Ω SerDes</strong><br />
-              • Minimum Copper Clearance: <strong>0.15mm (6 mil)</strong>
+            <div style={{ fontSize: '0.76rem', color: '#475569', lineHeight: 1.5 }}>
+              • Microstrip Impedance: <strong style={{ color: '#0f172a' }}>50Ω ±5%</strong><br />
+              • Differential Pair: <strong style={{ color: '#0f172a' }}>90Ω USB / 100Ω SerDes</strong><br />
+              • Minimum Copper Clearance: <strong style={{ color: '#0f172a' }}>0.15mm (6 mil)</strong>
             </div>
           </div>
         </div>
