@@ -128,7 +128,7 @@ p, span, div, a, label, li, ul, ol, input, button, select, textarea, optgroup {
   padding: 0 28px;
 }
 
-/* Canvas Background - Kept faint for clean drafting feel */
+/* Interactive Circuit Canvas Background */
 #circuit-canvas {
   position: fixed;
   top: 0;
@@ -137,7 +137,7 @@ p, span, div, a, label, li, ul, ol, input, button, select, textarea, optgroup {
   height: 100vh;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.12;
+  opacity: 1;
 }
 
 /* Typography Classes */

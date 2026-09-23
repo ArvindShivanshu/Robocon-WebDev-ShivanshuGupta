@@ -17,7 +17,7 @@ import AltiumStudio from './components/studio/AltiumStudio.jsx';
 import CoDesignBridge from './components/studio/CoDesignBridge.jsx';
 
 // React Bits Library
-import { ClickSpark, Squares, FluidSimulation } from './components/reactbits';
+import { ClickSpark, FluidSimulation } from './components/reactbits';
 
 export default function App() {
   const [workshopData, setWorkshopData] = useState(null);
@@ -165,15 +165,8 @@ export default function App() {
           </div>
         )}
 
-        {/* Minimalist Interactive Drafting Paper Grid */}
-        <Squares
-          direction="diagonal"
-          speed={0.18}
-          squareSize={56}
-          borderColor="rgba(15, 23, 42, 0.04)"
-          hoverFillColor="rgba(6, 182, 212, 0.05)"
-          style={{ zIndex: 0 }}
-        />
+        {/* Interactive High-Speed Silicon Circuit Traces & Signal Pulses */}
+        <CircuitCanvas />
 
         {/* Single, Unified Master Navigation Bar */}
         <Navbar
