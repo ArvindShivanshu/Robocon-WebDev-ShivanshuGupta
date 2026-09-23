@@ -4,7 +4,7 @@
   "outputDirectory": ".",
   "rewrites": [
     {
-      "source": "/workshop-cad/(?!assets/)(.*)",
+      "source": "/workshop-cad/:path*",
       "destination": "/workshop-cad/index.html"
     }
   ],
