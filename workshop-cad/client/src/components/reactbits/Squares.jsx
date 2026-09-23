@@ -20,8 +20,8 @@ export default function Squares({
     let animationId;
 
     const resize = () => {
-      canvas.width = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
-      canvas.height = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
     resize();
@@ -115,11 +115,11 @@ export default function Squares({
       ref={canvasRef}
       className={`squares-canvas ${className}`}
       style={{
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100%',
+        width: '100vw',
+        height: '100vh',
         pointerEvents: 'none',
         zIndex: 0,
         ...style

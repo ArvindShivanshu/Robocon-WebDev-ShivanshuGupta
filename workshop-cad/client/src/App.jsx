@@ -38,7 +38,11 @@ export default function App() {
     scrollPositions.current[activeStudioMode] = window.scrollY;
     setActiveStudioMode(newMode);
     // Restore saved scroll position for the new mode, or 0 if none
-    window.scrollTo({ top: scrollPositions.current[newMode] || 0, behavior: 'instant' });
+    try {
+      window.scrollTo({ top: scrollPositions.current[newMode] || 0, behavior: 'auto' });
+    } catch {
+      window.scrollTo(0, scrollPositions.current[newMode] || 0);
+    }
   };
 
   // Fetch live workshop info from Express Backend (PERN) with timeout guard

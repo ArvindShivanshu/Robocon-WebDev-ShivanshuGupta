@@ -382,6 +382,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions, isAc
 
   // 60FPS Digital Oscilloscope Simulation CRT Waveform
   useEffect(() => {
+    if (!isActive) return;
     const scopeCanvas = scopeCanvasRef.current;
     if (!scopeCanvas) return;
     const sCtx = scopeCanvas.getContext('2d');
@@ -389,9 +390,19 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions, isAc
     let scopeTime = 0;
 
     const renderScope = () => {
+      if (!isActive) return;
+      const w = scopeCanvas.clientWidth;
+      const h = scopeCanvas.clientHeight;
+
+      if (!w || !h || w < 20 || h < 20) {
+        scopeAnimId = requestAnimationFrame(renderScope);
+        return;
+      }
+
+      if (scopeCanvas.width !== w) scopeCanvas.width = w;
+      if (scopeCanvas.height !== h) scopeCanvas.height = h;
+
       scopeTime += 0.05;
-      const w = (scopeCanvas.width = scopeCanvas.clientWidth);
-      const h = (scopeCanvas.height = scopeCanvas.clientHeight);
 
       sCtx.fillStyle = '#060a0e';
       sCtx.fillRect(0, 0, w, h);
@@ -399,8 +410,8 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions, isAc
       // CRT Grid Division Lines
       sCtx.strokeStyle = 'rgba(0, 229, 255, 0.08)';
       sCtx.lineWidth = 1;
-      const divX = w / 8;
-      const divY = h / 4;
+      const divX = Math.max(10, w / 8);
+      const divY = Math.max(10, h / 4);
       for (let x = 0; x <= w; x += divX) {
         sCtx.beginPath();
         sCtx.moveTo(x, 0);
@@ -460,7 +471,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions, isAc
 
     scopeAnimId = requestAnimationFrame(renderScope);
     return () => cancelAnimationFrame(scopeAnimId);
-  }, [selectedNet]);
+  }, [selectedNet, isActive]);
 
   // Main 60FPS Canvas Loop (2D Precision CAD + True 3D Perspective Isometric Board View)
   useEffect(() => {
@@ -762,7 +773,8 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions, isAc
             // 64 Gold Rectangular Pads radiating around 4 edges
             ctx.fillStyle = '#fbbf24';
             for (let side = 0; side < 4; side++) {
-              for (let p = -hw + 6; p <= hw - 6; p += (hw * 2 - 12) / 15) {
+              const padStep = Math.max(1, (hw * 2 - 12) / 15);
+              for (let p = -hw + 6; p <= hw - 6; p += padStep) {
                 let px = 0, pz = 0;
                 if (side === 0) { px = cx3D + p; pz = cz3D + hd + 3; }
                 else if (side === 1) { px = cx3D + p; pz = cz3D - hd - 3; }
@@ -982,7 +994,7 @@ export default function AltiumStudio({ onSyncToSolidWorks, boardDimensions, isAc
           // Realistic Gull-Wing Pins on QFP (STM32 on all 4 sides)
           if (comp.type === 'qfp') {
             ctx.fillStyle = '#e2e8f0'; // Tinned copper alloy pins
-            const pinStep = (hw * 2 - 12) / 15;
+            const pinStep = Math.max(1, (hw * 2 - 12) / 15);
             for (let p = -hw + 6; p <= hw - 6; p += pinStep) {
               // South pins
               const pTopS = project3D(cx3D + p, compBotY - 2, cz3D + hd);

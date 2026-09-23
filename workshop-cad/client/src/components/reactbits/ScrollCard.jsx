@@ -19,13 +19,25 @@ export default function ScrollCard({
   once = true
 }) {
   const cardRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [parallaxY, setParallaxY] = useState(0);
 
   // Entrance observer
   useEffect(() => {
     const el = cardRef.current;
     if (!el) return;
+
+    if (typeof window === 'undefined' || !window.IntersectionObserver) {
+      setIsVisible(true);
+      return;
+    }
+
+    // Immediate check if already inside or near viewport on mount
+    const rect = el.getBoundingClientRect();
+    if (rect.top < (window.innerHeight || 800) + 100 && rect.bottom > -100) {
+      setIsVisible(true);
+      if (once) return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -36,7 +48,7 @@ export default function ScrollCard({
           setIsVisible(false);
         }
       },
-      { threshold }
+      { threshold: Math.min(threshold, 0.05), rootMargin: '80px 0px' }
     );
 
     observer.observe(el);
@@ -102,7 +114,7 @@ export default function ScrollCard({
       ref={cardRef}
       className={`reactbits-scroll-card ${className}`.trim()}
       style={{
-        opacity: isVisible ? 1 : 0,
+        opacity: 1,
         transform: activeTransform,
         transformOrigin: 'center center',
         perspective: '1000px',
